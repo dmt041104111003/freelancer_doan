@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Icon from "@/components/ui/Icon";
 
@@ -21,7 +21,7 @@ export default function BalanceCards({ balance, credits }: BalanceCardsProps) {
       <h2 className="text-lg font-semibold text-gray-900 mb-4">Tài khoản</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg">
-          <Icon name="account_balance_wallet" size={32} className="text-[#00b14f]" />
+          <Icon name="account_balance_wallet" size={32} className="text-[#04A0EF]" />
           <div>
             <p className="text-sm text-gray-500">Số dư</p>
             <p className="text-xl font-bold text-gray-900">{formatCurrency(balance)}</p>

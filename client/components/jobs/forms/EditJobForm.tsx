@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter, notFound } from "next/navigation";
@@ -181,7 +181,7 @@ export default function EditJobForm() {
     return (
       <div className="max-w-7xl mx-auto px-4">
         <div className="bg-white rounded-lg shadow p-8 flex flex-col items-center justify-center">
-          <div className="w-8 h-8 border-4 border-[#00b14f] border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-4 border-[#04A0EF] border-t-transparent rounded-full animate-spin" />
           <p className="mt-4 text-gray-600">Đang tải thông tin...</p>
         </div>
       </div>
@@ -198,7 +198,7 @@ export default function EditJobForm() {
       <div className="mb-6">
         <Link
           href="/my-posted-jobs"
-          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-[#00b14f] mb-4"
+          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-[#04A0EF] mb-4"
         >
           <Icon name="arrow_back" size={20} />
           Quay lại
@@ -307,7 +307,7 @@ export default function EditJobForm() {
                 {formData.skills.map((skill) => (
                   <span
                     key={skill}
-                    className="inline-flex items-center gap-1 px-3 py-1 bg-[#00b14f]/10 text-[#00b14f] rounded-full text-sm"
+                    className="inline-flex items-center gap-1 px-3 py-1 bg-[#04A0EF]/10 text-[#04A0EF] rounded-full text-sm"
                   >
                     {skill}
                     <button type="button" onClick={() => removeSkill(skill)} className="hover:text-red-500 disabled:pointer-events-none">
@@ -331,7 +331,7 @@ export default function EditJobForm() {
                   name="complexity"
                   value={formData.complexity}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00b14f] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#04A0EF] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                 >
                   {(Object.keys(JOB_COMPLEXITY_CONFIG) as JobComplexity[]).map((key) => (
                     <option key={key} value={key}>
@@ -347,7 +347,7 @@ export default function EditJobForm() {
                   name="duration"
                   value={formData.duration}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00b14f] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#04A0EF] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                 >
                   {(Object.keys(JOB_DURATION_CONFIG) as JobDuration[]).map((key) => (
                     <option key={key} value={key}>
@@ -363,7 +363,7 @@ export default function EditJobForm() {
                   name="workType"
                   value={formData.workType}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00b14f] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#04A0EF] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                 >
                   {(Object.keys(WORK_TYPE_CONFIG) as WorkType[]).map((key) => (
                     <option key={key} value={key}>
@@ -435,7 +435,7 @@ export default function EditJobForm() {
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="bg-[#00b14f] hover:bg-[#009643] w-full sm:w-auto"
+              className="bg-[#04A0EF] hover:bg-[#0380BF] w-full sm:w-auto"
             >
               {isSubmitting ? (
                 <>

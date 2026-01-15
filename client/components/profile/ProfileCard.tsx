@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Image from "next/image";
@@ -116,7 +116,7 @@ export default function ProfileCard({ user, onUpdate, isLoading }: ProfileCardPr
           <div className="relative -mt-12 sm:-mt-16 mb-3 sm:mb-4 w-fit">
             <Avatar className="w-24 h-24 sm:w-32 sm:h-32 border-4 border-white shadow-lg">
               <AvatarImage src={user.avatarUrl} alt={user.fullName} />
-              <AvatarFallback className="bg-[#00b14f] text-white text-2xl sm:text-3xl">
+              <AvatarFallback className="bg-[#04A0EF] text-white text-2xl sm:text-3xl">
                 {user.fullName?.charAt(0)?.toUpperCase() || "U"}
               </AvatarFallback>
             </Avatar>
@@ -136,17 +136,17 @@ export default function ProfileCard({ user, onUpdate, isLoading }: ProfileCardPr
               <button
                 onClick={handleOpenEdit}
                 disabled={isLoading}
-                className="text-gray-500 hover:text-[#00b14f] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="text-gray-500 hover:text-[#04A0EF] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Icon name="edit" size={18} />
               </button>
               {user.isVerified ? (
-                <span className="text-sm text-[#00b14f] border border-[#00b14f] rounded-full px-3 py-0.5 flex items-center gap-1">
+                <span className="text-sm text-[#04A0EF] border border-[#04A0EF] rounded-full px-3 py-0.5 flex items-center gap-1">
                   <Icon name="verified" size={14} />
                   Đã xác thực
                 </span>
               ) : (
-                <button disabled={isLoading} className="text-sm text-[#00b14f] border border-[#00b14f] rounded-full px-3 py-0.5 hover:bg-[#00b14f]/5 flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed">
+                <button disabled={isLoading} className="text-sm text-[#04A0EF] border border-[#04A0EF] rounded-full px-3 py-0.5 hover:bg-[#04A0EF]/5 flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed">
                   <Icon name="verified" size={14} />
                   Thêm huy hiệu xác thực
                 </button>
@@ -174,7 +174,7 @@ export default function ProfileCard({ user, onUpdate, isLoading }: ProfileCardPr
                 {user.location && (
                   <p className="text-gray-500 text-sm">
                     {user.location} ·{" "}
-                    <a href="#" className="text-[#00b14f] hover:underline">
+                    <a href="#" className="text-[#04A0EF] hover:underline">
                       Thông tin liên hệ
                     </a>
                   </p>
@@ -194,7 +194,7 @@ export default function ProfileCard({ user, onUpdate, isLoading }: ProfileCardPr
                   <button
                     onClick={handleOpenEdit}
                     disabled={isLoading}
-                    className="text-gray-400 text-sm hover:text-[#00b14f] flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="text-gray-400 text-sm hover:text-[#04A0EF] flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Icon name="add" size={16} />
                     Thêm chức danh
@@ -204,7 +204,7 @@ export default function ProfileCard({ user, onUpdate, isLoading }: ProfileCardPr
                   <button
                     onClick={handleOpenEdit}
                     disabled={isLoading}
-                    className="text-gray-400 text-sm hover:text-[#00b14f] flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="text-gray-400 text-sm hover:text-[#04A0EF] flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Icon name="add" size={16} />
                     Thêm địa điểm
@@ -214,7 +214,7 @@ export default function ProfileCard({ user, onUpdate, isLoading }: ProfileCardPr
                   <button
                     onClick={handleOpenEdit}
                     disabled={isLoading}
-                    className="text-gray-400 text-sm hover:text-[#00b14f] flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="text-gray-400 text-sm hover:text-[#04A0EF] flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Icon name="add" size={16} />
                     Thêm công ty
@@ -226,7 +226,7 @@ export default function ProfileCard({ user, onUpdate, isLoading }: ProfileCardPr
 
           <div className="flex flex-col sm:flex-row gap-2 mt-4">
             <Button 
-              className={`rounded-full w-full sm:w-auto ${user.isOpenToWork ? "bg-[#00b14f] hover:bg-[#009643]" : "bg-gray-500 hover:bg-gray-600"}`}
+              className={`rounded-full w-full sm:w-auto ${user.isOpenToWork ? "bg-[#04A0EF] hover:bg-[#0380BF]" : "bg-gray-500 hover:bg-gray-600"}`}
               onClick={handleOpenEdit}
               disabled={isLoading}
             >
@@ -234,7 +234,7 @@ export default function ProfileCard({ user, onUpdate, isLoading }: ProfileCardPr
             </Button>
             <Button
               variant="outline"
-              className="rounded-full border-[#00b14f] text-[#00b14f] hover:bg-[#00b14f]/5 w-full sm:w-auto"
+              className="rounded-full border-[#04A0EF] text-[#04A0EF] hover:bg-[#04A0EF]/5 w-full sm:w-auto"
               onClick={handleOpenEdit}
               disabled={isLoading}
             >
@@ -383,7 +383,7 @@ export default function ProfileCard({ user, onUpdate, isLoading }: ProfileCardPr
             <Button
               onClick={handleSave}
               disabled={isLoading}
-              className="bg-[#00b14f] hover:bg-[#009643]"
+              className="bg-[#04A0EF] hover:bg-[#0380BF]"
             >
               {isLoading ? "Đang lưu..." : "Lưu"}
             </Button>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Icon from "@/components/ui/Icon";
 import { ChatMessage } from "@/lib/api";
@@ -154,7 +154,7 @@ export default function MessageBubble({
         isFailed
           ? "bg-red-400 text-white"
           : isMe
-            ? "bg-[#00b14f] text-white"
+            ? "bg-[#04A0EF] text-white"
             : "bg-gray-100 text-gray-900"
       } ${message.replyTo ? "-mt-2 relative z-10" : ""} ${!isLastMessage ? "cursor-pointer" : ""}`}
       onClick={() => !isLastMessage && onToggleTime()}
@@ -182,7 +182,7 @@ export default function MessageBubble({
             className={`${message.replyTo ? "-mt-2 relative z-10" : ""} ${!isLastMessage ? "cursor-pointer" : ""}`}
             onClick={() => !isLastMessage && onToggleTime()}
           >
-            <Icon name="thumb_up" size={32} className="text-[#00b14f]" />
+            <Icon name="thumb_up" size={32} className="text-[#04A0EF]" />
           </div>
         ) : isImageMessage ? (
           renderImageMessage()

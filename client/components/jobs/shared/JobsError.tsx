@@ -1,4 +1,4 @@
-import Icon from "@/components/ui/Icon";
+﻿import Icon from "@/components/ui/Icon";
 
 interface JobsErrorProps {
   message: string;
@@ -13,7 +13,7 @@ export default function JobsError({ message, onRetry }: JobsErrorProps) {
       {onRetry && (
         <button
           onClick={onRetry}
-          className="px-4 py-2 bg-[#00b14f] text-white rounded-lg hover:bg-[#009643] transition-colors"
+          className="px-4 py-2 bg-[#04A0EF] text-white rounded-lg hover:bg-[#0380BF] transition-colors"
         >
           Thử lại
         </button>

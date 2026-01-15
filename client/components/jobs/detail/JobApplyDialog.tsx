@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Icon from "@/components/ui/Icon";
 import { Button } from "@/components/ui/button";
@@ -68,7 +68,7 @@ export default function JobApplyDialog({
           <Button variant="outline" onClick={handleClose} disabled={isLoading}>
             Hủy
           </Button>
-          <Button onClick={onSubmit} disabled={isLoading} className="bg-[#00b14f] hover:bg-[#009643]">
+          <Button onClick={onSubmit} disabled={isLoading} className="bg-[#04A0EF] hover:bg-[#0380BF]">
             {isLoading ? (
               <>
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />

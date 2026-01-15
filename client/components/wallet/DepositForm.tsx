@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { toast } from "sonner";
@@ -102,7 +102,7 @@ export default function DepositForm({ onSuccess, onRefresh, disabled, setProcess
             onClick={() => setTab("deposit")}
             className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
               tab === "deposit"
-                ? "text-[#00b14f] border-b-2 border-[#00b14f]"
+                ? "text-[#04A0EF] border-b-2 border-[#04A0EF]"
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >
@@ -112,7 +112,7 @@ export default function DepositForm({ onSuccess, onRefresh, disabled, setProcess
             onClick={() => setTab("withdraw")}
             className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
               tab === "withdraw"
-                ? "text-[#00b14f] border-b-2 border-[#00b14f]"
+                ? "text-[#04A0EF] border-b-2 border-[#04A0EF]"
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >
@@ -139,13 +139,13 @@ export default function DepositForm({ onSuccess, onRefresh, disabled, setProcess
                   <button
                     key={val}
                     onClick={() => setAmount(val.toString())}
-                    className="px-3 py-1 text-sm border border-gray-300 rounded-md hover:border-[#00b14f] hover:text-[#00b14f] disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 py-1 text-sm border border-gray-300 rounded-md hover:border-[#04A0EF] hover:text-[#04A0EF] disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {formatCurrency(val)}
                   </button>
                 ))}
               </div>
-              <Button onClick={handleDeposit} disabled={isDisabled || !amount} className="w-full bg-[#00b14f] hover:bg-[#009643]">
+              <Button onClick={handleDeposit} disabled={isDisabled || !amount} className="w-full bg-[#04A0EF] hover:bg-[#0380BF]">
                 {isLoading ? "Đang xử lý..." : "Tạo mã QR nạp tiền"}
               </Button>
             </fieldset>
@@ -188,7 +188,7 @@ export default function DepositForm({ onSuccess, onRefresh, disabled, setProcess
               <Button
                 onClick={handleOpenZaloPay}
                 disabled={isChecking}
-                className="bg-[#00b14f] hover:bg-[#009643]"
+                className="bg-[#04A0EF] hover:bg-[#0380BF]"
               >
                 {isChecking ? (
                   <>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { toast } from "sonner";
@@ -132,7 +132,7 @@ export default function DisputeResponseDialog({
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Giải thích và bảo vệ công việc của bạn..."
                   rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00b14f]"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#04A0EF]"
                 />
               </div>
 
@@ -197,7 +197,7 @@ export default function DisputeResponseDialog({
             <Button
               onClick={handleSubmit}
               disabled={isSubmitting}
-              className="bg-[#00b14f] hover:bg-[#009643]"
+              className="bg-[#04A0EF] hover:bg-[#0380BF]"
             >
               {isSubmitting ? "Đang xử lý..." : "Gửi phản hồi"}
             </Button>

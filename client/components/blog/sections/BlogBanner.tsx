@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import Link from "next/link";
 
 export default function BlogBanner() {
@@ -17,11 +17,11 @@ export default function BlogBanner() {
         
         {/* Content */}
         <div className="absolute inset-0 flex flex-col justify-center items-start px-8 md:px-12">
-          <p className="text-white/80 text-sm mb-1">MBTI by WorkHub</p>
+          <p className="text-white/80 text-sm mb-1">MBTI by Freelancer.vn</p>
           <h2 className="text-2xl md:text-4xl font-bold text-white mb-4">
             TRẮC NGHIỆM<br />TÍNH CÁCH MBTI
           </h2>
-          <span className="px-6 py-3 bg-[#00b14f] text-white rounded-lg hover:bg-[#009643] transition-colors font-medium">
+          <span className="px-6 py-3 bg-[#04A0EF] text-white rounded-lg hover:bg-[#0380BF] transition-colors font-medium">
             Làm trắc nghiệm ngay
           </span>
         </div>

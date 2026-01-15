@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Lexend } from "next/font/google";
 import { Toaster } from "sonner";
 import { AuthProvider } from "@/context/AuthContext";
-import FloatingSupport from "@/components/layout/FloatingSupport";
 import UnreadMessageTitle from "@/components/layout/UnreadMessageTitle";
 import "./globals.css";
 
@@ -51,7 +50,6 @@ export default function RootLayout({
         <AuthProvider>
           <UnreadMessageTitle />
           {children}
-          <FloatingSupport />
         </AuthProvider>
         <Toaster position="bottom-right" richColors />
       </body>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -136,12 +136,12 @@ export default function RegisterForm() {
             <Label htmlFor="otp" className="text-sm text-gray-600">Mã OTP</Label>
             <Input id="otp" type="text" placeholder="Nhập mã OTP 6 số" value={otpCode} maxLength={AUTH_CONSTANTS.OTP_LENGTH}
               onChange={(e) => { setOtpCode(e.target.value.replace(/\D/g, "").slice(0, AUTH_CONSTANTS.OTP_LENGTH)); if (errors.otp) setErrors({ ...errors, otp: "" }); }}
-              disabled={isLoading} className={`h-12 text-center text-2xl tracking-widest font-mono border-gray-200 focus:border-[#00b14f] focus:ring-0 shadow-none ${errors.otp ? "border-red-500" : ""}`} />
+              disabled={isLoading} className={`h-12 text-center text-2xl tracking-widest font-mono border-gray-200 focus:border-[#04A0EF] focus:ring-0 shadow-none ${errors.otp ? "border-red-500" : ""}`} />
             <AuthFormError error={errors.otp} centered />
           </div>
 
           <div className="text-center text-sm text-gray-500">
-            {otpTimer > 0 ? <p>Mã OTP hết hạn sau <span className="text-[#00b14f] font-medium">{formatOtpTime(otpTimer)}</span></p> : <p className="text-red-500">{AUTH_MESSAGES.OTP_EXPIRED}</p>}
+            {otpTimer > 0 ? <p>Mã OTP hết hạn sau <span className="text-[#04A0EF] font-medium">{formatOtpTime(otpTimer)}</span></p> : <p className="text-red-500">{AUTH_MESSAGES.OTP_EXPIRED}</p>}
           </div>
 
           <AuthSubmitButton 
@@ -151,7 +151,7 @@ export default function RegisterForm() {
             disabled={otpCode.length !== AUTH_CONSTANTS.OTP_LENGTH}
           />
 
-          <button type="button" onClick={handleResendOtp} disabled={!canResend || isLoading} className={`w-full text-sm ${canResend ? "text-[#00b14f] hover:underline" : "text-gray-400 cursor-not-allowed"}`}>
+          <button type="button" onClick={handleResendOtp} disabled={!canResend || isLoading} className={`w-full text-sm ${canResend ? "text-[#04A0EF] hover:underline" : "text-gray-400 cursor-not-allowed"}`}>
             Gửi lại mã OTP
           </button>
         </form>
@@ -172,10 +172,10 @@ export default function RegisterForm() {
         <div className="space-y-1">
           <Label htmlFor="fullName" className="text-sm text-gray-600">Họ và tên</Label>
           <div className="relative">
-            <div className="absolute left-3 top-1/2 -translate-y-1/2"><Icon name="person" size={18} className="text-[#00b14f]" /></div>
+            <div className="absolute left-3 top-1/2 -translate-y-1/2"><Icon name="person" size={18} className="text-[#04A0EF]" /></div>
             <Input id="fullName" type="text" placeholder="Nhập họ tên" value={formData.fullName}
               onChange={(e) => { setFormData({ ...formData, fullName: e.target.value }); if (errors.fullName) setErrors({ ...errors, fullName: "" }); }}
-              disabled={isLoading} className={`pl-10 h-10 text-sm border-gray-200 focus:border-[#00b14f] focus:ring-0 shadow-none ${errors.fullName ? "border-red-500" : ""}`} />
+              disabled={isLoading} className={`pl-10 h-10 text-sm border-gray-200 focus:border-[#04A0EF] focus:ring-0 shadow-none ${errors.fullName ? "border-red-500" : ""}`} />
           </div>
           <AuthFormError error={errors.fullName} />
         </div>
@@ -183,10 +183,10 @@ export default function RegisterForm() {
         <div className="space-y-1">
           <Label htmlFor="email" className="text-sm text-gray-600">Email</Label>
           <div className="relative">
-            <div className="absolute left-3 top-1/2 -translate-y-1/2"><Icon name="mail" size={18} className="text-[#00b14f]" /></div>
+            <div className="absolute left-3 top-1/2 -translate-y-1/2"><Icon name="mail" size={18} className="text-[#04A0EF]" /></div>
             <Input id="email" type="email" placeholder="Nhập email" value={formData.email}
               onChange={(e) => { setFormData({ ...formData, email: e.target.value }); if (errors.email) setErrors({ ...errors, email: "" }); }}
-              disabled={isLoading} className={`pl-10 h-10 text-sm border-gray-200 focus:border-[#00b14f] focus:ring-0 shadow-none ${errors.email ? "border-red-500" : ""}`} />
+              disabled={isLoading} className={`pl-10 h-10 text-sm border-gray-200 focus:border-[#04A0EF] focus:ring-0 shadow-none ${errors.email ? "border-red-500" : ""}`} />
           </div>
           <AuthFormError error={errors.email} />
         </div>
@@ -194,10 +194,10 @@ export default function RegisterForm() {
         <div className="space-y-1">
           <Label htmlFor="password" className="text-sm text-gray-600">Mật khẩu</Label>
           <div className="relative">
-            <div className="absolute left-3 top-1/2 -translate-y-1/2"><Icon name="shield" size={18} className="text-[#00b14f]" /></div>
+            <div className="absolute left-3 top-1/2 -translate-y-1/2"><Icon name="shield" size={18} className="text-[#04A0EF]" /></div>
             <Input id="password" type={showPassword ? "text" : "password"} placeholder="Nhập mật khẩu" value={formData.password}
               onChange={(e) => { setFormData({ ...formData, password: e.target.value }); if (errors.password) setErrors({ ...errors, password: "" }); }}
-              disabled={isLoading} className={`pl-10 pr-10 h-10 text-sm border-gray-200 focus:border-[#00b14f] focus:ring-0 shadow-none ${errors.password ? "border-red-500" : ""}`} />
+              disabled={isLoading} className={`pl-10 pr-10 h-10 text-sm border-gray-200 focus:border-[#04A0EF] focus:ring-0 shadow-none ${errors.password ? "border-red-500" : ""}`} />
             <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2" disabled={isLoading}>
               <Icon name={showPassword ? "visibility" : "visibility_off"} size={18} className="text-gray-400 hover:text-gray-600" />
             </button>
@@ -208,10 +208,10 @@ export default function RegisterForm() {
         <div className="space-y-1">
           <Label htmlFor="confirmPassword" className="text-sm text-gray-600">Xác nhận mật khẩu</Label>
           <div className="relative">
-            <div className="absolute left-3 top-1/2 -translate-y-1/2"><Icon name="shield" size={18} className="text-[#00b14f]" /></div>
+            <div className="absolute left-3 top-1/2 -translate-y-1/2"><Icon name="shield" size={18} className="text-[#04A0EF]" /></div>
             <Input id="confirmPassword" type={showConfirmPassword ? "text" : "password"} placeholder="Nhập lại mật khẩu" value={formData.confirmPassword}
               onChange={(e) => { setFormData({ ...formData, confirmPassword: e.target.value }); if (errors.confirmPassword) setErrors({ ...errors, confirmPassword: "" }); }}
-              disabled={isLoading} className={`pl-10 pr-10 h-10 text-sm border-gray-200 focus:border-[#00b14f] focus:ring-0 shadow-none ${errors.confirmPassword ? "border-red-500" : ""}`} />
+              disabled={isLoading} className={`pl-10 pr-10 h-10 text-sm border-gray-200 focus:border-[#04A0EF] focus:ring-0 shadow-none ${errors.confirmPassword ? "border-red-500" : ""}`} />
             <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-3 top-1/2 -translate-y-1/2" disabled={isLoading}>
               <Icon name={showConfirmPassword ? "visibility" : "visibility_off"} size={18} className="text-gray-400 hover:text-gray-600" />
             </button>
@@ -222,9 +222,9 @@ export default function RegisterForm() {
         <div className="space-y-1">
           <div className="flex items-start gap-2">
             <Checkbox id="terms" checked={agreed} onCheckedChange={(c) => { setAgreed(c as boolean); if (errors.agreed) setErrors({ ...errors, agreed: "" }); }}
-              disabled={isLoading} className={`mt-0.5 shrink-0 data-[state=checked]:bg-[#00b14f] data-[state=checked]:border-[#00b14f] ${errors.agreed ? "border-red-500" : ""}`} />
+              disabled={isLoading} className={`mt-0.5 shrink-0 data-[state=checked]:bg-[#04A0EF] data-[state=checked]:border-[#04A0EF] ${errors.agreed ? "border-red-500" : ""}`} />
             <Label htmlFor="terms" className={`text-sm font-normal text-gray-600 leading-relaxed cursor-pointer ${disabledClass}`}>
-              Tôi đã đọc và đồng ý với <Link href="/terms" className={`text-[#00b14f] hover:underline ${disabledClass}`}>Điều khoản dịch vụ</Link> và <Link href="/privacy" className={`text-[#00b14f] hover:underline ${disabledClass}`}>Chính sách bảo mật</Link>
+              Tôi đã đọc và đồng ý với <Link href="/terms" className={`text-[#04A0EF] hover:underline ${disabledClass}`}>Điều khoản dịch vụ</Link> và <Link href="/privacy" className={`text-[#04A0EF] hover:underline ${disabledClass}`}>Chính sách bảo mật</Link>
             </Label>
           </div>
           <AuthFormError error={errors.agreed} />
@@ -234,7 +234,7 @@ export default function RegisterForm() {
       </form>
 
       <p className="text-center mt-3 text-sm text-gray-600">
-        Bạn đã có tài khoản? <Link href="/login" className={`text-[#00b14f] font-medium hover:underline ${disabledClass}`}>Đăng nhập ngay</Link>
+        Bạn đã có tài khoản? <Link href="/login" className={`text-[#04A0EF] font-medium hover:underline ${disabledClass}`}>Đăng nhập ngay</Link>
       </p>
     </div>
   );

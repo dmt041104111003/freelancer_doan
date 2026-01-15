@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Icon from "@/components/ui/Icon";
 import { Button } from "@/components/ui/button";
@@ -50,7 +50,7 @@ export default function PendingRequests({
               size="sm"
               onClick={() => onAccept(req.id)}
               disabled={processingId === req.id}
-              className="bg-[#00b14f] hover:bg-[#00a347] h-8 px-3 disabled:opacity-50"
+              className="bg-[#04A0EF] hover:bg-[#00a347] h-8 px-3 disabled:opacity-50"
             >
               <Icon name="check" size={16} />
             </Button>

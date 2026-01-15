@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -6,7 +6,6 @@ import { Job, Page } from "@/types/job";
 import { api } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import JobCardWithPreview from "../cards/JobCardWithPreview";
-import JobCategoriesSidebar from "../sidebar/JobCategoriesSidebar";
 import JobsSearchBar from "../shared/JobsSearchBar";
 import JobsEmptyState from "../shared/JobsEmptyState";
 import JobsError from "../shared/JobsError";
@@ -175,7 +174,7 @@ export default function JobsList() {
                 onClick={() => handlePageChange(p)}
                 className={`w-10 h-10 rounded-full flex items-center justify-center font-medium transition-colors ${
                   p === current
-                    ? "bg-[#00b14f] text-white"
+                    ? "bg-[#04A0EF] text-white"
                     : "text-gray-600 hover:bg-gray-100"
                 }`}
               >
@@ -209,29 +208,20 @@ export default function JobsList() {
         />
       </div>
 
-      {/* Main Content with Sidebar */}
-      <div className="flex gap-6">
-        {/* Sidebar - Hidden on mobile/tablet */}
-        <div className="hidden lg:block w-[280px] shrink-0">
-          <div className="sticky top-20 z-50">
-            <JobCategoriesSidebar />
-          </div>
-        </div>
-
-        {/* Jobs Content */}
-        <div className="flex-1 min-w-0">
+      {/* Jobs Content */}
+      <div>
           {/* Results Info */}
           {!isLoading && (
             <div className="flex items-center justify-between mb-4">
               <p className="text-gray-600">
                 {searchKeyword ? (
                   <>
-                    Tìm thấy <span className="font-semibold text-[#00b14f]">{filteredJobs.length}</span> việc làm 
+                    Tìm thấy <span className="font-semibold text-[#04A0EF]">{filteredJobs.length}</span> việc làm 
                     cho &quot;<span className="font-medium">{searchKeyword}</span>&quot;
                   </>
                 ) : (
                   <>
-                    <span className="font-semibold text-[#00b14f]">{page?.totalElements || 0}</span> việc làm đang tuyển
+                    <span className="font-semibold text-[#04A0EF]">{page?.totalElements || 0}</span> việc làm đang tuyển
                   </>
                 )}
               </p>
@@ -281,7 +271,6 @@ export default function JobsList() {
               {!searchKeyword && renderPagination()}
             </>
           )}
-        </div>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import Link from "next/link";
 import { BlogArticle } from "@/types/blog";
 
@@ -32,16 +32,16 @@ export default function TextCard({
       
       {/* Content */}
       <div className="p-4">
-        <span className="text-xs font-semibold text-[#00b14f] uppercase tracking-wide">
+        <span className="text-xs font-semibold text-[#04A0EF] uppercase tracking-wide">
           {article.category}
         </span>
-        <h3 className={`font-bold text-gray-900 mt-1 mb-2 line-clamp-2 group-hover:text-[#00b14f] transition-colors ${
+        <h3 className={`font-bold text-gray-900 mt-1 mb-2 line-clamp-2 group-hover:text-[#04A0EF] transition-colors ${
           titleSize === "lg" ? "text-lg" : "text-base"
         }`}>
           {article.title}
         </h3>
         <div className="flex items-center gap-2 text-gray-500 text-xs mb-2">
-          <span>WorkHub</span>
+          <span>Freelancer.vn</span>
           <span>•</span>
           <span>{article.date}</span>
         </div>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef } from "react";
 import { toast } from "sonner";
@@ -96,7 +96,7 @@ export function FileUpload({
         disabled={disabled || isUploading}
       />
       {file || value ? (
-        <div className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-[#00b14f]/5">
+        <div className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-[#04A0EF]/5">
           <Icon name="picture_as_pdf" size={20} className="text-red-500" />
           <span className="flex-1 text-sm text-gray-700 truncate">
             {file?.name || "File đã upload"}
@@ -115,11 +115,11 @@ export function FileUpload({
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={disabled || isUploading}
-          className="w-full px-3 py-4 border border-dashed border-gray-300 rounded-md hover:border-[#00b14f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full px-3 py-4 border border-dashed border-gray-300 rounded-md hover:border-[#04A0EF] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isUploading ? (
             <div className="flex items-center justify-center gap-2 text-gray-500">
-              <div className="w-4 h-4 border-2 border-[#00b14f] border-t-transparent rounded-full animate-spin" />
+              <div className="w-4 h-4 border-2 border-[#04A0EF] border-t-transparent rounded-full animate-spin" />
               <span className="text-sm">Đang upload...</span>
             </div>
           ) : (

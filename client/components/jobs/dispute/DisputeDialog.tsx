@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { toast } from "sonner";
@@ -43,7 +43,7 @@ const EvidenceCard = ({
   label?: string;
   onRemove?: () => void;
 }) => (
-  <div className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-[#00b14f]/5 hover:bg-[#00b14f]/10 transition-colors">
+  <div className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-[#04A0EF]/5 hover:bg-[#04A0EF]/10 transition-colors">
     <Icon name="picture_as_pdf" size={20} className="text-red-500 shrink-0" />
     <div className="flex-1 text-sm text-gray-700 truncate">
       <span className="font-medium">{name || label || "Tệp đính kèm"}</span>
@@ -159,7 +159,7 @@ export function CreateDisputeDialog({
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Mô tả chi tiết sai phạm của người làm..."
               rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00b14f]"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#04A0EF]"
             />
           </div>
 
@@ -337,7 +337,7 @@ export function DisputeResponseDialog({
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Giải thích và bảo vệ công việc của bạn..."
                   rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00b14f]"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#04A0EF]"
                 />
               </div>
 
@@ -402,7 +402,7 @@ export function DisputeResponseDialog({
             <Button 
               onClick={handleSubmit} 
               disabled={isSubmitting}
-              className="bg-[#00b14f] hover:bg-[#009643]"
+              className="bg-[#04A0EF] hover:bg-[#0380BF]"
             >
               {isSubmitting ? "Đang xử lý..." : "Gửi phản hồi"}
             </Button>
@@ -458,7 +458,7 @@ export function ViewDisputeDialog({
                 target="_blank"
                 rel="noopener noreferrer"
                 download
-                className="flex items-center gap-2 mt-3 px-3 py-2 border border-gray-300 rounded-md bg-[#00b14f]/5 hover:bg-[#00b14f]/10 transition-colors"
+                className="flex items-center gap-2 mt-3 px-3 py-2 border border-gray-300 rounded-md bg-[#04A0EF]/5 hover:bg-[#04A0EF]/10 transition-colors"
               >
                 <Icon name="picture_as_pdf" size={20} className="text-red-500 shrink-0" />
                 <span className="flex-1 text-sm text-gray-700">Bằng chứng đính kèm</span>
@@ -479,7 +479,7 @@ export function ViewDisputeDialog({
                   target="_blank"
                   rel="noopener noreferrer"
                   download
-                  className="flex items-center gap-2 mt-3 px-3 py-2 border border-gray-300 rounded-md bg-[#00b14f]/5 hover:bg-[#00b14f]/10 transition-colors"
+                  className="flex items-center gap-2 mt-3 px-3 py-2 border border-gray-300 rounded-md bg-[#04A0EF]/5 hover:bg-[#04A0EF]/10 transition-colors"
                 >
                   <Icon name="picture_as_pdf" size={20} className="text-red-500 shrink-0" />
                   <span className="flex-1 text-sm text-gray-700">Bằng chứng đính kèm</span>

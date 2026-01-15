@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
@@ -147,7 +147,7 @@ export default function NotificationDropdown() {
   // Bell button with badge
   const bellButton = (
     <button className="relative p-2 outline-none">
-      <Icon name="notifications" size={22} className="text-gray-600 hover:text-[#00b14f] transition-colors" />
+      <Icon name="notifications" size={22} className="text-gray-600 hover:text-[#04A0EF] transition-colors" />
       {unreadCount > 0 && (
         <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1">
           {unreadCount > 99 ? "99+" : unreadCount}
@@ -171,7 +171,7 @@ export default function NotificationDropdown() {
               {unreadCount > 0 && (
                 <button
                   onClick={handleMarkAllAsRead}
-                  className="text-xs text-[#00b14f] hover:underline"
+                  className="text-xs text-[#04A0EF] hover:underline"
                 >
                   Đánh dấu tất cả đã đọc
                 </button>
@@ -189,7 +189,7 @@ export default function NotificationDropdown() {
                 <Link
                   href="/notifications"
                   onClick={() => setIsOpen(false)}
-                  className="text-xs text-[#00b14f] hover:underline"
+                  className="text-xs text-[#04A0EF] hover:underline"
                 >
                   Xem tất cả thông báo
                 </Link>
@@ -202,7 +202,7 @@ export default function NotificationDropdown() {
       {/* Mobile: Full-screen overlay */}
       <div className="md:hidden">
         <button onClick={() => setIsMobileOpen(true)} className="relative p-2 outline-none">
-          <Icon name="notifications" size={22} className="text-gray-600 hover:text-[#00b14f] transition-colors" />
+          <Icon name="notifications" size={22} className="text-gray-600 hover:text-[#04A0EF] transition-colors" />
           {unreadCount > 0 && (
             <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1">
               {unreadCount > 99 ? "99+" : unreadCount}
@@ -232,7 +232,7 @@ export default function NotificationDropdown() {
               {unreadCount > 0 && (
                 <button
                   onClick={handleMarkAllAsRead}
-                  className="text-xs text-[#00b14f] hover:underline"
+                  className="text-xs text-[#04A0EF] hover:underline"
                 >
                   Đánh dấu tất cả đã đọc
                 </button>
@@ -249,7 +249,7 @@ export default function NotificationDropdown() {
                   <Link
                     href="/notifications"
                     onClick={() => setIsMobileOpen(false)}
-                    className="text-sm text-[#00b14f] hover:underline font-medium"
+                    className="text-sm text-[#04A0EF] hover:underline font-medium"
                   >
                     Xem tất cả thông báo
                   </Link>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -79,7 +79,7 @@ export default function CreditPackages({ balance, onPurchase, disabled, setProce
                 key={pkg.packageId}
                 onClick={() => !isDisabled && setSelected(pkg)}
                 className={`border rounded-lg p-4 transition-colors ${isDisabled ? "cursor-not-allowed" : "cursor-pointer"} ${
-                  selected?.packageId === pkg.packageId ? "border-[#00b14f] bg-[#00b14f]/5" : "border-gray-200 hover:border-gray-300"
+                  selected?.packageId === pkg.packageId ? "border-[#04A0EF] bg-[#04A0EF]/5" : "border-gray-200 hover:border-gray-300"
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">
@@ -89,12 +89,12 @@ export default function CreditPackages({ balance, onPurchase, disabled, setProce
                   )}
                 </div>
                 <p className="text-xs text-gray-500 mb-2">credit</p>
-                <p className="font-medium text-[#00b14f]">{formatCurrency(pkg.price)}</p>
+                <p className="font-medium text-[#04A0EF]">{formatCurrency(pkg.price)}</p>
               </div>
             ))}
           </div>
           {selected && (
-            <Button onClick={() => setShowConfirm(true)} disabled={isDisabled} className="w-full mt-4 bg-[#00b14f] hover:bg-[#009643]">
+            <Button onClick={() => setShowConfirm(true)} disabled={isDisabled} className="w-full mt-4 bg-[#04A0EF] hover:bg-[#0380BF]">
               Mua {selected.credits} credit
             </Button>
           )}
@@ -122,7 +122,7 @@ export default function CreditPackages({ balance, onPurchase, disabled, setProce
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">Giá</span>
-                <span className="text-[#00b14f] font-medium">{formatCurrency(selected.price)}</span>
+                <span className="text-[#04A0EF] font-medium">{formatCurrency(selected.price)}</span>
               </div>
               <div className="flex justify-between border-t pt-2">
                 <span className="text-gray-500">Số dư sau mua</span>
@@ -141,7 +141,7 @@ export default function CreditPackages({ balance, onPurchase, disabled, setProce
             <Button
               onClick={handlePurchase}
               disabled={isLoading}
-              className="bg-[#00b14f] hover:bg-[#009643]"
+              className="bg-[#04A0EF] hover:bg-[#0380BF]"
             >
               {isLoading ? (
                 <>

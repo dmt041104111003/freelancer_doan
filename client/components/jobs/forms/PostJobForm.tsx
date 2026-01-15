@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -122,7 +122,7 @@ export default function PostJobForm() {
       <div className="mb-6">
         <Link
           href="/my-posted-jobs"
-          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-[#00b14f] mb-4"
+          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-[#04A0EF] mb-4"
         >
           <Icon name="arrow_back" size={20} />
           Quay lại
@@ -226,7 +226,7 @@ export default function PostJobForm() {
                 {formData.skills.map((skill) => (
                   <span
                     key={skill}
-                    className="inline-flex items-center gap-1 px-3 py-1 bg-[#00b14f]/10 text-[#00b14f] rounded-full text-sm"
+                    className="inline-flex items-center gap-1 px-3 py-1 bg-[#04A0EF]/10 text-[#04A0EF] rounded-full text-sm"
                   >
                     {skill}
                     <button type="button" onClick={() => removeSkill(skill)} className="hover:text-red-500 disabled:pointer-events-none">
@@ -250,7 +250,7 @@ export default function PostJobForm() {
                   name="complexity"
                   value={formData.complexity}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00b14f] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#04A0EF] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                 >
                   {(Object.keys(JOB_COMPLEXITY_CONFIG) as JobComplexity[]).map((key) => (
                     <option key={key} value={key}>
@@ -266,7 +266,7 @@ export default function PostJobForm() {
                   name="duration"
                   value={formData.duration}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00b14f] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#04A0EF] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                 >
                   {(Object.keys(JOB_DURATION_CONFIG) as JobDuration[]).map((key) => (
                     <option key={key} value={key}>
@@ -282,7 +282,7 @@ export default function PostJobForm() {
                   name="workType"
                   value={formData.workType}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00b14f] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#04A0EF] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                 >
                   {(Object.keys(WORK_TYPE_CONFIG) as WorkType[]).map((key) => (
                     <option key={key} value={key}>
@@ -354,7 +354,7 @@ export default function PostJobForm() {
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="bg-[#00b14f] hover:bg-[#009643] w-full sm:w-auto"
+              className="bg-[#04A0EF] hover:bg-[#0380BF] w-full sm:w-auto"
             >
               {isSubmitting ? (
                 <>

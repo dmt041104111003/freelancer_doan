@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -78,10 +78,10 @@ export default function LoginForm() {
         <div className="space-y-1">
           <Label htmlFor="email" className="text-sm text-gray-600">Email</Label>
           <div className="relative">
-            <div className="absolute left-3 top-1/2 -translate-y-1/2"><Icon name="mail" size={18} className="text-[#00b14f]" /></div>
+            <div className="absolute left-3 top-1/2 -translate-y-1/2"><Icon name="mail" size={18} className="text-[#04A0EF]" /></div>
             <Input id="email" type="email" placeholder="Email" value={formData.email}
               onChange={(e) => { setFormData({ ...formData, email: e.target.value }); if (errors.email) setErrors({ ...errors, email: "" }); }}
-              disabled={isLoading} className={`pl-10 h-10 text-sm border-gray-200 focus:border-[#00b14f] focus:ring-0 shadow-none ${errors.email ? "border-red-500" : ""}`} />
+              disabled={isLoading} className={`pl-10 h-10 text-sm border-gray-200 focus:border-[#04A0EF] focus:ring-0 shadow-none ${errors.email ? "border-red-500" : ""}`} />
           </div>
           <AuthFormError error={errors.email} />
         </div>
@@ -89,10 +89,10 @@ export default function LoginForm() {
         <div className="space-y-1">
           <Label htmlFor="password" className="text-sm text-gray-600">Mật khẩu</Label>
           <div className="relative">
-            <div className="absolute left-3 top-1/2 -translate-y-1/2"><Icon name="shield" size={18} className="text-[#00b14f]" /></div>
+            <div className="absolute left-3 top-1/2 -translate-y-1/2"><Icon name="shield" size={18} className="text-[#04A0EF]" /></div>
             <Input id="password" type={showPassword ? "text" : "password"} placeholder="Mật khẩu" value={formData.password}
               onChange={(e) => { setFormData({ ...formData, password: e.target.value }); if (errors.password) setErrors({ ...errors, password: "" }); }}
-              disabled={isLoading} className={`pl-10 pr-10 h-10 text-sm border-gray-200 focus:border-[#00b14f] focus:ring-0 shadow-none ${errors.password ? "border-red-500" : ""}`} />
+              disabled={isLoading} className={`pl-10 pr-10 h-10 text-sm border-gray-200 focus:border-[#04A0EF] focus:ring-0 shadow-none ${errors.password ? "border-red-500" : ""}`} />
             <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2" disabled={isLoading}>
               <Icon name={showPassword ? "visibility" : "visibility_off"} size={18} className="text-gray-400 hover:text-gray-600" />
             </button>
@@ -101,14 +101,14 @@ export default function LoginForm() {
         </div>
 
         <div className="text-right">
-          <Link href="/forgot-password" className={`text-sm text-[#00b14f] hover:underline ${isLoading ? "pointer-events-none opacity-50" : ""}`}>Quên mật khẩu</Link>
+          <Link href="/forgot-password" className={`text-sm text-[#04A0EF] hover:underline ${isLoading ? "pointer-events-none opacity-50" : ""}`}>Quên mật khẩu</Link>
         </div>
 
         <AuthSubmitButton isLoading={isLoading} loadingText="Đang đăng nhập..." text="Đăng nhập" />
       </form>
 
       <p className="text-center mt-3 text-sm text-gray-600">
-        Bạn chưa có tài khoản? <Link href="/register" className={`text-[#00b14f] font-medium hover:underline ${isLoading ? "pointer-events-none opacity-50" : ""}`}>Đăng ký ngay</Link>
+        Bạn chưa có tài khoản? <Link href="/register" className={`text-[#04A0EF] font-medium hover:underline ${isLoading ? "pointer-events-none opacity-50" : ""}`}>Đăng ký ngay</Link>
       </p>
     </div>
   );

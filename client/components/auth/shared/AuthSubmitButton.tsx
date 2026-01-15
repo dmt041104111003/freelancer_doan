@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+﻿import { Button } from "@/components/ui/button";
 
 interface AuthSubmitButtonProps {
   isLoading: boolean;
@@ -22,7 +22,7 @@ export default function AuthSubmitButton({
       type={type}
       onClick={onClick}
       disabled={isLoading || disabled} 
-      className="w-full h-10 lg:h-11 bg-[#00b14f] text-sm font-semibold"
+      className="w-full h-10 lg:h-11 bg-[#04A0EF] text-sm font-semibold"
     >
       {isLoading ? (
         <div className="flex items-center gap-2">

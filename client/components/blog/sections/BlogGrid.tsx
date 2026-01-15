@@ -1,107 +1,124 @@
-"use client";
+﻿"use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Icon from "@/components/ui/Icon";
 import { blogArticles } from "@/constant/blog";
-import TextCard from "../cards/TextCard";
-import KnowledgeCard from "../cards/KnowledgeCard";
-import BlogBanner from "./BlogBanner";
+
+// Filter categories
+const categories = [
+  { id: "all", label: "ALL" },
+  { id: "tips", label: "Mẹo hay" },
+  { id: "news", label: "Tin tức" },
+  { id: "events", label: "Sự kiện" },
+  { id: "guides", label: "Hướng dẫn" },
+];
 
 export default function BlogGrid() {
-  const section1 = blogArticles.slice(0, 4);  // First 4 - Featured
-  const section2 = blogArticles.slice(4, 6);  // Next 2 - Xu hướng
-  const section3 = blogArticles.slice(6, 10); // Next 4 - Kiến thức chuyên ngành
-  const section4 = blogArticles.slice(10);    // Remaining - Chế độ lương thưởng
+  const [activeCategory, setActiveCategory] = useState("all");
+
+  // Filter articles based on category
+  const filteredArticles = activeCategory === "all" 
+    ? blogArticles 
+    : blogArticles.filter(article => article.category.toLowerCase().includes(activeCategory));
 
   return (
-    <>
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="space-y-6">
-          {/* Section 1: Bài viết nổi bật */}
-          <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Bài viết nổi bật</h2>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-              {/* Large featured - left */}
-              <TextCard article={section1[0]} showImage titleSize="lg" />
-              
-              {/* 3 small cards - right */}
-              <div className="grid grid-cols-1 gap-3">
-                {section1.slice(1, 4).map((article) => (
-                  <TextCard key={article.id} article={article} />
-                ))}
+    <div className="max-w-6xl mx-auto px-4 py-8">
+      {/* Category Filter Tabs */}
+      <div className="flex flex-wrap justify-center gap-2 mb-10">
+        {categories.map((cat) => (
+          <button
+            key={cat.id}
+            onClick={() => setActiveCategory(cat.id)}
+            className={`px-6 py-2.5 text-sm font-medium border transition-colors ${
+              activeCategory === cat.id
+                ? "bg-[#04A0EF] text-white border-[#04A0EF]"
+                : "bg-white text-gray-600 border-gray-300 hover:border-[#04A0EF] hover:text-[#04A0EF]"
+            }`}
+          >
+            {cat.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Blog Articles List */}
+      <div className="space-y-8">
+        {filteredArticles.slice(0, 6).map((article) => (
+          <article 
+            key={article.id}
+            className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8"
+          >
+            {/* Left - Image */}
+            <Link href={`/blog/${article.id}`} className="relative group">
+              <div className="relative h-[250px] md:h-[300px] overflow-hidden">
+                <Image
+                  src={article.image}
+                  alt={article.title}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              {/* Category Label */}
+              <div className="absolute bottom-0 left-0">
+                <span className="inline-block px-4 py-2 bg-[#04A0EF] text-white text-sm font-medium uppercase">
+                  {article.category}
+                </span>
+              </div>
+            </Link>
+
+            {/* Right - Content */}
+            <div className="flex flex-col justify-center">
+              {/* Title */}
+              <Link href={`/blog/${article.id}`}>
+                <h2 className="text-xl md:text-2xl font-bold text-gray-800 hover:text-[#04A0EF] transition-colors mb-4 leading-tight">
+                  {article.title}
+                </h2>
+              </Link>
+
+              {/* Meta */}
+              <div className="flex items-center gap-4 text-gray-500 text-sm mb-4">
+                <span className="flex items-center gap-1.5">
+                  <Icon name="calendar_today" size={16} />
+                  {article.date}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Icon name="visibility" size={16} />
+                  {article.views || 0}
+                </span>
+              </div>
+
+              {/* Excerpt */}
+              <p className="text-gray-600 leading-relaxed mb-6 line-clamp-3">
+                {article.excerpt}
+              </p>
+
+              {/* Read More Button */}
+              <div>
+                <Link
+                  href={`/blog/${article.id}`}
+                  className="inline-flex items-center gap-2 px-6 py-2.5 border-2 border-gray-800 text-gray-800 font-medium hover:bg-gray-800 hover:text-white transition-colors"
+                >
+                  XEM THÊM
+                </Link>
               </div>
             </div>
-          </section>
+          </article>
+        ))}
+      </div>
 
-          {/* Section 2 */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {section2.map((article) => (
-              <TextCard key={article.id} article={article} titleSize="lg" />
-            ))}
-          </div>
-
-          <Link 
-            href="/blog" 
-            className="flex items-center justify-center gap-2 w-full py-3 mt-8 border-2 border-[#00b14f] text-[#00b14f] rounded-lg hover:bg-[#00b14f] hover:text-white transition-colors font-medium"
+      {/* Load More Button */}
+      {filteredArticles.length > 6 && (
+        <div className="text-center mt-12">
+          <Link
+            href="/blog"
+            className="inline-flex items-center gap-2 px-8 py-3 bg-[#04A0EF] text-white font-semibold rounded hover:bg-[#0380BF] transition-colors"
           >
             Xem thêm bài viết
             <Icon name="arrow_forward" size={20} />
           </Link>
         </div>
-      </div>
-
-      {/* Section 3: Kiến thức chuyên ngành - Full width with background image */}
-      {section3.length > 0 && (
-        <div className="relative py-12 mt-8">
-          {/* Background Image */}
-          <Image
-            src="/landing/slide1.png"
-            alt="Background"
-            fill
-            className="object-cover"
-          />
-          {/* Dark Overlay */}
-          <div className="absolute inset-0 bg-black/70" />
-          
-          {/* Content */}
-          <div className="relative max-w-7xl mx-auto px-4">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-white">Kiến thức chuyên ngành</h2>
-              <Link href="/blog" className="text-white hover:text-white/80 flex items-center gap-1 text-sm font-medium">
-                Xem tất cả
-                <Icon name="chevron_right" size={20} />
-              </Link>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {section3.map((article) => (
-                <KnowledgeCard key={article.id} article={article} />
-              ))}
-            </div>
-          </div>
-        </div>
       )}
-
-      {/* Section 4: Chế độ lương thưởng */}
-      {section4.length > 0 && (
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">Chế độ lương thưởng</h2>
-            <Link href="/blog" className="text-gray-600 hover:text-[#00b14f] flex items-center gap-1 text-sm font-medium">
-              Xem tất cả
-              <Icon name="chevron_right" size={20} />
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {section4.map((article) => (
-              <TextCard key={article.id} article={article} showImage />
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Banner: Trắc nghiệm tính cách */}
-      <BlogBanner />
-    </>
+    </div>
   );
 }

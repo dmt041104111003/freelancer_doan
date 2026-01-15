@@ -1,4 +1,4 @@
-import Icon from "@/components/ui/Icon";
+﻿import Icon from "@/components/ui/Icon";
 
 interface JobsSearchBarProps {
   value: string;
@@ -19,7 +19,7 @@ export default function JobsSearchBar({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-[#00b14f] focus:ring-2 focus:ring-[#00b14f]/20 transition-all bg-white"
+        className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-[#04A0EF] focus:ring-2 focus:ring-[#04A0EF]/20 transition-all bg-white"
       />
     </div>
   );

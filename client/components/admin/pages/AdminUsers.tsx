@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -350,7 +350,7 @@ export default function AdminUsers() {
             <Button
               onClick={handleGrantCredits}
               disabled={isGranting || !creditAmount || parseInt(creditAmount) <= 0}
-              className="bg-[#00b14f] hover:bg-[#00a047]"
+              className="bg-[#04A0EF] hover:bg-[#00a047]"
             >
               {isGranting ? (
                 <>

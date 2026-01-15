@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter, notFound } from "next/navigation";
@@ -152,7 +152,7 @@ export default function JobDetail() {
     return (
       <div className="max-w-7xl mx-auto px-4">
         <div className="bg-white rounded-lg shadow p-8 flex flex-col items-center justify-center">
-          <div className="w-8 h-8 border-4 border-[#00b14f] border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-4 border-[#04A0EF] border-t-transparent rounded-full animate-spin" />
           <p className="mt-4 text-gray-600">Đang tải thông tin...</p>
         </div>
       </div>
@@ -168,7 +168,7 @@ export default function JobDetail() {
       {/* Back button */}
       <button
         onClick={() => router.back()}
-        className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-[#00b14f] mb-4"
+        className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-[#04A0EF] mb-4"
       >
         <Icon name="arrow_back" size={20} />
         Quay lại

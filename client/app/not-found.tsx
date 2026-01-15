@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import Icon from "@/components/ui/Icon";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ export default function NotFound() {
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Không tìm thấy trang</h1>
         <p className="text-gray-500 mb-6">Trang bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.</p>
         <Link href="/">
-          <Button className="bg-[#00b14f] hover:bg-[#009643]">
+          <Button className="bg-[#04A0EF] hover:bg-[#0380BF]">
             <Icon name="home" size={20} />
             Về trang chủ
           </Button>

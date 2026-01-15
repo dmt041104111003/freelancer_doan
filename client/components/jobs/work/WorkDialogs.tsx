@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -83,7 +83,7 @@ export function WorkSubmitDialog({
       >
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Icon name="upload_file" size={20} className="text-[#00b14f]" />
+            <Icon name="upload_file" size={20} className="text-[#04A0EF]" />
             Nộp sản phẩm
           </DialogTitle>
           <DialogDescription>
@@ -114,7 +114,7 @@ export function WorkSubmitDialog({
               placeholder="Mô tả những gì đã hoàn thành, hướng dẫn sử dụng..."
               rows={3}
               disabled={isSubmitting}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00b14f] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#04A0EF] disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </div>
 
@@ -138,7 +138,7 @@ export function WorkSubmitDialog({
           <Button 
             onClick={handleSubmit} 
             disabled={isSubmitting || !url.trim()}
-            className="bg-[#00b14f] hover:bg-[#009643]"
+            className="bg-[#04A0EF] hover:bg-[#0380BF]"
           >
             {isSubmitting ? (
               <>
@@ -256,7 +256,7 @@ export function WorkReviewDialog({
 
         {isLoading ? (
           <div className="py-8 text-center">
-            <div className="w-8 h-8 border-4 border-[#00b14f] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+            <div className="w-8 h-8 border-4 border-[#04A0EF] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
             <p className="text-gray-500">Đang tải...</p>
           </div>
         ) : !workSubmission?.workSubmissionUrl ? (
@@ -283,7 +283,7 @@ export function WorkReviewDialog({
                     target="_blank"
                     rel="noopener noreferrer"
                     download
-                    className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-[#00b14f]/5 hover:bg-[#00b14f]/10 transition-colors"
+                    className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-[#04A0EF]/5 hover:bg-[#04A0EF]/10 transition-colors"
                   >
                     <Icon name="picture_as_pdf" size={20} className="text-red-500 shrink-0" />
                     <span className="flex-1 text-sm text-gray-700">Sản phẩm đã nộp</span>
@@ -386,7 +386,7 @@ export function WorkReviewDialog({
               <Button 
                 onClick={handleApprove} 
                 disabled={isProcessing}
-                className="bg-[#00b14f] hover:bg-[#009643]"
+                className="bg-[#04A0EF] hover:bg-[#0380BF]"
               >
                 {isProcessing ? (
                   <>

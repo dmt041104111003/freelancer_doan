@@ -1,4 +1,4 @@
-import Icon from "@/components/ui/Icon";
+﻿import Icon from "@/components/ui/Icon";
 
 interface AuthFormHeaderProps {
   title: string;
@@ -10,8 +10,8 @@ interface AuthFormHeaderProps {
 export default function AuthFormHeader({ title, subtitle, icon, centered = false }: AuthFormHeaderProps) {
   return (
     <div className={`mb-4 lg:mb-3 ${centered ? "text-center" : ""}`}>
-      {icon && <Icon name={icon} size={48} className="text-[#00b14f] mx-auto mb-3" />}
-      <h1 className="text-lg sm:text-xl font-bold text-[#00b14f] mb-1">{title}</h1>
+      {icon && <Icon name={icon} size={48} className="text-[#04A0EF] mx-auto mb-3" />}
+      <h1 className="text-lg sm:text-xl font-bold text-[#04A0EF] mb-1">{title}</h1>
       {subtitle && <p className="text-gray-500 text-sm">{subtitle}</p>}
     </div>
   );

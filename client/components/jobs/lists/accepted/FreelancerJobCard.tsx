@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { Job, JOB_STATUS_CONFIG, WorkStatus } from "@/types/job";
@@ -34,7 +34,7 @@ export default function FreelancerJobCard({ job, onSubmitWork, onViewDispute }: 
         {job.employer && (
           <Avatar className="w-12 h-12 shrink-0 hidden sm:flex">
             <AvatarImage src={job.employer.avatarUrl} alt={job.employer.fullName} />
-            <AvatarFallback className="bg-[#00b14f] text-white">
+            <AvatarFallback className="bg-[#04A0EF] text-white">
               {job.employer.fullName.charAt(0)}
             </AvatarFallback>
           </Avatar>
@@ -42,7 +42,7 @@ export default function FreelancerJobCard({ job, onSubmitWork, onViewDispute }: 
 
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2 mb-2">
-            <h3 className="text-lg font-semibold text-gray-900 hover:text-[#00b14f] cursor-pointer truncate">
+            <h3 className="text-lg font-semibold text-gray-900 hover:text-[#04A0EF] cursor-pointer truncate">
               {job.title}
             </h3>
             <span
@@ -102,7 +102,7 @@ export default function FreelancerJobCard({ job, onSubmitWork, onViewDispute }: 
               target="_blank"
               rel="noopener noreferrer"
               download
-              className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-[#00b14f]/5 hover:bg-[#00b14f]/10 transition-colors mb-2"
+              className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-[#04A0EF]/5 hover:bg-[#04A0EF]/10 transition-colors mb-2"
             >
               <Icon name="picture_as_pdf" size={20} className="text-red-500 shrink-0" />
               <span className="flex-1 text-sm text-gray-700 truncate">Sản phẩm đã nộp</span>
@@ -132,7 +132,7 @@ export default function FreelancerJobCard({ job, onSubmitWork, onViewDispute }: 
             ) : (
               <Button
                 size="sm"
-                className="bg-[#00b14f] hover:bg-[#009643]"
+                className="bg-[#04A0EF] hover:bg-[#0380BF]"
                 onClick={() => onSubmitWork({ id: job.id, title: job.title })}
               >
                 <Icon name="upload" size={16} />

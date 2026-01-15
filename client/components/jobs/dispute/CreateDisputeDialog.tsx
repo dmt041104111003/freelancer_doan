@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { toast } from "sonner";
@@ -92,7 +92,7 @@ export default function CreateDisputeDialog({
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Mô tả chi tiết sai phạm của người làm..."
               rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00b14f]"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#04A0EF]"
             />
           </div>
 

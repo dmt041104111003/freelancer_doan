@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -180,7 +180,7 @@ export default function PostedJobsList() {
         subtitle={page ? `${page.totalElements} công việc` : "Xem và quản lý các công việc bạn đã đăng tuyển"}
       >
         <Link href="/my-posted-jobs/create">
-          <Button className="bg-[#00b14f] hover:bg-[#009643] w-full sm:w-auto">
+          <Button className="bg-[#04A0EF] hover:bg-[#0380BF] w-full sm:w-auto">
             <Icon name="add" size={20} />
             Đăng việc mới
           </Button>
@@ -196,7 +196,7 @@ export default function PostedJobsList() {
               onClick={() => setFilter(tab.key)}
               className={`px-4 py-3 text-sm font-medium transition-colors whitespace-nowrap ${
                 filter === tab.key
-                  ? "text-[#00b14f] border-b-2 border-[#00b14f]"
+                  ? "text-[#04A0EF] border-b-2 border-[#04A0EF]"
                   : "text-gray-500 hover:text-gray-700"
               }`}
             >
@@ -233,7 +233,7 @@ export default function PostedJobsList() {
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-2 mb-2">
                         <span className="text-xs text-gray-400">#{job.id}</span>
-                        <Link href={`/jobs/${job.id}`} className="text-lg font-semibold text-gray-900 hover:text-[#00b14f]">
+                        <Link href={`/jobs/${job.id}`} className="text-lg font-semibold text-gray-900 hover:text-[#04A0EF]">
                           {job.title}
                         </Link>
                         <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${JOB_STATUS_CONFIG[job.status]?.color}`}>
@@ -254,7 +254,7 @@ export default function PostedJobsList() {
                     <div className="flex flex-row sm:flex-col gap-2 shrink-0">
                       <Button
                         size="sm"
-                        className="flex-1 sm:flex-none bg-[#00b14f] hover:bg-[#009643]"
+                        className="flex-1 sm:flex-none bg-[#04A0EF] hover:bg-[#0380BF]"
                         onClick={() => handleReviewWork(job)}
                       >
                         <Icon name="rate_review" size={16} />

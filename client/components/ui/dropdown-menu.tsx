@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import * as React from "react"
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
@@ -42,7 +42,7 @@ function DropdownMenuContent({
         data-slot="dropdown-menu-content"
         sideOffset={sideOffset}
         className={cn(
-          "z-[9999] min-w-[200px] bg-white rounded-b-xl shadow-xl border border-gray-200 border-t-2 border-t-[#00b14f] py-2 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+          "z-[9999] min-w-[200px] bg-white rounded-b-xl shadow-xl border border-gray-200 border-t-2 border-t-[#04A0EF] py-2 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
           className
         )}
         {...props}
@@ -76,8 +76,8 @@ function DropdownMenuItem({
       className={cn(
         "flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 cursor-pointer outline-none transition-colors",
         "hover:bg-gray-50 focus:bg-gray-50",
-        "[&_svg]:text-gray-400 [&_svg]:shrink-0 hover:[&_svg]:text-[#00b14f] focus:[&_svg]:text-[#00b14f]",
-        "hover:text-[#00b14f] focus:text-[#00b14f]",
+        "[&_svg]:text-gray-400 [&_svg]:shrink-0 hover:[&_svg]:text-[#04A0EF] focus:[&_svg]:text-[#04A0EF]",
+        "hover:text-[#04A0EF] focus:text-[#04A0EF]",
         "data-[variant=destructive]:hover:text-red-500 data-[variant=destructive]:focus:text-red-500",
         "data-[variant=destructive]:hover:[&_svg]:text-red-500 data-[variant=destructive]:focus:[&_svg]:text-red-500",
         "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",

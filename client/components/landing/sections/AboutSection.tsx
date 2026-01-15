@@ -1,68 +1,147 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
+import Icon from "@/components/ui/Icon";
+
+// Demo job data
+const jobOpportunities = [
+  {
+    id: 1,
+    title: "Lập trình viên Frontend (ReactJS)",
+    isUrgent: true,
+    deadline: null,
+    level: "Middle",
+    location: "Remote",
+  },
+  {
+    id: 2,
+    title: "UI/UX Designer",
+    isUrgent: true,
+    deadline: null,
+    level: "Senior",
+    location: "Hà Nội",
+  },
+  {
+    id: 3,
+    title: "Content Writer",
+    isUrgent: false,
+    deadline: "20/02/2026",
+    level: "Junior",
+    location: "Remote",
+  },
+  {
+    id: 4,
+    title: "Backend Developer (NodeJS)",
+    isUrgent: true,
+    deadline: null,
+    level: "Senior",
+    location: "TP. HCM",
+  },
+  {
+    id: 5,
+    title: "Digital Marketing Specialist",
+    isUrgent: false,
+    deadline: "25/02/2026",
+    level: "Middle",
+    location: "Remote",
+  },
+];
 
 export default function AboutSection() {
   return (
-    <section className="py-12 bg-white">
+    <section className="py-16 md:py-20 bg-[#f5f7fa]">
       <div className="max-w-6xl mx-auto px-4">
-        {/* Main Title */}
-        <h2 className="text-xl font-bold text-gray-900 mb-4">
-          Cơ hội ứng tuyển việc làm với đãi ngộ hấp dẫn tại các công ty hàng đầu
-        </h2>
-        
-        {/* Intro Paragraph */}
-        <p className="text-gray-700 text-sm leading-relaxed mb-6">
-          Trước sự phát triển vượt bậc của nền kinh tế, rất nhiều ngành nghề trở nên khan hiếm nhân lực hoặc thiếu nhân lực giỏi. Vì vậy, hầu hết các trường Đại học đều liên kết với các công ty, doanh nghiệp, cơ quan để tạo cơ hội cho các bạn sinh viên được học tập, rèn luyện bản thân và làm quen với môi trường làm việc từ sớm. Trong{" "}
-          <Link href="/jobs" className="text-[#00b14f] font-semibold hover:underline">
-            danh sách việc làm
-          </Link>{" "}
-          trên đây, WorkHub mang đến cho bạn những cơ hội việc làm tại những môi trường làm việc năng động, chuyên nghiệp.
-        </p>
+        {/* Header */}
+        <div className="text-center mb-10 md:mb-12">
+          <p className="text-[#04A0EF] text-lg md:text-xl font-medium mb-2">
+            Cơ hội việc làm
+          </p>
+          <h2 className="text-gray-800 text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+            Dành cho Freelancer
+          </h2>
+          {/* Accent Line */}
+          <div className="flex justify-center">
+            <div className="w-16 h-1 bg-[#04A0EF]"></div>
+          </div>
+        </div>
 
-        {/* Section: Vậy tại sao nên tìm việc tại WorkHub? */}
-        <h3 className="text-base font-bold text-gray-900 mb-3">
-          Vậy tại sao nên tìm việc tại WorkHub?
-        </h3>
+        {/* Job Listings Table */}
+        <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+          {/* Table Header - Hidden on mobile */}
+          <div className="hidden md:grid md:grid-cols-12 gap-4 px-6 py-4 bg-gray-50 border-b border-gray-200 text-sm font-semibold text-gray-600">
+            <div className="col-span-4">Vị trí</div>
+            <div className="col-span-2 text-center">Trạng thái</div>
+            <div className="col-span-2 text-center">Cấp bậc</div>
+            <div className="col-span-2 text-center">Địa điểm</div>
+            <div className="col-span-2 text-right">Thao tác</div>
+          </div>
 
-        {/* Sub-section: Việc làm Chất lượng */}
-        <h4 className="text-sm font-bold text-gray-800 mb-2">Việc làm Chất lượng</h4>
-        <ul className="list-disc list-inside text-gray-700 text-sm space-y-1 mb-4 ml-2">
-          <li>Hàng ngàn tin tuyển dụng chất lượng cao được cập nhật thường xuyên để đáp ứng nhu cầu tìm việc của ứng viên.</li>
-          <li>Hệ thống thông minh tự động gợi ý các công việc phù hợp theo CV của bạn.</li>
-        </ul>
+          {/* Job Rows */}
+          {jobOpportunities.map((job, index) => (
+            <div
+              key={job.id}
+              className={`grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-4 md:px-6 py-4 md:py-5 items-center ${
+                index !== jobOpportunities.length - 1 ? "border-b border-gray-100" : ""
+              } hover:bg-gray-50 transition-colors`}
+            >
+              {/* Job Title */}
+              <div className="md:col-span-4">
+                <Link 
+                  href={`/jobs/${job.id}`}
+                  className="text-[#04A0EF] font-semibold text-base md:text-lg hover:underline"
+                >
+                  {job.title}
+                </Link>
+              </div>
 
-        {/* Sub-section: Công cụ viết CV đẹp Miễn phí */}
-        <h4 className="text-sm font-bold text-gray-800 mb-2">Công cụ viết CV đẹp Miễn phí</h4>
-        <ul className="list-disc list-inside text-gray-700 text-sm space-y-1 mb-4 ml-2">
-          <li>Nhiều mẫu CV đẹp, phù hợp nhu cầu ứng tuyển các vị trí khác nhau.</li>
-          <li>Tương tác trực quan, dễ dàng chỉnh sửa thông tin, tạo CV online nhanh chóng trong vòng 5 phút.</li>
-        </ul>
+              {/* Status/Deadline */}
+              <div className="md:col-span-2 flex md:justify-center">
+                {job.isUrgent ? (
+                  <span className="inline-flex items-center px-3 py-1 rounded text-sm font-medium bg-red-50 text-red-600 border border-red-200">
+                    Tuyển gấp
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1.5 text-gray-600 text-sm">
+                    <Icon name="schedule" size={16} />
+                    {job.deadline}
+                  </span>
+                )}
+              </div>
 
-        {/* Sub-section: Hỗ trợ Người tìm việc */}
-        <h4 className="text-sm font-bold text-gray-800 mb-2">Hỗ trợ Người tìm việc</h4>
-        <ul className="list-disc list-inside text-gray-700 text-sm space-y-1 mb-6 ml-2">
-          <li>Nhà tuyển dụng chủ động tìm kiếm và liên hệ với bạn qua hệ thống kết nối ứng viên thông minh.</li>
-          <li>Báo cáo chi tiết Nhà tuyển dụng đã xem CV và gửi offer tới bạn.</li>
-        </ul>
+              {/* Level */}
+              <div className="md:col-span-2 md:text-center">
+                <span className="text-gray-700 text-sm md:text-base">{job.level}</span>
+              </div>
 
-        {/* Closing Paragraph */}
-        <p className="text-gray-700 text-sm leading-relaxed">
-          Tại{" "}
-          <Link href="/" className="text-[#00b14f] font-semibold hover:underline">
-            WorkHub
+              {/* Location */}
+              <div className="md:col-span-2 md:text-center">
+                <span className="text-gray-700 text-sm md:text-base">{job.location}</span>
+              </div>
+
+              {/* Apply Link */}
+              <div className="md:col-span-2 md:text-right mt-2 md:mt-0">
+                <Link
+                  href={`/jobs/${job.id}`}
+                  className="inline-flex items-center gap-1 text-[#04A0EF] font-medium hover:underline text-sm md:text-base"
+                >
+                  Ứng tuyển
+                  <Icon name="chevron_right" size={18} />
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* View All Link */}
+        <div className="text-center mt-8">
+          <Link
+            href="/jobs"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-[#04A0EF] text-white font-semibold rounded hover:bg-[#0380BF] transition-colors"
+          >
+            Xem tất cả việc làm
+            <Icon name="arrow_forward" size={20} />
           </Link>
-          , bạn có thể tìm thấy những tin tuyển dụng việc làm với mức lương vô cùng hấp dẫn. Những nhà tuyển dụng kết nối với WorkHub đều là những công ty lớn tại Việt Nam, nơi bạn có thể làm việc trong một môi trường chuyên nghiệp, năng động, trẻ trung. WorkHub là nền tảng tuyển dụng công nghệ cao giúp các nhà tuyển dụng và ứng viên kết nối với nhau. Nhanh tay tạo CV để ứng tuyển vào các vị trí việc làm mới nhất hấp dẫn tại{" "}
-          <Link href="/jobs?location=hanoi" className="text-[#00b14f] font-semibold hover:underline">
-            việc làm mới nhất tại Hà Nội
-          </Link>
-          ,{" "}
-          <Link href="/jobs?location=hcm" className="text-[#00b14f] font-semibold hover:underline">
-            việc làm mới nhất tại TP.HCM
-          </Link>
-          {" "}ở WorkHub, bạn sẽ tìm thấy những{" "}
-          <span className="font-semibold">việc làm mới nhất</span> với mức lương tốt nhất!
-        </p>
+        </div>
       </div>
     </section>
   );

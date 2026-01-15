@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Icon from "./Icon";
 
@@ -63,7 +63,7 @@ export function Pagination({
               disabled={disabled}
               className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-medium transition-colors flex-shrink-0 ${
                 p === currentPage
-                  ? "bg-[#00b14f] text-white"
+                  ? "bg-[#04A0EF] text-white"
                   : "text-gray-600 hover:bg-gray-100"
               }`}
             >

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { Job, JOB_STATUS_CONFIG, JOB_COMPLEXITY_CONFIG, JOB_DURATION_CONFIG, WORK_TYPE_CONFIG } from "@/types/job";
@@ -50,9 +50,9 @@ export default function JobDetailHeader({ job, isOwner, formatCurrency, formatRe
       </div>
 
       {job.budget && (
-        <div className="bg-[#00b14f]/5 rounded-lg p-4 mb-4">
+        <div className="bg-[#04A0EF]/5 rounded-lg p-4 mb-4">
           <p className="text-sm text-gray-500 mb-1">Ngân sách</p>
-          <p className="text-2xl font-bold text-[#00b14f]">
+          <p className="text-2xl font-bold text-[#04A0EF]">
             {formatCurrency(job.budget, job.currency)}
           </p>
         </div>

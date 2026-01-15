@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -44,7 +44,7 @@ export default function WalletContent({ user }: WalletContentProps) {
   return (
     <div className="max-w-7xl mx-auto px-4">
       <div className="mb-6">
-        <Link href="/profile" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-[#00b14f] mb-4">
+        <Link href="/profile" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-[#04A0EF] mb-4">
           <Icon name="arrow_back" size={20} />
           Quay lại
         </Link>

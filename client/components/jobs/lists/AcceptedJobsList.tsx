@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
@@ -229,7 +229,7 @@ export default function AcceptedJobsList() {
         <Link href="/jobs">
           <Button 
             variant="outline" 
-            className="border-[#00b14f] text-[#00b14f] hover:bg-[#00b14f] hover:text-white w-full sm:w-auto"
+            className="border-[#04A0EF] text-[#04A0EF] hover:bg-[#04A0EF] hover:text-white w-full sm:w-auto"
           >
             <Icon name="search" size={20} />
             Tìm việc mới
@@ -255,7 +255,7 @@ export default function AcceptedJobsList() {
               onClick={() => setFilter(tab.key)}
               className={`px-4 py-3 text-sm font-medium transition-colors ${
                 filter === tab.key
-                  ? "text-[#00b14f] border-b-2 border-[#00b14f]"
+                  ? "text-[#04A0EF] border-b-2 border-[#04A0EF]"
                   : "text-gray-500 hover:text-gray-700"
               }`}
             >
@@ -281,12 +281,12 @@ export default function AcceptedJobsList() {
             <p className="text-gray-600 mb-4">
               {searchKeyword ? (
                 <>
-                  Tìm thấy <span className="font-semibold text-[#00b14f]">{filteredSavedJobs.length}</span> kết quả
+                  Tìm thấy <span className="font-semibold text-[#04A0EF]">{filteredSavedJobs.length}</span> kết quả
                   cho &quot;<span className="font-medium">{searchKeyword}</span>&quot;
                 </>
               ) : (
                 <>
-                  <span className="font-semibold text-[#00b14f]">{savedJobs.length}</span> công việc đã lưu
+                  <span className="font-semibold text-[#04A0EF]">{savedJobs.length}</span> công việc đã lưu
                 </>
               )}
             </p>
@@ -304,7 +304,7 @@ export default function AcceptedJobsList() {
                   message={searchKeyword ? "Không tìm thấy kết quả" : "Chưa lưu công việc nào"}
                 >
                   <Link href="/jobs">
-                    <Button className="mt-4 bg-[#00b14f] hover:bg-[#009643]">
+                    <Button className="mt-4 bg-[#04A0EF] hover:bg-[#0380BF]">
                       <Icon name="search" size={16} />
                       Tìm việc ngay
                     </Button>
@@ -317,7 +317,7 @@ export default function AcceptedJobsList() {
                       {/* Employer Avatar */}
                       <Avatar className="w-12 h-12 shrink-0 hidden sm:flex">
                         <AvatarImage src={savedJob.employer.avatarUrl} alt={savedJob.employer.fullName} />
-                        <AvatarFallback className="bg-[#00b14f] text-white">
+                        <AvatarFallback className="bg-[#04A0EF] text-white">
                           {savedJob.employer.fullName.charAt(0)}
                         </AvatarFallback>
                       </Avatar>
@@ -325,7 +325,7 @@ export default function AcceptedJobsList() {
                       <div className="flex-1 min-w-0">
                         <div className="flex flex-wrap items-center gap-2 mb-2">
                           <Link href={`/jobs/${savedJob.jobId}`}>
-                            <h3 className="text-lg font-semibold text-gray-900 hover:text-[#00b14f] cursor-pointer">
+                            <h3 className="text-lg font-semibold text-gray-900 hover:text-[#04A0EF] cursor-pointer">
                               {savedJob.jobTitle}
                             </h3>
                           </Link>
@@ -341,7 +341,7 @@ export default function AcceptedJobsList() {
                         </p>
 
                         <div className="flex flex-wrap gap-4 text-sm text-gray-500 mb-3">
-                          <span className="flex items-center gap-1 text-[#00b14f] font-medium">
+                          <span className="flex items-center gap-1 text-[#04A0EF] font-medium">
                             <Icon name="payments" size={16} />
                             {savedJob.jobBudget ? `${savedJob.jobBudget.toLocaleString("vi-VN")} VND` : "Thương lượng"}
                           </span>
@@ -464,12 +464,12 @@ export default function AcceptedJobsList() {
             <p className="text-gray-600 mb-4">
               {searchKeyword ? (
                 <>
-                  Tìm thấy <span className="font-semibold text-[#00b14f]">{filteredApplications.length}</span> kết quả
+                  Tìm thấy <span className="font-semibold text-[#04A0EF]">{filteredApplications.length}</span> kết quả
                   cho &quot;<span className="font-medium">{searchKeyword}</span>&quot;
                 </>
               ) : (
                 <>
-                  <span className="font-semibold text-[#00b14f]">{applications.length}</span> đơn ứng tuyển
+                  <span className="font-semibold text-[#04A0EF]">{applications.length}</span> đơn ứng tuyển
                 </>
               )}
             </p>
@@ -493,7 +493,7 @@ export default function AcceptedJobsList() {
                       <div className="flex-1 min-w-0">
                         <div className="flex flex-wrap items-center gap-2 mb-2">
                           <Link href={`/jobs/${app.jobId}`}>
-                            <h3 className="text-lg font-semibold text-gray-900 hover:text-[#00b14f] cursor-pointer">
+                            <h3 className="text-lg font-semibold text-gray-900 hover:text-[#04A0EF] cursor-pointer">
                               {app.jobTitle}
                             </h3>
                           </Link>
@@ -575,7 +575,7 @@ export default function AcceptedJobsList() {
               </div>
               <div className="bg-white rounded-lg shadow p-4">
                 <div className="flex items-center gap-3">
-                  <Icon name="payments" size={24} className="text-[#00b14f]" />
+                  <Icon name="payments" size={24} className="text-[#04A0EF]" />
                   <div>
                     <p className="text-lg font-bold text-gray-900">{formatCurrency(stats.totalEarnings)}</p>
                     <p className="text-xs text-gray-500">Tổng thu nhập</p>

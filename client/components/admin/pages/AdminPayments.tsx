@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
@@ -68,7 +68,7 @@ export default function AdminPayments() {
               setStatusFilter(e.target.value as DepositStatus | "");
               setPage(0);
             }}
-            className="h-8 px-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#00b14f]"
+            className="h-8 px-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#04A0EF]"
           >
             {STATUS_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -97,7 +97,7 @@ export default function AdminPayments() {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <p className="text-lg font-semibold text-[#00b14f]">{formatCurrency(deposit.amount)}</p>
+                  <p className="text-lg font-semibold text-[#04A0EF]">{formatCurrency(deposit.amount)}</p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 text-xs text-gray-500 pt-2 border-t">

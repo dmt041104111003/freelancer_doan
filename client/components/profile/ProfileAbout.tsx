@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -39,7 +39,7 @@ export default function ProfileAbout({ bio, onUpdate, isLoading }: ProfileAboutP
         {!isEditing && (
           <button
             onClick={handleEdit}
-            className="text-gray-500 hover:text-[#00b14f]"
+            className="text-gray-500 hover:text-[#04A0EF]"
           >
             <Icon name={bio ? "edit" : "add"} size={18} />
           </button>
@@ -67,7 +67,7 @@ export default function ProfileAbout({ bio, onUpdate, isLoading }: ProfileAboutP
                 size="sm"
                 onClick={handleSave}
                 disabled={isLoading}
-                className="bg-[#00b14f] hover:bg-[#009643]"
+                className="bg-[#04A0EF] hover:bg-[#0380BF]"
               >
                 {isLoading ? "Đang lưu..." : "Lưu"}
               </Button>
@@ -79,7 +79,7 @@ export default function ProfileAbout({ bio, onUpdate, isLoading }: ProfileAboutP
       ) : (
         <button
           onClick={handleEdit}
-          className="text-gray-400 hover:text-[#00b14f] flex items-center gap-2"
+          className="text-gray-400 hover:text-[#04A0EF] flex items-center gap-2"
         >
           <Icon name="add" size={16} />
           Thêm giới thiệu về bản thân

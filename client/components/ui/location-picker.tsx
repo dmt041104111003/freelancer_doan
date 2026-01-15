@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import * as React from "react"
 import { useState, useRef, useEffect } from "react"
@@ -79,7 +79,7 @@ function LocationPicker({
         onClick={() => setOpen(!open)}
         className="flex sm:hidden items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition-colors"
       >
-        <Icon name="location_on" size={20} className={selectedProvinces.length > 0 ? "text-[#00b14f]" : "text-gray-400"} />
+        <Icon name="location_on" size={20} className={selectedProvinces.length > 0 ? "text-[#04A0EF]" : "text-gray-400"} />
       </button>
 
       {/* Desktop Button */}
@@ -127,7 +127,7 @@ function LocationPicker({
                     <div className={cn(
                       "w-5 h-5 rounded border-2 flex items-center justify-center transition-colors shrink-0",
                       selectedProvinces.includes(province.id)
-                        ? "bg-[#00b14f] border-[#00b14f]"
+                        ? "bg-[#04A0EF] border-[#04A0EF]"
                         : "border-gray-300"
                     )}>
                       {selectedProvinces.includes(province.id) && (
@@ -142,7 +142,7 @@ function LocationPicker({
             <div className="p-4 border-t border-gray-200">
               <button
                 onClick={() => setOpen(false)}
-                className="w-full py-3 bg-[#00b14f] text-white rounded-full font-medium hover:bg-[#009643] transition-colors"
+                className="w-full py-3 bg-[#04A0EF] text-white rounded-full font-medium hover:bg-[#0380BF] transition-colors"
               >
                 Xác nhận ({selectedProvinces.length} địa điểm)
               </button>
@@ -183,7 +183,7 @@ function LocationPicker({
                       <div className={cn(
                         "w-5 h-5 rounded border-2 flex items-center justify-center transition-colors",
                         selectedProvinces.includes(province.id)
-                          ? "bg-[#00b14f] border-[#00b14f]"
+                          ? "bg-[#04A0EF] border-[#04A0EF]"
                           : "border-gray-300"
                       )}>
                         {selectedProvinces.includes(province.id) && (
@@ -200,7 +200,7 @@ function LocationPicker({
 
             <div className="w-1/2">
               <div className="p-3 border-b border-gray-100">
-                <span className="text-[#00b14f] font-semibold text-sm">QUẬN/HUYỆN</span>
+                <span className="text-[#04A0EF] font-semibold text-sm">QUẬN/HUYỆN</span>
               </div>
               <div className="max-h-[300px] overflow-y-auto p-4 scrollbar-hide">
                 {activeProvinceData ? (
@@ -211,7 +211,7 @@ function LocationPicker({
                           type="checkbox"
                           checked={selectedDistricts.includes(district)}
                           onChange={() => toggleDistrict(district)}
-                          className="w-4 h-4 accent-[#00b14f]"
+                          className="w-4 h-4 accent-[#04A0EF]"
                         />
                         <span className="text-gray-700 text-sm">{district}</span>
                       </label>

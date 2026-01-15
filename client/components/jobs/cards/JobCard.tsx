@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { Job, JOB_COMPLEXITY_CONFIG, WORK_TYPE_CONFIG } from "@/types/job";
@@ -28,7 +28,7 @@ export default function JobCard({ job, onFavorite, isFavorite = false }: JobCard
   const workTypeConfig = WORK_TYPE_CONFIG[job.workType];
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-lg hover:border-[#00b14f]/30 transition-all duration-200 group">
+    <div className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-lg hover:border-[#04A0EF]/30 transition-all duration-200 group">
       <div className="flex gap-3">
         {/* Company Logo */}
         <Link href={`/jobs/${job.id}`} className="shrink-0">
@@ -38,7 +38,7 @@ export default function JobCard({ job, onFavorite, isFavorite = false }: JobCard
               alt={job.employer.company || job.employer.fullName} 
               className="object-cover"
             />
-            <AvatarFallback className="rounded-lg bg-gradient-to-br from-[#00b14f] to-[#009643] text-white text-lg font-semibold">
+            <AvatarFallback className="rounded-lg bg-gradient-to-br from-[#04A0EF] to-[#0380BF] text-white text-lg font-semibold">
               {(job.employer.company || job.employer.fullName)?.charAt(0)?.toUpperCase() || "C"}
             </AvatarFallback>
           </Avatar>
@@ -58,7 +58,7 @@ export default function JobCard({ job, onFavorite, isFavorite = false }: JobCard
 
           {/* Job Title */}
           <Link href={`/jobs/${job.id}`}>
-            <h3 className="font-semibold text-gray-900 group-hover:text-[#00b14f] transition-colors line-clamp-2 mb-1 text-[15px] leading-snug">
+            <h3 className="font-semibold text-gray-900 group-hover:text-[#04A0EF] transition-colors line-clamp-2 mb-1 text-[15px] leading-snug">
               {job.title}
             </h3>
           </Link>

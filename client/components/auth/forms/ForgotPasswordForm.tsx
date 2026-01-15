@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -142,10 +142,10 @@ export default function ForgotPasswordForm() {
           <div className="space-y-1">
             <Label htmlFor="newPassword" className="text-sm text-gray-600">Mật khẩu mới</Label>
             <div className="relative">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2"><Icon name="shield" size={18} className="text-[#00b14f]" /></div>
+              <div className="absolute left-3 top-1/2 -translate-y-1/2"><Icon name="shield" size={18} className="text-[#04A0EF]" /></div>
               <Input id="newPassword" type={showPassword ? "text" : "password"} placeholder="Nhập mật khẩu mới" value={newPassword}
                 onChange={(e) => { setNewPassword(e.target.value); if (errors.newPassword) setErrors({ ...errors, newPassword: "" }); }}
-                disabled={isLoading} className={`pl-10 pr-10 h-10 text-sm border-gray-200 focus:border-[#00b14f] focus:ring-0 shadow-none ${errors.newPassword ? "border-red-500" : ""}`} />
+                disabled={isLoading} className={`pl-10 pr-10 h-10 text-sm border-gray-200 focus:border-[#04A0EF] focus:ring-0 shadow-none ${errors.newPassword ? "border-red-500" : ""}`} />
               <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2" disabled={isLoading}>
                 <Icon name={showPassword ? "visibility" : "visibility_off"} size={18} className="text-gray-400 hover:text-gray-600" />
               </button>
@@ -156,10 +156,10 @@ export default function ForgotPasswordForm() {
           <div className="space-y-1">
             <Label htmlFor="confirmPassword" className="text-sm text-gray-600">Xác nhận mật khẩu</Label>
             <div className="relative">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2"><Icon name="shield" size={18} className="text-[#00b14f]" /></div>
+              <div className="absolute left-3 top-1/2 -translate-y-1/2"><Icon name="shield" size={18} className="text-[#04A0EF]" /></div>
               <Input id="confirmPassword" type={showConfirmPassword ? "text" : "password"} placeholder="Nhập lại mật khẩu" value={confirmPassword}
                 onChange={(e) => { setConfirmPassword(e.target.value); if (errors.confirmPassword) setErrors({ ...errors, confirmPassword: "" }); }}
-                disabled={isLoading} className={`pl-10 pr-10 h-10 text-sm border-gray-200 focus:border-[#00b14f] focus:ring-0 shadow-none ${errors.confirmPassword ? "border-red-500" : ""}`} />
+                disabled={isLoading} className={`pl-10 pr-10 h-10 text-sm border-gray-200 focus:border-[#04A0EF] focus:ring-0 shadow-none ${errors.confirmPassword ? "border-red-500" : ""}`} />
               <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-3 top-1/2 -translate-y-1/2" disabled={isLoading}>
                 <Icon name={showConfirmPassword ? "visibility" : "visibility_off"} size={18} className="text-gray-400 hover:text-gray-600" />
               </button>
@@ -190,12 +190,12 @@ export default function ForgotPasswordForm() {
             <Label htmlFor="otp" className="text-sm text-gray-600">Mã OTP</Label>
             <Input id="otp" type="text" placeholder="Nhập mã OTP 6 số" value={otpCode} maxLength={AUTH_CONSTANTS.OTP_LENGTH}
               onChange={(e) => { setOtpCode(e.target.value.replace(/\D/g, "").slice(0, AUTH_CONSTANTS.OTP_LENGTH)); if (errors.otp) setErrors({ ...errors, otp: "" }); }}
-              disabled={isLoading} className={`h-12 text-center text-2xl tracking-widest font-mono border-gray-200 focus:border-[#00b14f] focus:ring-0 shadow-none ${errors.otp ? "border-red-500" : ""}`} />
+              disabled={isLoading} className={`h-12 text-center text-2xl tracking-widest font-mono border-gray-200 focus:border-[#04A0EF] focus:ring-0 shadow-none ${errors.otp ? "border-red-500" : ""}`} />
             <AuthFormError error={errors.otp} centered />
           </div>
 
           <div className="text-center text-sm text-gray-500">
-            {otpTimer > 0 ? <p>Mã OTP hết hạn sau <span className="text-[#00b14f] font-medium">{formatOtpTime(otpTimer)}</span></p> : <p className="text-red-500">{AUTH_MESSAGES.OTP_EXPIRED}</p>}
+            {otpTimer > 0 ? <p>Mã OTP hết hạn sau <span className="text-[#04A0EF] font-medium">{formatOtpTime(otpTimer)}</span></p> : <p className="text-red-500">{AUTH_MESSAGES.OTP_EXPIRED}</p>}
           </div>
 
           <AuthSubmitButton 
@@ -205,7 +205,7 @@ export default function ForgotPasswordForm() {
             disabled={otpCode.length !== AUTH_CONSTANTS.OTP_LENGTH}
           />
 
-          <button type="button" onClick={handleResendOtp} disabled={!canResend || isLoading} className={`w-full text-sm ${canResend ? "text-[#00b14f] hover:underline" : "text-gray-400 cursor-not-allowed"}`}>
+          <button type="button" onClick={handleResendOtp} disabled={!canResend || isLoading} className={`w-full text-sm ${canResend ? "text-[#04A0EF] hover:underline" : "text-gray-400 cursor-not-allowed"}`}>
             Gửi lại mã OTP
           </button>
         </form>
@@ -226,24 +226,24 @@ export default function ForgotPasswordForm() {
         <div className="space-y-1">
           <Label htmlFor="email" className="text-sm text-gray-600">Email</Label>
           <div className="relative">
-            <div className="absolute left-3 top-1/2 -translate-y-1/2"><Icon name="mail" size={18} className="text-[#00b14f]" /></div>
+            <div className="absolute left-3 top-1/2 -translate-y-1/2"><Icon name="mail" size={18} className="text-[#04A0EF]" /></div>
             <Input id="email" type="email" placeholder="Nhập email" value={email}
               onChange={(e) => { setEmail(e.target.value); if (errors.email) setErrors({ ...errors, email: "" }); }}
-              disabled={isLoading} className={`pl-10 h-10 text-sm border-gray-200 focus:border-[#00b14f] focus:ring-0 shadow-none ${errors.email ? "border-red-500" : ""}`} />
+              disabled={isLoading} className={`pl-10 h-10 text-sm border-gray-200 focus:border-[#04A0EF] focus:ring-0 shadow-none ${errors.email ? "border-red-500" : ""}`} />
           </div>
           <AuthFormError error={errors.email} />
         </div>
 
         <p className={`text-sm text-gray-600 ${disabledClass}`}>
-          Bằng việc thực hiện đổi mật khẩu, bạn đã đồng ý với <Link href="/terms" className={`text-[#00b14f] hover:underline ${disabledClass}`}>Điều khoản dịch vụ</Link> và <Link href="/privacy" className={`text-[#00b14f] hover:underline ${disabledClass}`}>Chính sách bảo mật</Link>
+          Bằng việc thực hiện đổi mật khẩu, bạn đã đồng ý với <Link href="/terms" className={`text-[#04A0EF] hover:underline ${disabledClass}`}>Điều khoản dịch vụ</Link> và <Link href="/privacy" className={`text-[#04A0EF] hover:underline ${disabledClass}`}>Chính sách bảo mật</Link>
         </p>
 
         <AuthSubmitButton isLoading={isLoading} loadingText="Đang gửi..." text="Gửi mã xác thực" />
       </form>
 
       <div className="flex justify-between mt-3">
-        <Link href="/login" className={`text-sm text-[#00b14f] hover:underline ${disabledClass}`}>Quay lại đăng nhập</Link>
-        <Link href="/register" className={`text-sm text-[#00b14f] hover:underline ${disabledClass}`}>Đăng ký tài khoản mới</Link>
+        <Link href="/login" className={`text-sm text-[#04A0EF] hover:underline ${disabledClass}`}>Quay lại đăng nhập</Link>
+        <Link href="/register" className={`text-sm text-[#04A0EF] hover:underline ${disabledClass}`}>Đăng ký tài khoản mới</Link>
       </div>
     </div>
   );

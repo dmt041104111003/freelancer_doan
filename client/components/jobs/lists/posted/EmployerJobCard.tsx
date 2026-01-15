@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import Icon from "@/components/ui/Icon";
@@ -45,7 +45,7 @@ export default function EmployerJobCard({
         <div className="flex-1">
           <div className="flex flex-wrap items-center gap-2 mb-2">
             <span className="text-xs text-gray-400">#{job.id}</span>
-            <Link href={`/jobs/${job.id}`} className="text-lg font-semibold text-gray-900 hover:text-[#00b14f]">
+            <Link href={`/jobs/${job.id}`} className="text-lg font-semibold text-gray-900 hover:text-[#04A0EF]">
               {job.title}
             </Link>
             <span
@@ -134,7 +134,7 @@ export default function EmployerJobCard({
             <>
               <Button
                 size="sm"
-                className="flex-1 sm:flex-none bg-[#00b14f] hover:bg-[#009643]"
+                className="flex-1 sm:flex-none bg-[#04A0EF] hover:bg-[#0380BF]"
                 onClick={() => onReviewWork(job)}
               >
                 <Icon name="rate_review" size={16} />
@@ -167,7 +167,7 @@ export default function EmployerJobCard({
               <Button
                 variant="outline"
                 size="sm"
-                className="w-full text-[#00b14f] border-[#00b14f] hover:bg-[#00b14f]/5"
+                className="w-full text-[#04A0EF] border-[#04A0EF] hover:bg-[#04A0EF]/5"
               >
                 <Icon name="edit" size={16} />
                 <span className="sm:hidden lg:inline ml-1">Sửa</span>

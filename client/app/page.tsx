@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -29,7 +29,7 @@ export default function Home() {
   if (!isHydrated) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-[#00b14f] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-[#04A0EF] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }

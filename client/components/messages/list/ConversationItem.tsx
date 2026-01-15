@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { ChatConversation } from "@/lib/api";
 import UserAvatar from "../shared/UserAvatar";
@@ -43,7 +43,7 @@ export default function ConversationItem({
     <button
       onClick={() => onSelect(conversation.id)}
       className={`w-full flex items-center gap-3 px-4 py-3 md:py-2.5 active:bg-gray-100 md:hover:bg-gray-50 transition-colors ${
-        isSelected ? "md:bg-[#00b14f]/5" : ""
+        isSelected ? "md:bg-[#04A0EF]/5" : ""
       } ${isBlocked ? "opacity-60" : ""}`}
     >
       <div className="relative">
@@ -87,7 +87,7 @@ export default function ConversationItem({
       </div>
       
       {!isBlocked && unreadCount > 0 && (
-        <span className="w-5 h-5 bg-[#00b14f] text-white text-xs rounded-full flex items-center justify-center shrink-0">
+        <span className="w-5 h-5 bg-[#04A0EF] text-white text-xs rounded-full flex items-center justify-center shrink-0">
           {unreadCount > 9 ? "9+" : unreadCount}
         </span>
       )}

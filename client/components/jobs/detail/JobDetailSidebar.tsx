@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { Job, JOB_DURATION_CONFIG } from "@/types/job";
@@ -43,7 +43,7 @@ export default function JobDetailSidebar({
         <div className="flex items-center gap-3 mb-4">
           <Avatar className="w-12 h-12">
             <AvatarImage src={job.employer.avatarUrl} alt={job.employer.fullName} />
-            <AvatarFallback className="bg-[#00b14f] text-white">
+            <AvatarFallback className="bg-[#04A0EF] text-white">
               {job.employer.fullName?.charAt(0)?.toUpperCase() || "U"}
             </AvatarFallback>
           </Avatar>
@@ -51,7 +51,7 @@ export default function JobDetailSidebar({
             <p className="font-medium text-gray-900 flex items-center gap-1">
               {job.employer.fullName}
               {job.employer.isVerified && (
-                <Icon name="verified" size={16} className="text-[#00b14f]" />
+                <Icon name="verified" size={16} className="text-[#04A0EF]" />
               )}
             </p>
             {job.employer.title && (
@@ -148,7 +148,7 @@ export default function JobDetailSidebar({
         hasApplied && myApplication ? (
           <div className="bg-white rounded-lg shadow p-4">
             <div className="flex items-center gap-2 mb-2">
-              <Icon name="check_circle" size={20} className="text-[#00b14f]" />
+              <Icon name="check_circle" size={20} className="text-[#04A0EF]" />
               <span className="font-medium text-gray-900">Đã ứng tuyển</span>
             </div>
             <p className={`text-sm ${APPLICATION_STATUS_CONFIG[myApplication.status]?.color}`}>
@@ -161,7 +161,7 @@ export default function JobDetailSidebar({
         ) : (
           <Button
             onClick={onApply}
-            className="w-full bg-[#00b14f] hover:bg-[#009643] text-white py-3"
+            className="w-full bg-[#04A0EF] hover:bg-[#0380BF] text-white py-3"
           >
             <Icon name="send" size={20} />
             Ứng tuyển ngay
@@ -195,7 +195,7 @@ export default function JobDetailSidebar({
                 disabled={isToggling || (job.status === "OPEN" && job.applicationCount > 0)}
                 className={`w-full ${
                   job.status === "DRAFT"
-                    ? "bg-[#00b14f] hover:bg-[#009643]"
+                    ? "bg-[#04A0EF] hover:bg-[#0380BF]"
                     : "bg-gray-600 hover:bg-gray-700"
                 } text-white`}
               >

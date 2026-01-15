@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { popularKeywords } from "@/constant/landing";
@@ -12,7 +12,7 @@ export default function PopularKeywords() {
             <span key={index}>
               <Link
                 href={`/search?q=${encodeURIComponent(keyword)}`}
-                className="text-[#334155] hover:text-[#00b14f] hover:underline transition-colors"
+                className="text-[#334155] hover:text-[#04A0EF] hover:underline transition-colors"
               >
                 {keyword}
               </Link>

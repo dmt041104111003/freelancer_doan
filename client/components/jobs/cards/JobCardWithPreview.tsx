@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef, useEffect, useMemo } from "react";
 import Link from "next/link";
@@ -73,7 +73,7 @@ export default function JobCardWithPreview({ job, onFavorite, isFavorite = false
     >
       {/* Main Card */}
       <div className={`bg-white rounded-xl border p-4 transition-all duration-200 ${
-        showPreview ? "border-[#00b14f] shadow-lg" : "border-gray-200 hover:shadow-lg hover:border-[#00b14f]/30"
+        showPreview ? "border-[#04A0EF] shadow-lg" : "border-gray-200 hover:shadow-lg hover:border-[#04A0EF]/30"
       }`}>
         <div className="flex gap-3">
           {/* Company Logo */}
@@ -84,7 +84,7 @@ export default function JobCardWithPreview({ job, onFavorite, isFavorite = false
                 alt={job.employer.company || job.employer.fullName} 
                 className="object-cover"
               />
-              <AvatarFallback className="rounded-lg bg-gradient-to-br from-[#00b14f] to-[#009643] text-white text-lg font-semibold">
+              <AvatarFallback className="rounded-lg bg-gradient-to-br from-[#04A0EF] to-[#0380BF] text-white text-lg font-semibold">
                 {(job.employer.company || job.employer.fullName)?.charAt(0)?.toUpperCase() || "C"}
               </AvatarFallback>
             </Avatar>
@@ -105,7 +105,7 @@ export default function JobCardWithPreview({ job, onFavorite, isFavorite = false
             {/* Job Title */}
             <Link href={`/jobs/${job.id}`}>
               <h3 className={`font-semibold transition-colors line-clamp-2 mb-1 text-[15px] leading-snug ${
-                showPreview ? "text-[#00b14f]" : "text-gray-900 hover:text-[#00b14f]"
+                showPreview ? "text-[#04A0EF]" : "text-gray-900 hover:text-[#04A0EF]"
               }`}>
                 {job.title}
               </h3>
@@ -156,7 +156,7 @@ export default function JobCardWithPreview({ job, onFavorite, isFavorite = false
             <div className="flex gap-3">
               <Avatar className="w-12 h-12 rounded-lg border border-gray-100 shrink-0">
                 <AvatarImage src={badgeImage} alt={job.employer.company || job.employer.fullName} />
-                <AvatarFallback className="rounded-lg bg-gradient-to-br from-[#00b14f] to-[#009643] text-white font-semibold">
+                <AvatarFallback className="rounded-lg bg-gradient-to-br from-[#04A0EF] to-[#0380BF] text-white font-semibold">
                   {(job.employer.company || job.employer.fullName)?.charAt(0)?.toUpperCase() || "C"}
                 </AvatarFallback>
               </Avatar>
@@ -165,9 +165,9 @@ export default function JobCardWithPreview({ job, onFavorite, isFavorite = false
                   {job.title}
                 </h4>
                 <p className="text-sm text-gray-500 truncate">{job.employer.company || job.employer.fullName}</p>
-                <p className="text-[#00b14f] font-semibold text-sm mt-1">{formatBudget(job.budget)}</p>
+                <p className="text-[#04A0EF] font-semibold text-sm mt-1">{formatBudget(job.budget)}</p>
               </div>
-              <Icon name="verified" size={20} className="text-[#00b14f] shrink-0" />
+              <Icon name="verified" size={20} className="text-[#04A0EF] shrink-0" />
             </div>
 
             {/* Tags */}
@@ -210,12 +210,12 @@ export default function JobCardWithPreview({ job, onFavorite, isFavorite = false
 
           {/* Actions */}
           <div className="p-4 flex gap-3">
-            <button className="flex-1 px-4 py-2.5 border-2 border-[#00b14f] text-[#00b14f] font-semibold rounded-lg hover:bg-[#00b14f]/5 transition-colors">
+            <button className="flex-1 px-4 py-2.5 border-2 border-[#04A0EF] text-[#04A0EF] font-semibold rounded-lg hover:bg-[#04A0EF]/5 transition-colors">
               Ứng tuyển
             </button>
             <Link 
               href={`/jobs/${job.id}`}
-              className="flex-1 px-4 py-2.5 bg-[#00b14f] text-white font-semibold rounded-lg hover:bg-[#009643] transition-colors text-center"
+              className="flex-1 px-4 py-2.5 bg-[#04A0EF] text-white font-semibold rounded-lg hover:bg-[#0380BF] transition-colors text-center"
             >
               Xem chi tiết
             </Link>

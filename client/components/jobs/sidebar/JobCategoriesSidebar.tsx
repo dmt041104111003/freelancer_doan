@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef } from "react";
 import Link from "next/link";
@@ -59,16 +59,16 @@ export default function JobCategoriesSidebar() {
               <Link
                 href={`/jobs?category=${category.id}`}
                 className={`flex items-center justify-between px-4 py-3 transition-colors group ${
-                  hoveredCategory === category.id ? "bg-[#00b14f]/5 text-[#00b14f]" : "hover:bg-gray-50"
+                  hoveredCategory === category.id ? "bg-[#04A0EF]/5 text-[#04A0EF]" : "hover:bg-gray-50"
                 }`}
               >
                 <span className={`text-sm truncate pr-2 ${
-                  hoveredCategory === category.id ? "text-[#00b14f] font-medium" : "text-gray-700 group-hover:text-[#00b14f]"
+                  hoveredCategory === category.id ? "text-[#04A0EF] font-medium" : "text-gray-700 group-hover:text-[#04A0EF]"
                 }`}>
                   {category.name}
                 </span>
                 <Icon name="chevron_right" size={18} className={`shrink-0 ${
-                  hoveredCategory === category.id ? "text-[#00b14f]" : "text-gray-400"
+                  hoveredCategory === category.id ? "text-[#04A0EF]" : "text-gray-400"
                 }`} />
               </Link>
             </div>
@@ -114,7 +114,7 @@ export default function JobCategoriesSidebar() {
               >
                 {/* Category Title */}
                 <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                  <Icon name="work" size={18} className="text-[#00b14f]" />
+                  <Icon name="work" size={18} className="text-[#04A0EF]" />
                   {category.name}
                 </h4>
 
@@ -126,9 +126,9 @@ export default function JobCategoriesSidebar() {
                       <Link
                         key={idx}
                         href={`/jobs?keyword=${encodeURIComponent(tag)}`}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 border border-gray-200 rounded-full text-xs text-gray-600 hover:border-[#00b14f] hover:text-[#00b14f] transition-colors"
+                        className="inline-flex items-center gap-1 px-2.5 py-1 border border-gray-200 rounded-full text-xs text-gray-600 hover:border-[#04A0EF] hover:text-[#04A0EF] transition-colors"
                       >
-                        <Icon name="check_circle" size={12} className="text-[#00b14f]" />
+                        <Icon name="check_circle" size={12} className="text-[#04A0EF]" />
                         {tag}
                       </Link>
                     ))}
@@ -146,7 +146,7 @@ export default function JobCategoriesSidebar() {
                             <Link
                               key={tIdx}
                               href={`/jobs?keyword=${encodeURIComponent(tag)}`}
-                              className="px-2.5 py-1 bg-gray-50 rounded-full text-xs text-gray-600 hover:bg-[#e8f5e9] hover:text-[#00b14f] transition-colors"
+                              className="px-2.5 py-1 bg-gray-50 rounded-full text-xs text-gray-600 hover:bg-[#e8f5e9] hover:text-[#04A0EF] transition-colors"
                             >
                               {tag}
                             </Link>
@@ -161,7 +161,7 @@ export default function JobCategoriesSidebar() {
                 <div className="flex justify-end mt-4 pt-3 border-t border-gray-100">
                   <Link 
                     href={`/jobs?category=${category.id}`}
-                    className="inline-flex items-center gap-1 text-sm text-[#00b14f] hover:underline font-medium"
+                    className="inline-flex items-center gap-1 text-sm text-[#04A0EF] hover:underline font-medium"
                   >
                     Xem tất cả
                     <Icon name="arrow_forward" size={16} />

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Icon from "@/components/ui/Icon";
 
@@ -32,7 +32,7 @@ export default function EvidenceCard({
   onRemove,
 }: EvidenceCardProps) {
   return (
-    <div className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-[#00b14f]/5 hover:bg-[#00b14f]/10 transition-colors">
+    <div className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-[#04A0EF]/5 hover:bg-[#04A0EF]/10 transition-colors">
       <Icon name="picture_as_pdf" size={20} className="text-red-500 shrink-0" />
       <div className="flex-1 text-sm text-gray-700 truncate">
         <span className="font-medium">{name || label || "Tệp đính kèm"}</span>

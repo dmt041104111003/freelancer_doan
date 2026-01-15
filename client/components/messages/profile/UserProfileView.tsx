@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
 import Icon from "@/components/ui/Icon";
@@ -45,7 +45,7 @@ function ExpandableText({ text, maxLines = 3, className = "" }: ExpandableTextPr
       {isOverflowing && (
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="text-[#00b14f] text-sm font-medium mt-1 hover:underline"
+          className="text-[#04A0EF] text-sm font-medium mt-1 hover:underline"
         >
           {isExpanded ? "Thu gọn" : "Xem thêm"}
         </button>
@@ -168,7 +168,7 @@ export default function UserProfileView({
             onClick={handleUnblock}
             disabled={sendingRequest}
             size={isSmall ? "sm" : "default"}
-            className={`shrink-0 text-[#00b14f] border-[#00b14f] hover:bg-[#00b14f]/5 ${isSmall ? "" : "px-4 h-10"}`}
+            className={`shrink-0 text-[#04A0EF] border-[#04A0EF] hover:bg-[#04A0EF]/5 ${isSmall ? "" : "px-4 h-10"}`}
           >
             <Icon name="lock_open" size={isSmall ? 16 : 18} className="mr-1" />
             Bỏ chặn

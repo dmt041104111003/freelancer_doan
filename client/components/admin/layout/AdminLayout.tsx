@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -56,7 +56,7 @@ export default function AdminLayout() {
       {/* Logo */}
       <div className="h-14 flex items-center justify-between px-4 border-b border-gray-100">
         <div className="flex items-center gap-2">
-          <Icon name="admin_panel_settings" size={22} className="text-[#00b14f]" />
+          <Icon name="admin_panel_settings" size={22} className="text-[#04A0EF]" />
           <span className="font-semibold text-gray-900">Admin</span>
         </div>
         {/* Close button - mobile only */}
@@ -77,11 +77,11 @@ export default function AdminLayout() {
                 onClick={() => handleTabClick(tab.id)}
                 className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
                   activeTab === tab.id
-                    ? "bg-[#00b14f]/10 text-[#00b14f] font-medium"
+                    ? "bg-[#04A0EF]/10 text-[#04A0EF] font-medium"
                     : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                 }`}
               >
-                <Icon name={tab.icon} size={18} className={activeTab === tab.id ? "text-[#00b14f]" : "text-gray-400"} />
+                <Icon name={tab.icon} size={18} className={activeTab === tab.id ? "text-[#04A0EF]" : "text-gray-400"} />
                 {tab.label}
               </button>
             </li>
@@ -124,7 +124,7 @@ export default function AdminLayout() {
       {/* Mobile Header */}
       <div className="md:hidden h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4 sticky top-0 z-40">
         <div className="flex items-center gap-2">
-          <Icon name="admin_panel_settings" size={22} className="text-[#00b14f]" />
+          <Icon name="admin_panel_settings" size={22} className="text-[#04A0EF]" />
           <span className="font-semibold text-gray-900">Admin</span>
         </div>
         <button

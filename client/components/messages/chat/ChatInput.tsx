@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { forwardRef, useRef, useState } from "react";
 import Icon from "@/components/ui/Icon";
@@ -254,7 +254,7 @@ const ChatInput = forwardRef<HTMLInputElement, ChatInputProps>(({
       {replyingTo && !editingMessage && (
         <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 border-b border-gray-100">
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-medium text-[#00b14f]">
+            <p className="text-xs font-medium text-[#04A0EF]">
               <Icon name="reply" size={14} className="inline mr-1" />
               Đang trả lời {replyingTo.sender.id === currentUserId ? "chính bạn" : replyingTo.sender.fullName}
             </p>
@@ -315,7 +315,7 @@ const ChatInput = forwardRef<HTMLInputElement, ChatInputProps>(({
           disabled={uploading || !!editingMessage}
           title="Gửi tệp PDF (max 5MB)"
         >
-          <Icon name="add_circle" size={22} className="text-[#00b14f] hover:text-[#00a347]" />
+          <Icon name="add_circle" size={22} className="text-[#04A0EF] hover:text-[#00a347]" />
         </button>
         <button 
           className="p-1.5 shrink-0 disabled:opacity-50"
@@ -323,7 +323,7 @@ const ChatInput = forwardRef<HTMLInputElement, ChatInputProps>(({
           disabled={uploading || !!editingMessage}
           title="Chụp ảnh"
         >
-          <Icon name="camera_alt" size={20} className="text-[#00b14f] hover:text-[#00a347]" />
+          <Icon name="camera_alt" size={20} className="text-[#04A0EF] hover:text-[#00a347]" />
         </button>
         <button 
           className="p-1.5 shrink-0 disabled:opacity-50"
@@ -331,14 +331,14 @@ const ChatInput = forwardRef<HTMLInputElement, ChatInputProps>(({
           disabled={uploading || !!editingMessage}
           title="Gửi ảnh (max 200KB)"
         >
-          <Icon name="image" size={20} className="text-[#00b14f] hover:text-[#00a347]" />
+          <Icon name="image" size={20} className="text-[#04A0EF] hover:text-[#00a347]" />
         </button>
         <button 
           className="p-1.5 shrink-0 opacity-50 cursor-not-allowed" 
           title="Chưa hỗ trợ"
           disabled
         >
-          <Icon name="mic" size={20} className="text-[#00b14f]" />
+          <Icon name="mic" size={20} className="text-[#04A0EF]" />
         </button>
         <Input
           ref={ref}
@@ -352,7 +352,7 @@ const ChatInput = forwardRef<HTMLInputElement, ChatInputProps>(({
           className={`flex-1 rounded-full border-0 h-9 ${
             editingMessage 
               ? "bg-blue-50 focus-visible:ring-blue-500" 
-              : "bg-gray-100 focus-visible:ring-[#00b14f]"
+              : "bg-gray-100 focus-visible:ring-[#04A0EF]"
           }`}
         />
         {previewFile ? (
@@ -362,9 +362,9 @@ const ChatInput = forwardRef<HTMLInputElement, ChatInputProps>(({
             disabled={uploading}
           >
             {uploading ? (
-              <Icon name="sync" size={20} className="text-[#00b14f] animate-spin" />
+              <Icon name="sync" size={20} className="text-[#04A0EF] animate-spin" />
             ) : (
-              <Icon name="send" size={20} className="text-[#00b14f]" />
+              <Icon name="send" size={20} className="text-[#04A0EF]" />
             )}
           </button>
         ) : value.trim() ? (
@@ -376,7 +376,7 @@ const ChatInput = forwardRef<HTMLInputElement, ChatInputProps>(({
             <Icon 
               name={editingMessage ? "check" : "send"} 
               size={20} 
-              className={editingMessage ? "text-blue-500" : "text-[#00b14f]"} 
+              className={editingMessage ? "text-blue-500" : "text-[#04A0EF]"} 
             />
           </button>
         ) : (
@@ -385,7 +385,7 @@ const ChatInput = forwardRef<HTMLInputElement, ChatInputProps>(({
             className="p-1.5 shrink-0 disabled:opacity-50"
             disabled={uploading}
           >
-            <Icon name="thumb_up" size={22} className="text-[#00b14f]" />
+            <Icon name="thumb_up" size={22} className="text-[#04A0EF]" />
           </button>
         )}
       </div>

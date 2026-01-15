@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter, notFound } from "next/navigation";
@@ -146,7 +146,7 @@ export default function JobApplicationsTable() {
     return (
       <div className="max-w-7xl mx-auto px-4">
         <div className="bg-white rounded-lg shadow p-8 flex flex-col items-center justify-center">
-          <div className="w-8 h-8 border-4 border-[#00b14f] border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-4 border-[#04A0EF] border-t-transparent rounded-full animate-spin" />
           <p className="mt-4 text-gray-600">Đang tải thông tin...</p>
         </div>
       </div>
@@ -163,7 +163,7 @@ export default function JobApplicationsTable() {
       <div className="mb-6">
         <Link
           href={`/jobs/${jobId}`}
-          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-[#00b14f] mb-4"
+          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-[#04A0EF] mb-4"
         >
           <Icon name="arrow_back" size={20} />
           Quay lại chi tiết
@@ -179,7 +179,7 @@ export default function JobApplicationsTable() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as ApplicationStatus | "")}
-              className="h-9 px-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#00b14f]"
+              className="h-9 px-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#04A0EF]"
             >
               {STATUS_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -219,7 +219,7 @@ export default function JobApplicationsTable() {
                       <div className="flex items-center gap-3">
                         <Avatar className="w-10 h-10">
                           <AvatarImage src={app.freelancer.avatarUrl} alt={app.freelancer.fullName} />
-                          <AvatarFallback className="bg-[#00b14f] text-white text-sm">
+                          <AvatarFallback className="bg-[#04A0EF] text-white text-sm">
                             {app.freelancer.fullName?.charAt(0)?.toUpperCase() || "U"}
                           </AvatarFallback>
                         </Avatar>
@@ -235,7 +235,7 @@ export default function JobApplicationsTable() {
                       {app.freelancer.skills && app.freelancer.skills.length > 0 ? (
                         <button
                           onClick={() => { setViewingApp(app); setShowSkillsDialog(true); }}
-                          className="text-[#00b14f] hover:underline text-sm text-left"
+                          className="text-[#04A0EF] hover:underline text-sm text-left"
                         >
                           {app.freelancer.skills.length} kỹ năng
                         </button>
@@ -247,7 +247,7 @@ export default function JobApplicationsTable() {
                       {app.coverLetter ? (
                         <button
                           onClick={() => { setViewingApp(app); setShowCoverLetterDialog(true); }}
-                          className="text-[#00b14f] hover:underline text-sm text-left line-clamp-1 max-w-[200px]"
+                          className="text-[#04A0EF] hover:underline text-sm text-left line-clamp-1 max-w-[200px]"
                         >
                           Xem thư giới thiệu
                         </button>
@@ -269,7 +269,7 @@ export default function JobApplicationsTable() {
                           <button
                             onClick={() => handleAction(app, "accept")}
                             disabled={processingId === app.id}
-                            className="text-[#00b14f] hover:underline text-sm disabled:opacity-50"
+                            className="text-[#04A0EF] hover:underline text-sm disabled:opacity-50"
                           >
                             Duyệt
                           </button>
@@ -316,7 +316,7 @@ export default function JobApplicationsTable() {
             <Button
               onClick={executeAction}
               disabled={!!processingId}
-              className={confirmAction === "accept" ? "bg-[#00b14f] hover:bg-[#009643]" : "bg-gray-600 hover:bg-gray-700"}
+              className={confirmAction === "accept" ? "bg-[#04A0EF] hover:bg-[#0380BF]" : "bg-gray-600 hover:bg-gray-700"}
             >
               {processingId ? (
                 <>

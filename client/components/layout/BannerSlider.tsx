@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
@@ -71,7 +71,7 @@ export default function BannerSlider() {
                 onClick={() => setCurrentIndex(index)}
                 className={`w-2.5 h-2.5 rounded-full transition-all ${
                   index === currentIndex
-                    ? "bg-[#00b14f] w-6"
+                    ? "bg-[#04A0EF] w-6"
                     : "bg-white/60 hover:bg-white"
                 }`}
               />

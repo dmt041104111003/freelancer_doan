@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Icon from "@/components/ui/Icon";
 import { Button } from "@/components/ui/button";
@@ -63,7 +63,7 @@ export default function SearchResults({
                     onSendRequest(user);
                   }}
                   disabled={sendingRequestId === user.id}
-                  className="text-[#00b14f] border-[#00b14f] hover:bg-[#00b14f] hover:text-white disabled:opacity-50"
+                  className="text-[#04A0EF] border-[#04A0EF] hover:bg-[#04A0EF] hover:text-white disabled:opacity-50"
                 >
                   <Icon name="person_add" size={16} className="mr-1" />
                   Kết bạn

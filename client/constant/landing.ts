@@ -39,135 +39,335 @@ export interface Partner {
   logo: string;
 }
 
+// ==================== HERO SECTION ====================
+export interface BlogPost {
+  id: number;
+  title: string;
+  highlightText?: string;
+  date: string;
+  views: number;
+  image: string;
+  slug: string;
+}
+
+export const featuredPost: BlogPost = {
+  id: 1,
+  title: "BÍ QUYẾT TRỞ THÀNH FREELANCER THÀNH CÔNG NĂM 2024",
+  highlightText: "BÍ QUYẾT TRỞ THÀNH\nFREELANCER\nTHÀNH CÔNG",
+  date: "Tháng Một 10, 2024",
+  views: 8520,
+  image: "/landing/slide1.png",
+  slug: "/blog/bi-quyet-tro-thanh-freelancer-thanh-cong",
+};
+
+export const sidePosts: BlogPost[] = [
+  {
+    id: 2,
+    title: "CÁCH ĐỊNH GIÁ DỊCH VỤ FREELANCE CỦA BẠN",
+    date: "Tháng Một 5, 2024",
+    views: 5230,
+    image: "/landing/slide2.png",
+    slug: "/blog/cach-dinh-gia-dich-vu-freelance",
+  },
+  {
+    id: 3,
+    title: "XÂY DỰNG PORTFOLIO ẤN TƯỢNG CHO FREELANCER",
+    date: "Tháng Mười Hai 28, 2023",
+    views: 4815,
+    image: "/landing/slide3.png",
+    slug: "/blog/xay-dung-portfolio-an-tuong",
+  },
+  {
+    id: 4,
+    title: "QUẢN LÝ THỜI GIAN HIỆU QUẢ KHI LÀM VIỆC TỰ DO",
+    date: "Tháng Mười Hai 20, 2023",
+    views: 6142,
+    image: "/landing/slide4.png",
+    slug: "/blog/quan-ly-thoi-gian-hieu-qua",
+  },
+  {
+    id: 5,
+    title: "TOP 10 KỸ NĂNG FREELANCER CẦN CÓ TRONG 2024",
+    date: "Tháng Mười Hai 15, 2023",
+    views: 7890,
+    image: "/landing/slide1.png",
+    slug: "/blog/top-10-ky-nang-freelancer",
+  },
+];
+
+// ==================== APP DOWNLOAD / PLATFORM INFO ====================
+export interface PlatformFeature {
+  title: string;
+  items: string[];
+}
+
+export const platformFeatures: PlatformFeature[] = [
+  {
+    title: "Dành cho Freelancer",
+    items: [
+      "Kết nối với hàng nghìn dự án mới mỗi ngày",
+      "Thanh toán an toàn qua hệ thống escrow",
+      "Xây dựng profile chuyên nghiệp miễn phí",
+    ],
+  },
+  {
+    title: "Dành cho Doanh nghiệp",
+    items: [
+      "Tìm kiếm freelancer phù hợp trong vài phút",
+      "Quản lý dự án và tiến độ dễ dàng",
+      "Đảm bảo chất lượng với hệ thống đánh giá",
+    ],
+  },
+  {
+    title: "Ưu điểm Freelancer.vn",
+    items: [
+      "18M+ freelancer đã xác minh toàn cầu",
+      "Hỗ trợ 24/7 bằng tiếng Việt",
+      "Bảo mật dữ liệu theo chuẩn quốc tế",
+    ],
+  },
+];
+
+// ==================== HOTLINE / SUPPORT ====================
+export interface SupportInfo {
+  title: string;
+  subtitle: string;
+  buttonText: string;
+  buttonLink: string;
+}
+
+export const supportInfo: SupportInfo = {
+  title: "Bạn cần hỗ trợ?",
+  subtitle: "Đội ngũ hỗ trợ của chúng tôi luôn sẵn sàng giúp đỡ bạn 24/7. Hãy liên hệ ngay!",
+  buttonText: "LIÊN HỆ HỖ TRỢ",
+  buttonLink: "/contact",
+};
+
+// ==================== PARTNERS / CLIENTS ====================
+export interface Client {
+  id: number;
+  name: string;
+  logo: string;
+}
+
+export const clients: Client[] = [
+  { id: 1, name: "FPT Software", logo: "/logo.png" },
+  { id: 2, name: "VNG Corporation", logo: "/1-sao.png" },
+  { id: 3, name: "Viettel", logo: "/2-sao.png" },
+  { id: 4, name: "VNPT", logo: "/3-sao.png" },
+  { id: 5, name: "Tiki", logo: "/logo.png" },
+  { id: 6, name: "Shopee", logo: "/1-sao.png" },
+  { id: 7, name: "Sendo", logo: "/2-sao.png" },
+  { id: 8, name: "MoMo", logo: "/3-sao.png" },
+  { id: 9, name: "VinGroup", logo: "/logo.png" },
+  { id: 10, name: "TH True Milk", logo: "/1-sao.png" },
+  { id: 11, name: "Masan Group", logo: "/2-sao.png" },
+  { id: 12, name: "Techcombank", logo: "/3-sao.png" },
+];
+
+export const partnersHeader = {
+  subtitle: "Được tin tưởng bởi",
+  title: "Doanh nghiệp hàng đầu Việt Nam",
+};
+
+// ==================== PRODUCTS / SERVICES ====================
+export interface FreelanceService {
+  id: number;
+  category: string;
+  title: string;
+  freelancerCount: number;
+}
+
+export const freelanceServices: FreelanceService[] = [
+  { id: 1, category: "Lập trình", title: "Website & Ứng dụng", freelancerCount: 5200 },
+  { id: 2, category: "Thiết kế", title: "Đồ họa & UI/UX", freelancerCount: 3800 },
+  { id: 3, category: "Marketing", title: "SEO & Quảng cáo", freelancerCount: 2100 },
+  { id: 4, category: "Viết lách", title: "Content & Copywriting", freelancerCount: 1950 },
+  { id: 5, category: "Video", title: "Chỉnh sửa & Animation", freelancerCount: 1200 },
+  { id: 6, category: "Dịch thuật", title: "Đa ngôn ngữ", freelancerCount: 890 },
+  { id: 7, category: "Tư vấn", title: "Kinh doanh & Pháp lý", freelancerCount: 650 },
+  { id: 8, category: "Kế toán", title: "Tài chính & Thuế", freelancerCount: 720 },
+];
+
+export const servicesHeader = {
+  subtitle: "Dịch vụ Freelancer",
+  title: "Tìm chuyên gia phù hợp",
+};
+
+// ==================== FOOTER ====================
+export interface Office {
+  id: number;
+  companyName: string;
+  officeType: string;
+  address: string;
+  phones: { label: string; number: string }[];
+  email: string;
+}
+
+export const offices: Office[] = [
+  {
+    id: 1,
+    companyName: "CÔNG TY TNHH FREELANCER",
+    officeType: "TRỤ SỞ CHÍNH",
+    address: "Số 123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh",
+    phones: [
+      { label: "Hotline", number: "(+84) 123 456 789" },
+      { label: "Hỗ trợ", number: "(+84) 987 654 321" },
+    ],
+    email: "contact@example.com",
+  },
+  {
+    id: 2,
+    companyName: "CÔNG TY TNHH FREELANCER",
+    officeType: "CHI NHÁNH HÀ NỘI",
+    address: "Số 456 Đường DEF, Quận GHI, Hà Nội",
+    phones: [
+      { label: "Tel", number: "(+84) 111 222 333" },
+    ],
+    email: "hanoi@example.com",
+  },
+  {
+    id: 3,
+    companyName: "FREELANCER PTE. LTD.",
+    officeType: "INTERNATIONAL",
+    address: "123 Demo Street, Demo City, Demo Country",
+    phones: [],
+    email: "global@example.com",
+  },
+];
+
+export const footerCopyright = "Copyright © CÔNG TY TNHH FREELANCER. All rights reserved.";
+
+// ==================== EXISTING DATA ====================
 export const jobCategories: JobCategory[] = [
   { 
     id: 1, 
     name: "Phát triển & CNTT",
     popular: [
-      "Lập trình viên Ada", "Kiểm thử Blockchain", "Lập trình Backend Amazon", 
-      "Lập trình viên Yeoman", "Lập trình viên nghiên cứu", "Lập trình viên Twitter API",
-      "Lập trình viên UI", "Lập trình viên Schema", "Lập trình viên từ xa", "Kỹ sư Java"
+      "Lập trình viên Web", "Lập trình Mobile", "Lập trình Backend", 
+      "Lập trình Frontend", "Lập trình Full-stack", "DevOps Engineer",
+      "Kỹ sư QA/Testing", "Lập trình Game", "Blockchain Developer", "Kỹ sư Java"
     ],
     subCategories: [
-      { name: "Web & Mobile", tags: ["Lập trình viên Web", "Lập trình viên Web Ấn Độ", "Lập trình Game 2D", "Lập trình viên phần mềm", "Lập trình viên Google API"] },
-      { name: "Hệ thống & Cloud", tags: ["Lập trình viên Chrome OS", "Chuyên gia BLOOM", "Chuyên gia GPT Neo", "Tư vấn đổi mới", "Kỹ sư Big Data"] },
+      { name: "Web & Mobile", tags: ["Lập trình viên ReactJS", "Lập trình viên Vue.js", "Lập trình iOS", "Lập trình Android", "Lập trình Flutter"] },
+      { name: "Hệ thống & Cloud", tags: ["AWS Engineer", "Azure Specialist", "Docker Expert", "Kubernetes Admin", "System Administrator"] },
     ]
   },
   { 
     id: 2, 
     name: "Thiết kế & Sáng tạo",
     popular: [
-      "Thiết kế tài nguyên Game 2D", "Thiết kế Game 2D", "Thiết kế trang sức thủ công",
-      "Thiết kế trang phục", "Thiết kế hoa", "Biên kịch hành động",
-      "Thiết kế đánh giá", "Thiết kế Marketing", "Thiết kế đồ họa", "Chuyên gia Adobe Photoshop"
+      "Thiết kế Logo", "Thiết kế UI/UX", "Thiết kế Đồ họa",
+      "Thiết kế Banner", "Thiết kế Infographic", "Thiết kế Packaging",
+      "Thiết kế Social Media", "Brand Designer", "Motion Designer", "3D Designer"
     ],
     subCategories: [
-      { name: "Video & Âm thanh", tags: ["Biên tập video Youtube", "Chuyên gia Final Cut Pro X", "Biên tập video", "Kỹ sư âm thanh", "Kỹ sư mixing"] },
-      { name: "Thiết kế & Minh họa", tags: ["Thiết kế Logo", "Họa sĩ nền 2D Animation", "Họa sĩ minh họa 2D", "Quản lý âm nhạc", "Chuyên gia Adobe Illustrator"] },
+      { name: "Video & Âm thanh", tags: ["Biên tập video", "Motion Graphics", "Sound Designer", "Voiceover Artist", "Video Editor"] },
+      { name: "Thiết kế & Minh họa", tags: ["Illustrator", "Character Designer", "Icon Designer", "Print Designer", "Art Director"] },
     ]
   },
   { 
     id: 3, 
     name: "Dịch vụ AI",
     popular: [
-      "Lập trình viên OpenAI", "Lập trình viên AI Agent", "Kỹ sư trí tuệ nhân tạo",
-      "Kỹ sư Machine Learning", "Nhà khoa học dữ liệu", "Lập trình OpenAI trên AWS",
-      "Chuyên gia Deep Learning", "Lập trình viên Pandas", "Kỹ sư thị giác máy tính", "Kỹ sư NLP"
+      "AI/ML Engineer", "Data Scientist", "NLP Specialist",
+      "Computer Vision", "AI Chatbot Developer", "Prompt Engineer",
+      "Deep Learning Expert", "Data Analyst", "MLOps Engineer", "AI Researcher"
     ],
     subCategories: [
-      { name: "Framework & Tools", tags: ["Lập trình viên TensorFlow", "Freelancer PyTorch", "Chuyên gia Scikit-Learn", "Lập trình viên OpenCV", "Lập trình viên thuật toán"] },
-      { name: "Chuyên sâu", tags: ["Freelancer Keras", "Chuyên gia Jupyter", "Lập trình Deep Neural Networks", "Chuyên gia phân tích dự đoán", "Freelancer phân tích chuỗi thời gian"] },
+      { name: "Framework & Tools", tags: ["TensorFlow Expert", "PyTorch Developer", "Scikit-Learn Specialist", "OpenCV Developer", "Hugging Face"] },
+      { name: "Chuyên sâu", tags: ["Reinforcement Learning", "GANs Specialist", "Recommender Systems", "Time Series Analysis", "AutoML Expert"] },
     ]
   },
   { 
     id: 4, 
     name: "Bán hàng & Marketing",
     popular: [
-      "Phân tích viên Sales", "Tư vấn Marketing thương hiệu", "Tư vấn phân tích Marketing",
-      "Chuyên gia mạng xã hội", "Chuyên viên mạng xã hội", "Chuyên viên SEM",
-      "Tư vấn Marketing", "Quản lý SEO", "Tư vấn Marketing doanh nghiệp nhỏ", "Tư vấn chiến lược Marketing"
+      "Digital Marketing", "SEO Specialist", "Google Ads",
+      "Facebook Ads", "Content Marketing", "Email Marketing",
+      "Social Media Manager", "Growth Hacker", "Affiliate Marketing", "Influencer Marketing"
     ],
     subCategories: [
-      { name: "Tư vấn chuyên ngành", tags: ["Tư vấn Marketing luật", "Tư vấn Marketing y tế", "Tư vấn Marketing Google", "Tư vấn chiến lược Digital Marketing", "Tư vấn Marketing nha khoa"] },
-      { name: "Digital Marketing", tags: ["Tư vấn Marketing doanh nghiệp", "Marketer theo ngành dọc", "Digital Marketer", "Chuyên gia tạo khách hàng tiềm năng", "Marketer tạo nhu cầu"] },
+      { name: "Quảng cáo", tags: ["PPC Specialist", "Display Ads", "Video Ads", "TikTok Ads", "LinkedIn Ads"] },
+      { name: "Chiến lược", tags: ["Marketing Strategy", "Brand Strategy", "Market Research", "Competitor Analysis", "Customer Insights"] },
     ]
   },
   { 
     id: 5, 
     name: "Viết lách & Dịch thuật",
     popular: [
-      "Người đánh giá sách", "Nhà văn", "Chuyên gia bản tin",
-      "Chuyên gia bản thảo", "Nhà văn tạp chí", "Viết CV",
-      "Viết nội dung", "Viết kế hoạch kinh doanh", "Nhà văn chuyên nghiệp", "Biên dịch viên"
+      "Content Writer", "Copywriter", "Technical Writer",
+      "Blog Writer", "SEO Writer", "Ghostwriter",
+      "Script Writer", "Editor", "Proofreader", "Translator"
     ],
     subCategories: [
-      { name: "Dịch thuật", tags: ["Chuyên gia dịch tài liệu", "Dịch bài viết", "Dịch sách", "Viết luận văn", "Copywriter"] },
-      { name: "Viết chuyên ngành", tags: ["Nhà văn khoa học viễn tưởng", "Viết về ẩm thực", "Biên tập viên", "Freelancer ngữ pháp", "Nhà văn Anime"] },
+      { name: "Dịch thuật", tags: ["Dịch Anh-Việt", "Dịch Nhật-Việt", "Dịch Hàn-Việt", "Dịch Trung-Việt", "Phiên dịch"] },
+      { name: "Viết chuyên ngành", tags: ["Medical Writer", "Legal Writer", "Finance Writer", "Tech Writer", "Academic Writer"] },
     ]
   },
   { 
     id: 6, 
     name: "Hành chính & Hỗ trợ",
     popular: [
-      "Trợ lý ảo Amazon", "Lập trình viên hệ thống", "Trợ lý ảo Ebay",
-      "Chuyên viên nhập liệu", "Chuyên viên mã hóa dữ liệu", "Trợ lý ảo nhập liệu CRM",
-      "Trợ lý nhập liệu CRM", "Nhân viên nhập liệu", "Trợ lý ảo", "Dịch vụ thanh toán y tế Medical Mastermind"
+      "Virtual Assistant", "Data Entry", "Customer Support",
+      "Admin Assistant", "Bookkeeping", "Research Assistant",
+      "Project Coordinator", "Executive Assistant", "Receptionist", "Office Manager"
     ],
     subCategories: [
-      { name: "Quản trị", tags: ["Lập trình Google Calendar", "Trợ lý biên tập", "Chuyên gia phần mềm đấu giá", "Trợ lý ảo bất động sản", "Chuyên gia Excel"] },
-      { name: "Hỗ trợ", tags: ["Đại diện chăm sóc khách hàng", "Trợ lý cá nhân", "Quản lý dự án kinh doanh", "Quản lý dự án", "Quản trị viên Microsoft 365 Enterprise"] },
+      { name: "Quản trị", tags: ["Calendar Management", "Email Management", "Travel Booking", "Meeting Coordinator", "CRM Specialist"] },
+      { name: "Hỗ trợ", tags: ["Live Chat Support", "Phone Support", "Technical Support", "Help Desk", "Community Manager"] },
     ]
   },
   { 
     id: 7, 
     name: "Tài chính & Kế toán",
     popular: [
-      "Tư vấn phần mềm kế toán", "Quản lý đầu tư", "Quản lý quỹ đầu cơ",
-      "Tư vấn kế toán", "Tư vấn CNTT", "Tư vấn tài chính",
-      "Kế toán viên", "Tư vấn thuế", "Gia sư kế toán", "Tư vấn giáo dục"
+      "Kế toán viên", "CFO Consultant", "Tax Consultant",
+      "Financial Analyst", "Auditor", "Bookkeeper",
+      "Payroll Specialist", "Budget Analyst", "Investment Advisor", "Risk Analyst"
     ],
     subCategories: [
-      { name: "Tư vấn & Phân tích", tags: ["Tư vấn quản lý", "Chuyên viên đối chiếu ngân hàng", "Phân tích viên kinh doanh", "Freelancer kỹ năng giao tiếp", "Phân tích viên tài chính"] },
-      { name: "Kế toán chuyên môn", tags: ["Đại diện phát triển kinh doanh", "Tư vấn QuickBooks", "Chuyên gia Xero", "Chuyên viên đối chiếu tài khoản", "Chuyên viên lương"] },
+      { name: "Tư vấn & Phân tích", tags: ["Business Analyst", "Financial Modeling", "Valuation Expert", "Due Diligence", "M&A Advisor"] },
+      { name: "Kế toán chuyên môn", tags: ["QuickBooks Expert", "Xero Specialist", "SAP Consultant", "MISA Expert", "Fast Accounting"] },
     ]
   },
   { 
     id: 8, 
     name: "Pháp lý",
     popular: [
-      "Soạn thảo hợp đồng", "Chuyên viên tuân thủ CNTT", "Chuyên viên tuân thủ",
-      "Luật sư hợp đồng", "Trợ lý pháp lý", "Nghiên cứu viên pháp lý",
-      "Trợ lý luật sư", "Tư vấn pháp lý", "Người đánh giá tài liệu", "Luật sư tài chính chứng khoán"
+      "Luật sư tư vấn", "Soạn thảo hợp đồng", "Tư vấn pháp lý",
+      "Luật sư doanh nghiệp", "IP Lawyer", "Contract Specialist",
+      "Compliance Officer", "Legal Researcher", "Paralegal", "Notary"
     ],
     subCategories: [
-      { name: "Luật chuyên ngành", tags: ["Luật sư doanh nghiệp", "Freelancer luật kinh doanh", "Luật sư di trú", "Freelancer tuân thủ quy định", "Luật sư bản quyền"] },
-      { name: "Tố tụng & Lao động", tags: ["Luật sư sở hữu trí tuệ", "Luật sư dân sự", "Luật sư lao động", "Chuyên gia tố tụng", "Luật sư hình sự"] },
+      { name: "Luật chuyên ngành", tags: ["Luật Thương mại", "Luật Lao động", "Luật Đầu tư", "Luật Sở hữu trí tuệ", "Luật Bất động sản"] },
+      { name: "Tố tụng & Tranh chấp", tags: ["Luật sư Tranh tụng", "Hòa giải viên", "Trọng tài viên", "Luật sư Hình sự", "Luật sư Dân sự"] },
     ]
   },
   { 
     id: 9, 
     name: "Nhân sự & Đào tạo",
     popular: [
-      "Quản lý tuyển dụng", "Nhà tuyển dụng", "Freelancer công nghệ",
-      "Quản lý nhân sự", "Chuyên gia quản lý nhân tài", "Chuyên gia đào tạo & phát triển",
-      "Nhà tuyển dụng LinkedIn", "Thiết kế hướng dẫn", "Phỏng vấn viên", "Chuyên gia e-Learning"
+      "HR Consultant", "Recruiter", "Trainer",
+      "L&D Specialist", "Talent Acquisition", "HR Business Partner",
+      "Compensation & Benefits", "HR Analytics", "Employer Branding", "Onboarding Specialist"
     ],
     subCategories: [
-      { name: "Phát triển nhân sự", tags: ["Chuyên gia phát triển lãnh đạo", "Chuyên gia onboarding", "Freelancer tìm nguồn ứng viên", "Phát triển chương trình đào tạo", "Nhà tuyển dụng kỹ thuật"] },
-      { name: "Tư vấn HR", tags: ["Chuyên gia hệ thống quản lý học tập (LMS)", "Tư vấn phát triển tổ chức", "Freelancer thiết kế chương trình", "Tư vấn HR", "Chuyên gia gắn kết nhân viên"] },
+      { name: "Tuyển dụng", tags: ["Tech Recruiter", "Executive Search", "Headhunter", "Campus Recruiter", "Sourcing Specialist"] },
+      { name: "Đào tạo", tags: ["Corporate Trainer", "E-Learning Developer", "Instructional Designer", "Leadership Coach", "Sales Trainer"] },
     ]
   },
   { 
     id: 10, 
     name: "Kỹ thuật & Kiến trúc",
     popular: [
-      "Họa sĩ minh họa kiến trúc", "Kỹ sư thiết kế", "Chuyên gia AutoCAD",
-      "Chuyên gia Arduino", "Chuyên gia MATLAB", "Kỹ sư chuyên nghiệp",
-      "Kỹ sư tư vấn điện", "Kỹ sư Arduino", "Kỹ sư phần cứng", "Kỹ sư chiếu sáng"
+      "Kiến trúc sư", "Kỹ sư xây dựng", "Interior Designer",
+      "AutoCAD Specialist", "3D Modeler", "Structural Engineer",
+      "MEP Engineer", "Landscape Designer", "BIM Specialist", "Surveyor"
     ],
     subCategories: [
-      { name: "Kỹ sư chuyên ngành", tags: ["Kỹ sư nông nghiệp", "Kỹ sư hàng không vũ trụ", "Kỹ sư địa kỹ thuật", "Họa sĩ 3D", "Tư vấn kỹ thuật"] },
-      { name: "Thiết kế & CAD", tags: ["Thiết kế sản phẩm", "Tư vấn AutoCAD", "Tư vấn an toàn", "Người dựng mô hình 3D", "Thiết kế CAD"] },
+      { name: "Kiến trúc", tags: ["Residential Architect", "Commercial Architect", "Urban Planner", "Conservation Architect", "Sustainable Design"] },
+      { name: "Kỹ thuật", tags: ["Civil Engineer", "Electrical Engineer", "Mechanical Engineer", "HVAC Engineer", "Fire Safety Engineer"] },
     ]
   },
 ];
@@ -186,10 +386,10 @@ export const provinces: Province[] = [
 ];
 
 export const bannerSlides: BannerSlide[] = [
-  { id: 1, src: "/landing/slide1.png", alt: "Banner 1" },
-  { id: 2, src: "/landing/slide2.png", alt: "Banner 2" },
-  { id: 3, src: "/landing/slide3.png", alt: "Banner 3" },
-  { id: 4, src: "/landing/slide4.png", alt: "Banner 4" },
+  { id: 1, src: "/landing/slide1.png", alt: "Tìm kiếm Freelancer chất lượng" },
+  { id: 2, src: "/landing/slide2.png", alt: "Đăng dự án miễn phí" },
+  { id: 3, src: "/landing/slide3.png", alt: "Thanh toán an toàn" },
+  { id: 4, src: "/landing/slide4.png", alt: "Hỗ trợ 24/7" },
 ];
 
 export const stats: Stat[] = [
@@ -229,65 +429,55 @@ export const productCategories: ProductCategory[] = [
 ];
 
 export const partners: Partner[] = [
-  { id: 1, name: "Partner 1", logo: "/1-sao.png" },
-  { id: 2, name: "Partner 2", logo: "/2-sao.png" },
-  { id: 3, name: "Partner 3", logo: "/3-sao.png" },
-  { id: 4, name: "WorkHub", logo: "/logo.svg" },
-  { id: 5, name: "Partner 5", logo: "/1-sao.png" },
-  { id: 6, name: "Partner 6", logo: "/2-sao.png" },
-  { id: 7, name: "Partner 7", logo: "/3-sao.png" },
-  { id: 8, name: "Partner 8", logo: "/logo.svg" },
+  { id: 1, name: "FPT Software", logo: "/1-sao.png" },
+  { id: 2, name: "VNG Corporation", logo: "/2-sao.png" },
+  { id: 3, name: "Viettel", logo: "/3-sao.png" },
+  { id: 4, name: "Freelancer", logo: "/logo.svg" },
+  { id: 5, name: "Tiki", logo: "/1-sao.png" },
+  { id: 6, name: "Shopee", logo: "/2-sao.png" },
+  { id: 7, name: "MoMo", logo: "/3-sao.png" },
+  { id: 8, name: "VinGroup", logo: "/logo.svg" },
 ];
 
 export const popularKeywords: string[] = [
-  "cv là gì",
-  "Mẫu CV",
-  "mẫu cv tiếng việt",
-  "Sơ yếu lý lịch",
-  "CV tham khảo",
-  "tổng hợp CV tham khảo cho lập trình viên",
-  "giấy tờ thủ tục hồ sơ xin việc",
-  "Email xin việc bằng tiếng anh",
-  "Mẫu đơn xin việc",
-  "mẫu đơn xin nghỉ việc",
-  "Cách viết đơn xin nghỉ phép",
-  "Cách viết CV xin việc",
-  "cách viết CV Ngành Kinh doanh/Bán hàng",
-  "cách viết CV Ngành Kế Toán/Kiểm Toán",
-  "cách viết CV Ngành Nhân Sự",
-  "cách viết CV xin Học bổng",
-  "cách viết CV Tiếng Anh",
-  "cách viết CV Tiếng Nhật",
-  "cách viết CV Tiếng Trung",
-  "cách viết CV Tiếng Hàn",
-  "cẩm nang năm nhất cho sinh viên",
-  "Mẫu đơn xin thực tập",
-  "Hướng dẫn sửa lỗi gõ tiếng Việt",
-  "Ngành du lịch làm việc gì",
-  "Cẩm nang xin việc ngành nhân sự",
-  "Xin việc ngành công nghệ thông tin",
-  "Cẩm nang xin việc ngành marketing",
-  "Cẩm nang xin việc ngành kế toán kiểm toán",
-  "Cẩm nang xin việc ngành công nghệ thực phẩm",
-  "Cẩm nang xin việc ngành tài chính ngân hàng",
-  "Cẩm nang xin việc ngành luật",
-  "Cẩm nang xin việc ngành xây dựng - địa ốc",
-  "Trắc nghiệm tính cách MBTI",
-  "Việc làm online tại nhà",
-  "Tìm việc làm tại TP. HCM",
-  "Cách viết cover letter xin việc",
-  "CV xin việc bằng tiếng Anh",
-  "CV cho sinh viên chưa tốt nghiệp",
-  "Việc làm hành chính nhân sự",
-  "Thư xin việc bằng tiếng Anh",
-  "Ngành logistic là gì",
-  "Việc làm Hải Phòng",
-  "Việc làm Bình Định",
-  "Tuyển dụng Content Marketing",
-  "Tuyển lập trình viên PHP",
-  "Tuyển lập trình viên Java",
-  "Tuyển lập trình viên .Net",
-  "Tuyển dụng nhân viên kinh doanh",
-  "Tuyển dụng nhân viên marketing",
-  "Tìm việc kế toán",
+  "Freelancer lập trình",
+  "Thiết kế logo",
+  "Content writer",
+  "SEO specialist",
+  "Video editor",
+  "Mobile app developer",
+  "UI/UX designer",
+  "Social media manager",
+  "Virtual assistant",
+  "Translator",
+  "Data entry",
+  "Copywriter",
+  "Web developer",
+  "Graphic designer",
+  "WordPress developer",
+  "React developer",
+  "Digital marketing",
+  "Voiceover artist",
+  "Illustrator",
+  "Motion graphics",
+  "3D modeling",
+  "Bookkeeping",
+  "Business consultant",
+  "Proofreading",
+  "Academic writing",
+  "Photo editing",
+  "Brand identity",
+  "Landing page design",
+  "Email marketing",
+  "Google Ads specialist",
+  "Facebook Ads",
+  "Python developer",
+  "JavaScript developer",
+  "iOS developer",
+  "Android developer",
+  "Backend developer",
+  "Frontend developer",
+  "Full-stack developer",
+  "DevOps engineer",
+  "Cloud architect",
 ];

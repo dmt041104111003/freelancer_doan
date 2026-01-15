@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Icon from "@/components/ui/Icon";
 import { Input } from "@/components/ui/input";
@@ -22,7 +22,7 @@ export default function ListHeader({ searchQuery, onSearchChange }: ListHeaderPr
             placeholder="Tìm theo tên hoặc email..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="pl-10 rounded-full bg-gray-100 border-0 focus-visible:ring-[#00b14f] h-10"
+            className="pl-10 rounded-full bg-gray-100 border-0 focus-visible:ring-[#04A0EF] h-10"
           />
           {searchQuery && (
             <button 

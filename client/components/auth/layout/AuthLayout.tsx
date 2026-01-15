@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -42,7 +42,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
   if (!isHydrated || (isHydrated && isAuthenticated)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="w-8 h-8 border-4 border-[#00b14f] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-4 border-[#04A0EF] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -59,7 +59,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
       </div>
 
       <div className="flex-1 flex flex-col px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-5 bg-white lg:overflow-hidden">
-        <Link href="/" className="hidden lg:flex items-center gap-1 text-gray-600 text-sm hover:text-[#00b14f] mb-3 w-fit">
+        <Link href="/" className="hidden lg:flex items-center gap-1 text-gray-600 text-sm hover:text-[#04A0EF] mb-3 w-fit">
           <Icon name="arrow_back" size={18} />
           <span>Trang chủ</span>
         </Link>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -62,7 +62,7 @@ export default function ProfileSkills({ skills = [], onUpdate, isLoading }: Prof
           <h2 className="text-lg font-semibold text-gray-900">Kỹ năng</h2>
           <button
             onClick={handleOpenEdit}
-            className="text-gray-500 hover:text-[#00b14f]"
+            className="text-gray-500 hover:text-[#04A0EF]"
           >
             <Icon name={skills.length > 0 ? "edit" : "add"} size={18} />
           </button>
@@ -73,7 +73,7 @@ export default function ProfileSkills({ skills = [], onUpdate, isLoading }: Prof
             {skills.map((skill) => (
               <span
                 key={skill}
-                className="px-3 py-1 bg-[#00b14f]/10 text-[#00b14f] rounded-full text-sm"
+                className="px-3 py-1 bg-[#04A0EF]/10 text-[#04A0EF] rounded-full text-sm"
               >
                 {skill}
               </span>
@@ -82,7 +82,7 @@ export default function ProfileSkills({ skills = [], onUpdate, isLoading }: Prof
         ) : (
           <button
             onClick={handleOpenEdit}
-            className="text-gray-400 hover:text-[#00b14f] flex items-center gap-2"
+            className="text-gray-400 hover:text-[#04A0EF] flex items-center gap-2"
           >
             <Icon name="add" size={16} />
             Thêm kỹ năng của bạn
@@ -122,7 +122,7 @@ export default function ProfileSkills({ skills = [], onUpdate, isLoading }: Prof
                 {editedSkills.map((skill) => (
                   <span
                     key={skill}
-                    className="inline-flex items-center gap-1 px-3 py-1 bg-[#00b14f]/10 text-[#00b14f] rounded-full text-sm"
+                    className="inline-flex items-center gap-1 px-3 py-1 bg-[#04A0EF]/10 text-[#04A0EF] rounded-full text-sm"
                   >
                     {skill}
                     <button
@@ -149,7 +149,7 @@ export default function ProfileSkills({ skills = [], onUpdate, isLoading }: Prof
             <Button
               onClick={handleSave}
               disabled={isLoading}
-              className="bg-[#00b14f] hover:bg-[#009643]"
+              className="bg-[#04A0EF] hover:bg-[#0380BF]"
             >
               {isLoading ? "Đang lưu..." : "Lưu"}
             </Button>

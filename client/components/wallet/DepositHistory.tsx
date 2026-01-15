@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { BalanceDeposit, DEPOSIT_STATUS_CONFIG } from "@/types/balance";
 import { Button } from "@/components/ui/button";
@@ -28,7 +28,7 @@ export default function DepositHistory({ deposits, isLoading }: DepositHistoryPr
       <div className="overflow-x-auto">
         {isLoading ? (
           <div className="p-6 text-center">
-            <div className="w-6 h-6 border-2 border-[#00b14f] border-t-transparent rounded-full animate-spin mx-auto" />
+            <div className="w-6 h-6 border-2 border-[#04A0EF] border-t-transparent rounded-full animate-spin mx-auto" />
           </div>
         ) : deposits.length === 0 ? (
           <div className="p-6 text-center text-gray-500 text-sm">Chưa có giao dịch</div>
@@ -59,7 +59,7 @@ export default function DepositHistory({ deposits, isLoading }: DepositHistoryPr
                       <Button
                         size="sm"
                         onClick={() => handlePay(d.orderUrl!)}
-                        className="bg-[#00b14f] hover:bg-[#009643]"
+                        className="bg-[#04A0EF] hover:bg-[#0380BF]"
                       >
                         <Icon name="payment" size={14} />
                         Thanh toán

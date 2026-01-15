@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -202,7 +202,7 @@ export default function AdminDisputes() {
                     (dispute.status === "PENDING_FREELANCER_RESPONSE" && dispute.freelancerDeadline)) && (
                     <button
                       onClick={() => openResolveDialog(dispute)}
-                      className="text-[#00b14f] hover:underline text-sm"
+                      className="text-[#04A0EF] hover:underline text-sm"
                     >
                       Quyết định
                     </button>
@@ -271,7 +271,7 @@ export default function AdminDisputes() {
                             (dispute.status === "PENDING_FREELANCER_RESPONSE" && dispute.freelancerDeadline)) && (
                             <button
                               onClick={() => openResolveDialog(dispute)}
-                              className="text-[#00b14f] hover:underline"
+                              className="text-[#04A0EF] hover:underline"
                             >
                               Quyết định
                             </button>
@@ -331,7 +331,7 @@ export default function AdminDisputes() {
                     target="_blank"
                     rel="noopener noreferrer"
                     download
-                    className="flex items-center gap-2 mt-3 px-3 py-2 border border-gray-300 rounded-md bg-[#00b14f]/5 hover:bg-[#00b14f]/10 transition-colors"
+                    className="flex items-center gap-2 mt-3 px-3 py-2 border border-gray-300 rounded-md bg-[#04A0EF]/5 hover:bg-[#04A0EF]/10 transition-colors"
                   >
                     <Icon name="picture_as_pdf" size={20} className="text-red-500 shrink-0" />
                     <span className="flex-1 text-sm text-gray-700">Bằng chứng đính kèm</span>
@@ -353,7 +353,7 @@ export default function AdminDisputes() {
                       target="_blank"
                       rel="noopener noreferrer"
                       download
-                      className="flex items-center gap-2 mt-3 px-3 py-2 border border-gray-300 rounded-md bg-[#00b14f]/5 hover:bg-[#00b14f]/10 transition-colors"
+                      className="flex items-center gap-2 mt-3 px-3 py-2 border border-gray-300 rounded-md bg-[#04A0EF]/5 hover:bg-[#04A0EF]/10 transition-colors"
                     >
                       <Icon name="picture_as_pdf" size={20} className="text-red-500 shrink-0" />
                       <span className="flex-1 text-sm text-gray-700">Bằng chứng đính kèm</span>

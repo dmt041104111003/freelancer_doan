@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Icon from "@/components/ui/Icon";
 import { ChatUserInfo } from "@/lib/api";
@@ -48,10 +48,10 @@ export default function ChatHeader({
         
         <div className="flex items-center ml-auto">
           <button className="p-2">
-            <Icon name="phone" size={22} className="text-[#00b14f] hover:text-[#00a347]" />
+            <Icon name="phone" size={22} className="text-[#04A0EF] hover:text-[#00a347]" />
           </button>
           <button className="p-2">
-            <Icon name="videocam" size={22} className="text-[#00b14f] hover:text-[#00a347]" />
+            <Icon name="videocam" size={22} className="text-[#04A0EF] hover:text-[#00a347]" />
           </button>
           <button 
             className="p-2"
@@ -60,7 +60,7 @@ export default function ChatHeader({
             <Icon 
               name="info" 
               size={22} 
-              className={`${showProfileActive ? "text-[#00a347]" : "text-[#00b14f]"} hover:text-[#00a347]`} 
+              className={`${showProfileActive ? "text-[#00a347]" : "text-[#04A0EF]"} hover:text-[#00a347]`} 
             />
           </button>
         </div>
