@@ -1,20 +1,20 @@
 export const AUTH_CONSTANTS = {
   OTP_LENGTH: 6,
   OTP_EXPIRES_IN: 600,
-  MIN_PASSWORD_LENGTH: 8,
+  MIN_PASSWORD_LENGTH: 6,
   MIN_NAME_LENGTH: 2,
 }
 
 export const AUTH_REGEX = {
   EMAIL: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-  PASSWORD: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+  PASSWORD: /^.{6,}$/,
 }
 
 export const AUTH_MESSAGES = {
   EMAIL_REQUIRED: "Vui lòng nhập email",
   EMAIL_INVALID: "Email không hợp lệ",
   PASSWORD_REQUIRED: "Vui lòng nhập mật khẩu",
-  PASSWORD_WEAK: "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt",
+  PASSWORD_WEAK: "Mật khẩu phải có ít nhất 6 ký tự",
   PASSWORD_MIN: "Mật khẩu phải có ít nhất 6 ký tự",
   CONFIRM_PASSWORD_REQUIRED: "Vui lòng xác nhận mật khẩu",
   CONFIRM_PASSWORD_MISMATCH: "Mật khẩu xác nhận không khớp",

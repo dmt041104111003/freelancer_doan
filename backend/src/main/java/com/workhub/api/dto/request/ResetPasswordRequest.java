@@ -19,10 +19,6 @@ public class ResetPasswordRequest {
     private String otp;
     
     @NotBlank(message = "New password is required")
-    @Size(min = 8, max = 50, message = "Password must be between 8 and 50 characters")
-    @Pattern(
-            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
-            message = "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character"
-    )
+    @Size(min = 6, max = 50, message = "Password must be between 6 and 50 characters")
     private String newPassword;
 }
