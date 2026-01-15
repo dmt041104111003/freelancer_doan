@@ -6,4 +6,5 @@ export interface BlogArticle {
   category: string;
   date: string;
   readTime: string;
+  views?: number;
 }
