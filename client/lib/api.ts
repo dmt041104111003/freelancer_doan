@@ -1,7 +1,7 @@
 import { User } from "@/types/user";
 import { Job, Page, CreateJobRequest, UpdateJobRequest, JobStatus, JobHistory } from "@/types/job";
 import { BalanceDeposit, DepositStatus, BalanceStatistics } from "@/types/balance";
-import { clearAuthData } from "@/constant/auth";
+import { clearAuthData, getUser } from "@/constant/auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -12,14 +12,29 @@ export interface ApiResponse<T> {
 }
 
 function handleUnauthorized(endpoint: string) {
+  // Bỏ qua các endpoint auth
   if (endpoint.startsWith("/api/auth/")) {
     return;
   }
   
+  // Chỉ xử lý nếu user đã đăng nhập trước đó (có data trong localStorage)
+  const existingUser = getUser();
+  if (!existingUser) {
+    return; // Không có user -> không cần redirect
+  }
+  
+  // Xóa auth data cũ
   clearAuthData();
   
-  if (typeof window !== "undefined" && !window.location.pathname.startsWith("/login")) {
-    window.location.href = "/login";
+  // Redirect về login nếu đang ở trang protected
+  if (typeof window !== "undefined") {
+    const path = window.location.pathname;
+    const publicPaths = ["/", "/login", "/register", "/forgot-password", "/jobs", "/how-it-works", "/freelancers", "/blog"];
+    const isPublicPath = publicPaths.some(p => path === p || path.startsWith("/jobs/"));
+    
+    if (!isPublicPath) {
+      window.location.href = "/login";
+    }
   }
 }
 
@@ -32,7 +47,6 @@ async function request<T>(endpoint: string, options?: RequestInit): Promise<ApiR
   
   const data = await res.json();
   
-  // Log for debugging
   if (!res.ok) {
     console.error(`API Error [${res.status}] ${endpoint}:`, data);
     
