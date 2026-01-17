@@ -3,6 +3,7 @@ import { api } from "@/lib/api";
 import { User } from "@/types/user";
 import { useAuth } from "@/context/AuthContext";
 import { saveAuthData } from "@/constant/auth";
+import { toast } from "sonner";
 
 export function useProfile() {
   const { user, setUser } = useAuth();
@@ -33,12 +34,17 @@ export function useProfile() {
       if (response.status === "SUCCESS" && response.data) {
         setUser(response.data);
         saveAuthData({ user: response.data });
+        toast.success("Cập nhật thông tin thành công");
         return true;
       }
-      setError(response.message || "Cập nhật thất bại");
+      const errorMsg = response.message || "Cập nhật thất bại";
+      setError(errorMsg);
+      toast.error(errorMsg);
       return false;
     } catch (err) {
-      setError("Không thể cập nhật profile");
+      const errorMsg = "Không thể cập nhật profile";
+      setError(errorMsg);
+      toast.error(errorMsg);
       return false;
     } finally {
       setIsLoading(false);
@@ -53,12 +59,17 @@ export function useProfile() {
       if (response.status === "SUCCESS" && response.data) {
         setUser(response.data);
         saveAuthData({ user: response.data });
+        toast.success("Đăng ký thành công! Bạn có thể đăng việc.");
         return true;
       }
-      setError(response.message || "Đăng ký thất bại");
+      const errorMsg = response.message || "Đăng ký thất bại";
+      setError(errorMsg);
+      toast.error(errorMsg);
       return false;
     } catch {
-      setError("Không thể đăng ký");
+      const errorMsg = "Không thể đăng ký";
+      setError(errorMsg);
+      toast.error(errorMsg);
       return false;
     } finally {
       setIsLoading(false);

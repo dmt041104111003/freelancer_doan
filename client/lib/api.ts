@@ -1,6 +1,7 @@
 import { User } from "@/types/user";
 import { Job, Page, CreateJobRequest, UpdateJobRequest, JobStatus, JobHistory } from "@/types/job";
 import { BalanceDeposit, DepositStatus, BalanceStatistics } from "@/types/balance";
+import { clearAuthData } from "@/constant/auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -8,6 +9,18 @@ export interface ApiResponse<T> {
   status: string;
   message: string;
   data: T;
+}
+
+function handleUnauthorized(endpoint: string) {
+  if (endpoint.startsWith("/api/auth/")) {
+    return;
+  }
+  
+  clearAuthData();
+  
+  if (typeof window !== "undefined" && !window.location.pathname.startsWith("/login")) {
+    window.location.href = "/login";
+  }
 }
 
 async function request<T>(endpoint: string, options?: RequestInit): Promise<ApiResponse<T>> {
@@ -22,6 +35,10 @@ async function request<T>(endpoint: string, options?: RequestInit): Promise<ApiR
   // Log for debugging
   if (!res.ok) {
     console.error(`API Error [${res.status}] ${endpoint}:`, data);
+    
+    if (res.status === 401) {
+      handleUnauthorized(endpoint);
+    }
   }
   
   return data;

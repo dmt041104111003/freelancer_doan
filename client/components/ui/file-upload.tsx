@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef } from "react";
 import { toast } from "sonner";
@@ -147,7 +147,7 @@ export function ImageUploadButton({
   onUpload,
   usage,
   disabled,
-  maxSize = 200 * 1024,
+  maxSize = 2 * 1024 * 1024, // 2MB default
   className,
   children,
 }: ImageUploadButtonProps) {

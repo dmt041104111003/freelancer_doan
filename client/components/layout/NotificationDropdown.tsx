@@ -1,10 +1,11 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { api, Notification, NOTIFICATION_TYPE_CONFIG } from "@/lib/api";
 import { formatDateTime } from "@/lib/format";
 import Icon from "@/components/ui/Icon";
+import { useAuth } from "@/context/AuthContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,6 +14,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function NotificationDropdown() {
+  const { isAuthenticated } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -20,6 +22,10 @@ export default function NotificationDropdown() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const fetchNotifications = useCallback(async () => {
+    if (!isAuthenticated) {
+      setIsLoading(false);
+      return;
+    }
     try {
       const [notifRes, countRes] = await Promise.all([
         api.getNotifications(),
@@ -36,7 +42,7 @@ export default function NotificationDropdown() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     fetchNotifications();
