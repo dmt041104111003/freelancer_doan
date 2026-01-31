@@ -261,7 +261,7 @@ public class NotificationService {
                 .user(user)
                 .type(ENotificationType.JOB_COMPLETED)
                 .title("Công việc hoàn thành")
-                .message("Công việc \"" + job.getTitle() + "\" đã hoàn thành thành công. Điểm uy tín của bạn đã được +1.")
+                .message("Công việc \"" + job.getTitle() + "\" đã hoàn thành thành công. Nhân phẩm tốt của bạn đã được +1.")
                 .referenceId(job.getId())
                 .referenceType("JOB")
                 .build();
@@ -279,7 +279,7 @@ public class NotificationService {
                 .user(freelancer)
                 .type(ENotificationType.WORK_SUBMISSION_TIMEOUT)
                 .title("Quá hạn nộp sản phẩm")
-                .message("Bạn đã không nộp sản phẩm đúng hạn cho công việc \"" + job.getTitle() + "\". Bạn đã bị loại khỏi công việc này và điểm không uy tín +1.")
+                .message("Bạn đã không nộp sản phẩm đúng hạn cho công việc \"" + job.getTitle() + "\". Bạn đã bị loại khỏi công việc này và nhân phẩm tệ +1.")
                 .referenceId(job.getId())
                 .referenceType("JOB")
                 .build();
@@ -409,7 +409,7 @@ public class NotificationService {
                 .user(loser)
                 .type(ENotificationType.DISPUTE_RESOLVED_LOSE)
                 .title("Bạn thua tranh chấp")
-                .message("Rất tiếc, bạn đã thua tranh chấp cho công việc \"" + job.getTitle() + "\". Điểm uy tín của bạn đã bị trừ 1 và điểm không uy tín đã tăng 1.")
+                .message("Rất tiếc, bạn đã thua tranh chấp cho công việc \"" + job.getTitle() + "\". Nhân phẩm tốt của bạn đã bị trừ 1 và nhân phẩm tệ đã tăng 1.")
                 .referenceId(job.getId())
                 .referenceType("JOB")
                 .build();

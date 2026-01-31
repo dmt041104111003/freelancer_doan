@@ -59,6 +59,9 @@ public class BalanceDeposit {
     @Column(name = "payment_channel")
     private Integer paymentChannel;
 
+    @Column(name = "payment_gateway", length = 20)
+    private String paymentGateway;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -71,13 +74,29 @@ public class BalanceDeposit {
         this.orderUrl = orderUrl;
         this.qrCode = qrCode;
         this.zpTransToken = zpTransToken;
+        this.paymentGateway = "ZALOPAY";
+    }
+
+    public void setVnPayInfo(String paymentUrl) {
+        this.orderUrl = paymentUrl;
+        this.paymentGateway = "VNPAY";
     }
 
     public void markAsPaid(Long zpTransId, Integer channel) {
         this.status = EDepositStatus.PAID;
         this.paidAt = LocalDateTime.now();
-        this.zpTransId = zpTransId;
-        this.paymentChannel = channel;
+        if (zpTransId != null) this.zpTransId = zpTransId;
+        if (channel != null) this.paymentChannel = channel;
+    }
+
+    public void markAsPaidVnPay(String vnpTransactionNo) {
+        this.status = EDepositStatus.PAID;
+        this.paidAt = LocalDateTime.now();
+        if (vnpTransactionNo != null && !vnpTransactionNo.isEmpty()) {
+            try {
+                this.zpTransId = Long.parseLong(vnpTransactionNo);
+            } catch (NumberFormatException ignored) {}
+        }
     }
 
     public void markAsCancelled() {

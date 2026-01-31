@@ -14,8 +14,8 @@ export interface JobEmployer {
   company?: string;
   location?: string;
   isVerified?: boolean;
-  trustScore?: number;      // Điểm uy tín (UT)
-  untrustScore?: number;    // Điểm không uy tín (KUT)
+  trustScore?: number;      // Nhân phẩm tốt
+  untrustScore?: number;    // Nhân phẩm tệ
 }
 
 // Job response from backend

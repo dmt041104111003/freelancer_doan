@@ -78,7 +78,7 @@ export default function Header() {
   };
 
   return (
-    <header className="w-full md:sticky md:top-0 z-[9999]">
+    <header className="w-full md:sticky md:top-0 z-40">
       {/* Top Bar - Hidden on mobile */}
       <div className="hidden md:block bg-[#1a3a4a] text-white">
         <div className="max-w-7xl mx-auto px-4">

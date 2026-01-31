@@ -1,7 +1,5 @@
-// Balance deposit status matching backend
 export type DepositStatus = "PENDING" | "PAID" | "CANCELLED" | "EXPIRED";
 
-// Balance deposit response from backend
 export interface BalanceDeposit {
   id: number;
   appTransId: string;
@@ -12,6 +10,7 @@ export interface BalanceDeposit {
   description?: string;
   orderUrl?: string;
   qrCode?: string;
+  paymentGateway?: string;
   status: DepositStatus;
   paymentChannel?: number;
   expiredAt?: string;
@@ -19,7 +18,6 @@ export interface BalanceDeposit {
   createdAt: string;
 }
 
-// Balance statistics for admin
 export interface BalanceStatistics {
   totalDeposited: number;
   todayDeposited: number;
@@ -33,7 +31,6 @@ export interface BalanceStatistics {
   monthTransactions: number;
 }
 
-// UI Config
 export const DEPOSIT_STATUS_CONFIG = {
   PENDING: { label: "Chờ thanh toán", color: "bg-yellow-100 text-yellow-700" },
   PAID: { label: "Đã thanh toán", color: "bg-green-100 text-green-700" },

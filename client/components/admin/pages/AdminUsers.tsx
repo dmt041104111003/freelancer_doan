@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -199,7 +199,7 @@ export default function AdminUsers() {
                 <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
                 <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Vai trò</th>
                 <th className="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase">Credits</th>
-                <th className="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase">UT/KUT</th>
+                <th className="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase">Nhân phẩm tốt / Nhân phẩm tệ</th>
                 <th className="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase">Trạng thái</th>
                 <th className="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase">Thao tác</th>
               </tr>

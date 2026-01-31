@@ -394,7 +394,7 @@ public class JobController {
     }
 
     /**
-     * Employer duyệt sản phẩm → Thanh toán + Cộng điểm uy tín
+     * Employer duyệt sản phẩm → Thanh toán + Cộng nhân phẩm tốt
      * PUT /api/jobs/{id}/work/approve
      */
     @PutMapping("/{id}/work/approve")

@@ -25,6 +25,7 @@ public class BalanceDepositResponse {
     private String orderUrl;
     private String qrCode;
     private String zpTransToken;
+    private String paymentGateway;
     private EDepositStatus status;
     private Integer paymentChannel;
     private LocalDateTime expiredAt;

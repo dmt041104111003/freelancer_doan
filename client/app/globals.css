@@ -275,3 +275,14 @@
 .animate-highlight {
   animation: messageHighlight 2s ease-out forwards;
 }
+
+/* Sơ đồ logic học thuật: nét slate, không animation */
+.flowchart-container .react-flow__edge-path {
+  stroke: #475569;
+}
+.flowchart-node {
+  transition: box-shadow 0.15s ease;
+}
+.flowchart-node:hover {
+  box-shadow: 0 2px 8px rgba(71, 85, 105, 0.12);
+}

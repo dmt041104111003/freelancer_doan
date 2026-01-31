@@ -220,12 +220,17 @@ export const api = {
     request<JobApplication | null>(`/api/jobs/${jobId}/work`),
 
   // Balance - Nạp số dư
-  createDeposit: (amount: number) =>
-    request<BalanceDeposit>("/api/balance/deposit", { method: "POST", body: JSON.stringify({ amount }) }),
+  createDeposit: (amount: number, gateway?: "ZALOPAY" | "VNPAY") =>
+    request<BalanceDeposit>("/api/balance/deposit", {
+      method: "POST",
+      body: JSON.stringify({ amount, gateway: gateway ?? "ZALOPAY" }),
+    }),
 
-  // Query trạng thái nạp tiền
   queryDepositStatus: (appTransId: string) =>
     request<BalanceDeposit>(`/api/balance/deposit/${appTransId}/status`),
+
+  confirmVnPayReturn: (queryString: string) =>
+    request<BalanceDeposit>(`/api/balance/vnpay/confirm-return${queryString ? (queryString.startsWith("?") ? queryString : "?" + queryString) : ""}`),
 
   // Lấy lịch sử nạp tiền của tôi
   getMyDeposits: (params?: { status?: DepositStatus; page?: number; size?: number }) => {
@@ -747,8 +752,8 @@ export interface JobApplication {
     phoneNumber?: string;
     bio?: string;
     skills?: string[];
-    trustScore?: number;      // Điểm uy tín (UT)
-    untrustScore?: number;    // Điểm không uy tín (KUT)
+    trustScore?: number;      // Nhân phẩm tốt
+    untrustScore?: number;    // Nhân phẩm tệ
   };
   coverLetter?: string;
   status: ApplicationStatus;

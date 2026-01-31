@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { toast } from "sonner";
@@ -26,10 +26,12 @@ interface DepositFormProps {
 const QUICK_AMOUNTS = [50000, 100000, 200000, 500000, 1000000];
 
 type TabType = "deposit" | "withdraw";
+type GatewayType = "ZALOPAY" | "VNPAY";
 
 export default function DepositForm({ onSuccess, onRefresh, disabled, setProcessing }: DepositFormProps) {
   const [tab, setTab] = useState<TabType>("deposit");
   const [amount, setAmount] = useState("");
+  const [gateway, setGateway] = useState<GatewayType>("ZALOPAY");
   const [isLoading, setIsLoading] = useState(false);
   const [showQR, setShowQR] = useState(false);
   const [deposit, setDeposit] = useState<BalanceDeposit | null>(null);
@@ -47,9 +49,13 @@ export default function DepositForm({ onSuccess, onRefresh, disabled, setProcess
     setIsLoading(true);
     setProcessing?.(true);
     try {
-      const res = await api.createDeposit(value);
+      const res = await api.createDeposit(value, gateway);
       if (res.status === "SUCCESS" && res.data) {
         setDeposit(res.data);
+        if (res.data.paymentGateway === "VNPAY" && res.data.orderUrl) {
+          window.location.href = res.data.orderUrl;
+          return;
+        }
         setShowQR(true);
         setAmount("");
         onRefresh();
@@ -96,7 +102,6 @@ export default function DepositForm({ onSuccess, onRefresh, disabled, setProcess
   return (
     <>
       <div className={`bg-white rounded-lg shadow overflow-hidden ${isDisabled ? "opacity-60" : ""}`}>
-        {/* Tabs */}
         <div className="flex border-b border-gray-200">
           <button
             onClick={() => setTab("deposit")}
@@ -120,10 +125,62 @@ export default function DepositForm({ onSuccess, onRefresh, disabled, setProcess
           </button>
         </div>
 
-        {/* Content */}
         <div className="p-6">
           {tab === "deposit" ? (
-            <fieldset disabled={isDisabled} className="space-y-3">
+            <fieldset disabled={isDisabled} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Chọn phương thức thanh toán
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setGateway("ZALOPAY")}
+                    className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all text-left ${
+                      gateway === "ZALOPAY"
+                        ? "border-[#0068FF] bg-[#0068FF]/8 shadow-sm"
+                        : "border-gray-200 bg-gray-50/50 hover:border-gray-300 hover:bg-gray-100/50"
+                    }`}
+                  >
+                    <span
+                      className={`flex h-10 w-10 items-center justify-center rounded-lg ${
+                        gateway === "ZALOPAY" ? "bg-[#0068FF]/15 text-[#0068FF]" : "bg-gray-200 text-gray-500"
+                      }`}
+                    >
+                      <Icon name="qr_code_2" size={24} />
+                    </span>
+                    <span className={`font-semibold text-sm ${gateway === "ZALOPAY" ? "text-[#0068FF]" : "text-gray-700"}`}>
+                      ZaloPay
+                    </span>
+                    <span className="text-xs text-gray-500 text-center">
+                      Quét mã QR qua app ZaloPay
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setGateway("VNPAY")}
+                    className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all text-left ${
+                      gateway === "VNPAY"
+                        ? "border-[#006838] bg-[#006838]/8 shadow-sm"
+                        : "border-gray-200 bg-gray-50/50 hover:border-gray-300 hover:bg-gray-100/50"
+                    }`}
+                  >
+                    <span
+                      className={`flex h-10 w-10 items-center justify-center rounded-lg ${
+                        gateway === "VNPAY" ? "bg-[#006838]/15 text-[#006838]" : "bg-gray-200 text-gray-500"
+                      }`}
+                    >
+                      <Icon name="account_balance" size={24} />
+                    </span>
+                    <span className={`font-semibold text-sm ${gateway === "VNPAY" ? "text-[#006838]" : "text-gray-700"}`}>
+                      VNPAY
+                    </span>
+                    <span className="text-xs text-gray-500 text-center">
+                      Thẻ ATM, QR, ví qua VNPAY
+                    </span>
+                  </button>
+                </div>
+              </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Số tiền (VND)</label>
                 <Input
@@ -146,7 +203,11 @@ export default function DepositForm({ onSuccess, onRefresh, disabled, setProcess
                 ))}
               </div>
               <Button onClick={handleDeposit} disabled={isDisabled || !amount} className="w-full bg-[#04A0EF] hover:bg-[#0380BF]">
-                {isLoading ? "Đang xử lý..." : "Tạo mã QR nạp tiền"}
+                {isLoading
+                  ? "Đang xử lý..."
+                  : gateway === "VNPAY"
+                    ? "Tiếp tục thanh toán VNPAY"
+                    : "Tạo mã QR ZaloPay"}
               </Button>
             </fieldset>
           ) : (

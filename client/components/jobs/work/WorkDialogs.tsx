@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -126,7 +126,7 @@ export function WorkSubmitDialog({
             <ul className="list-disc list-inside space-y-1 ml-5">
               <li>Bên thuê sẽ có 3 ngày để duyệt sản phẩm</li>
               <li>Nếu không duyệt, hệ thống sẽ tự động thanh toán cho bạn</li>
-              <li>Cả hai bên sẽ được +1 điểm uy tín khi hoàn thành</li>
+              <li>Cả hai bên sẽ được +1 nhân phẩm tốt khi hoàn thành</li>
             </ul>
           </div>
         </div>
@@ -360,7 +360,7 @@ export function WorkReviewDialog({
                 </p>
                 <ul className="list-disc list-inside space-y-1 ml-5">
                   <li>Tiền ký quỹ sẽ được chuyển cho người làm</li>
-                  <li>Cả hai bên sẽ được +1 điểm uy tín</li>
+                  <li>Cả hai bên sẽ được +1 nhân phẩm tốt</li>
                   <li>Công việc sẽ được đánh dấu hoàn thành</li>
                 </ul>
               </div>

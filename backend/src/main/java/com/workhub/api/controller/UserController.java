@@ -140,6 +140,7 @@ public class UserController {
                 .enabled(user.getEnabled())
                 .roles(roles)
                 .credits(user.getCredits())
+                .balance(user.getBalance())
                 .hasBankInfo(user.hasBankInfo());
 
         if (includeBankInfo) {

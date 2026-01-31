@@ -44,7 +44,7 @@ public class JobSchedulerService {
      * - Clear freelancer
      * - Mở lại job
      * - Thông báo cho cả 2 bên
-     * - Freelancer +1 điểm không uy tín
+     * - Freelancer +1 nhân phẩm tệ
      */
     @Transactional
     public void checkWorkSubmissionDeadlines() {
@@ -72,7 +72,7 @@ public class JobSchedulerService {
      * - Auto approve sản phẩm
      * - Thanh toán cho freelancer
      * - Hoàn thành job
-     * - Cả 2 bên +1 điểm uy tín
+     * - Cả 2 bên +1 nhân phẩm tốt
      */
     @Transactional
     public void checkWorkReviewDeadlines() {
@@ -127,7 +127,7 @@ public class JobSchedulerService {
         job.reopenJob();
         jobRepository.save(job);
         
-        // 3. Freelancer +1 điểm không uy tín
+        // 3. Freelancer +1 nhân phẩm tệ
         freelancer.addUntrustScore(1);
         userService.save(freelancer);
         
@@ -189,7 +189,7 @@ public class JobSchedulerService {
             freelancer.addBalance(payment);
         }
         
-        // 4. Cả 2 bên +1 điểm uy tín
+        // 4. Cả 2 bên +1 nhân phẩm tốt
         freelancer.addTrustScore(1);
         employer.addTrustScore(1);
         userService.save(freelancer);

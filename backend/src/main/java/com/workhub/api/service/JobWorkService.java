@@ -78,7 +78,7 @@ public class JobWorkService {
     }
 
     /**
-     * Employer duyệt sản phẩm → Thanh toán cho freelancer + Cả 2 được +1 điểm uy tín
+     * Employer duyệt sản phẩm → Thanh toán cho freelancer + Cả 2 được +1 nhân phẩm tốt
      */
     @Transactional
     public ApiResponse<JobApplicationResponse> approveWork(Long jobId, Long userId) {
@@ -114,7 +114,7 @@ public class JobWorkService {
             userService.save(freelancer);
         }
 
-        // Cộng điểm uy tín cho cả 2 bên
+        // Cộng nhân phẩm tốt cho cả 2 bên
         freelancer.addTrustScore(1);
         employer.addTrustScore(1);
         userService.save(freelancer);
@@ -137,7 +137,7 @@ public class JobWorkService {
         notificationService.notifyJobCompleted(employer, job);
 
         return ApiResponse.success(
-                "Đã duyệt sản phẩm và thanh toán " + payment.toPlainString() + " VND cho freelancer. Cả 2 bên đã được +1 điểm uy tín.",
+                "Đã duyệt sản phẩm và thanh toán " + payment.toPlainString() + " VND cho freelancer. Cả 2 bên đã được +1 nhân phẩm tốt.",
                 jobApplicationService.buildApplicationResponse(application));
     }
 

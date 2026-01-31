@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -17,11 +17,23 @@ interface WalletContentProps {
 }
 
 export default function WalletContent({ user }: WalletContentProps) {
-  const [balance, setBalance] = useState(user.balance || 0);
-  const [credits, setCredits] = useState(user.credits || 0);
+  const [balance, setBalance] = useState(user.balance ?? 0);
+  const [credits, setCredits] = useState(user.credits ?? 0);
   const [deposits, setDeposits] = useState<BalanceDeposit[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
+
+  const fetchProfile = async () => {
+    try {
+      const res = await api.getProfile();
+      if (res.data) {
+        setBalance(res.data.balance ?? 0);
+        setCredits(res.data.credits ?? 0);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const fetchDeposits = async () => {
     setIsLoading(true);
@@ -38,6 +50,7 @@ export default function WalletContent({ user }: WalletContentProps) {
   };
 
   useEffect(() => {
+    fetchProfile();
     fetchDeposits();
   }, []);
 

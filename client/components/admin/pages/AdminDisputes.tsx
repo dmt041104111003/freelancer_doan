@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -499,7 +499,7 @@ export default function AdminDisputes() {
                 </p>
                 <ul className="list-disc list-inside space-y-1 ml-5">
                   <li>{employerWins ? "Bên thuê" : "Người làm"} nhận tiền ký quỹ</li>
-                  <li>{employerWins ? "Người làm" : "Bên thuê"} bị +1 KUT, -1 UT</li>
+                  <li>{employerWins ? "Người làm" : "Bên thuê"} bị +1 Nhân phẩm tệ, -1 Nhân phẩm tốt</li>
                 </ul>
               </div>
             )}

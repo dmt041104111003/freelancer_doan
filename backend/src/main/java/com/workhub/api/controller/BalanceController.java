@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @RestController
@@ -45,6 +46,19 @@ public class BalanceController {
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         return ResponseEntity.ok(balanceService.queryDepositStatus(appTransId, userDetails.getId()));
+    }
+
+    @GetMapping("/vnpay/ipn")
+    public ResponseEntity<Map<String, Object>> vnpayIpn(HttpServletRequest request) {
+        Map<String, Object> result = balanceService.handleVnPayIpn(request);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/vnpay/confirm-return")
+    public ResponseEntity<ApiResponse<BalanceDepositResponse>> vnpayConfirmReturn(
+            HttpServletRequest request,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(balanceService.confirmVnPayReturn(request, userDetails.getId()));
     }
 
     @GetMapping("/my-deposits")

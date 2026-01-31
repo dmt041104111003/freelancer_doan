@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { Job, JOB_DURATION_CONFIG } from "@/types/job";
@@ -60,10 +60,10 @@ export default function JobDetailSidebar({
             {/* Trust Score */}
             <div className="flex items-center gap-2 mt-1">
               <span className="text-xs px-1.5 py-0.5 bg-green-50 text-green-700 rounded">
-                UT: {job.employer.trustScore ?? 0}
+                Nhân phẩm tốt: {job.employer.trustScore ?? 0}
               </span>
               <span className="text-xs px-1.5 py-0.5 bg-red-50 text-red-700 rounded">
-                KUT: {job.employer.untrustScore ?? 0}
+                Nhân phẩm tệ: {job.employer.untrustScore ?? 0}
               </span>
             </div>
           </div>

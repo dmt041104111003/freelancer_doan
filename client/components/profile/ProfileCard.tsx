@@ -157,13 +157,13 @@ export default function ProfileCard({ user, onUpdate, isLoading }: ProfileCardPr
               <div className="flex items-center gap-1">
                 <Icon name="verified" size={16} className="text-green-600" />
                 <span className="text-sm font-medium text-green-700">
-                  {user.trustScore ?? 0} UT
+                  {user.trustScore ?? 0} Nhân phẩm tốt
                 </span>
               </div>
               <div className="flex items-center gap-1">
                 <Icon name="dangerous" size={16} className="text-red-500" />
                 <span className="text-sm font-medium text-red-600">
-                  {user.untrustScore ?? 0} KUT
+                  {user.untrustScore ?? 0} Nhân phẩm tệ
                 </span>
               </div>
             </div>

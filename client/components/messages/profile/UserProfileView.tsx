@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useRef } from "react";
 import Icon from "@/components/ui/Icon";
@@ -270,11 +270,11 @@ export default function UserProfileView({
             <div className="flex items-center gap-4 mb-4">
               <div className="flex items-center gap-1">
                 <Icon name="verified" size={16} className="text-green-600" />
-                <span className="text-sm font-medium text-green-700">{user.trustScore ?? 0} UT</span>
+                <span className="text-sm font-medium text-green-700">{user.trustScore ?? 0} Nhân phẩm tốt</span>
               </div>
               <div className="flex items-center gap-1">
                 <Icon name="dangerous" size={16} className="text-red-500" />
-                <span className="text-sm font-medium text-red-600">{user.untrustScore ?? 0} KUT</span>
+                <span className="text-sm font-medium text-red-600">{user.untrustScore ?? 0} Nhân phẩm tệ</span>
               </div>
             </div>
 
@@ -345,11 +345,11 @@ export default function UserProfileView({
           <div className="flex items-center gap-6 mb-5">
             <div className="flex items-center gap-1.5">
               <Icon name="verified" size={18} className="text-green-600" />
-              <span className="text-sm font-medium text-green-700">{user.trustScore ?? 0} UT</span>
+              <span className="text-sm font-medium text-green-700">{user.trustScore ?? 0} Nhân phẩm tốt</span>
             </div>
             <div className="flex items-center gap-1.5">
               <Icon name="dangerous" size={18} className="text-red-500" />
-              <span className="text-sm font-medium text-red-600">{user.untrustScore ?? 0} KUT</span>
+              <span className="text-sm font-medium text-red-600">{user.untrustScore ?? 0} Nhân phẩm tệ</span>
             </div>
           </div>
 
@@ -393,11 +393,11 @@ export default function UserProfileView({
           <div className="flex items-center gap-4 mb-4">
             <div className="flex items-center gap-1">
               <Icon name="verified" size={16} className="text-green-600" />
-              <span className="text-sm font-medium text-green-700">{user.trustScore ?? 0} UT</span>
+              <span className="text-sm font-medium text-green-700">{user.trustScore ?? 0} Nhân phẩm tốt</span>
             </div>
             <div className="flex items-center gap-1">
               <Icon name="dangerous" size={16} className="text-red-500" />
-              <span className="text-sm font-medium text-red-600">{user.untrustScore ?? 0} KUT</span>
+              <span className="text-sm font-medium text-red-600">{user.untrustScore ?? 0} Nhân phẩm tệ</span>
             </div>
           </div>
 

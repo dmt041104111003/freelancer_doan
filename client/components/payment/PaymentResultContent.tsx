@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
@@ -11,9 +11,16 @@ type Status = "loading" | "success" | "cancelled";
 
 export default function PaymentResultContent() {
   const searchParams = useSearchParams();
-  const appTransId = searchParams.get("apptransid");
-  const type = searchParams.get("type"); // "balance" for balance deposit
-  
+  const appTransId =
+    searchParams.get("appTransId") ||
+    searchParams.get("apptransid") ||
+    searchParams.get("vnp_TxnRef") ||
+    null;
+  const type = searchParams.get("type");
+  const vnpResponseCode = searchParams.get("vnp_ResponseCode");
+  const vnpTransactionStatus = searchParams.get("vnp_TransactionStatus");
+  const vnpAmount = searchParams.get("vnp_Amount");
+
   const [status, setStatus] = useState<Status>("loading");
   const [amount, setAmount] = useState<number | null>(null);
 
@@ -23,23 +30,48 @@ export default function PaymentResultContent() {
       return;
     }
 
+    const vnpSuccess =
+      vnpResponseCode === "00" && vnpTransactionStatus === "00";
+
     const check = async () => {
       try {
-        // Check balance deposit status
+        if (vnpSuccess && (vnpResponseCode !== undefined || vnpTransactionStatus !== undefined)) {
+          const qs = "?" + searchParams.toString();
+          const res = await api.confirmVnPayReturn(qs);
+          if (res.data?.status === "PAID") {
+            setStatus("success");
+            setAmount(res.data.amount ?? (vnpAmount ? Number(vnpAmount) / 100 : null));
+          } else if (res.data) {
+            setStatus("success");
+            setAmount(res.data.amount ?? (vnpAmount ? Number(vnpAmount) / 100 : null));
+          } else {
+            setStatus("success");
+            if (vnpAmount) setAmount(Number(vnpAmount) / 100);
+          }
+          return;
+        }
         const res = await api.queryDepositStatus(appTransId);
         if (res.data?.status === "PAID") {
           setStatus("success");
           setAmount(res.data.amount);
+        } else if (vnpSuccess && vnpAmount) {
+          setStatus("success");
+          setAmount(Number(vnpAmount) / 100);
         } else {
           setStatus("cancelled");
         }
       } catch {
-        setStatus("cancelled");
+        if (vnpSuccess && vnpAmount) {
+          setStatus("success");
+          setAmount(Number(vnpAmount) / 100);
+        } else {
+          setStatus("cancelled");
+        }
       }
     };
 
     check();
-  }, [appTransId, type]);
+  }, [appTransId, type, vnpResponseCode, vnpTransactionStatus, vnpAmount]);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("vi-VN", {
