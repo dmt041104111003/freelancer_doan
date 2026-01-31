@@ -6,8 +6,10 @@ import com.workhub.api.dto.request.UpdateProfileRequest;
 import com.workhub.api.dto.request.UpdateUserStatusRequest;
 import com.workhub.api.dto.response.ApiResponse;
 import com.workhub.api.dto.response.AuthResponse;
+import com.workhub.api.dto.response.FreelancerListItemResponse;
 import com.workhub.api.entity.User;
 import com.workhub.api.security.UserDetailsImpl;
+import com.workhub.api.service.FriendService;
 import com.workhub.api.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final FriendService friendService;
 
     @GetMapping("/me")
     public ResponseEntity<ApiResponse<AuthResponse.UserResponse>> getMe(
@@ -53,6 +56,44 @@ public class UserController {
 
         userService.changePassword(userDetails.getId(), req);
         return ResponseEntity.ok(ApiResponse.success("Đổi mật khẩu thành công"));
+    }
+
+    @GetMapping("/freelancers")
+    public ResponseEntity<ApiResponse<Page<FreelancerListItemResponse>>> getFreelancers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size,
+            @RequestParam(defaultValue = "fullName") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        Sort sort = sortDir.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<User> users = userService.getFreelancers(pageable);
+        Long currentUserId = userDetails != null ? userDetails.getId() : null;
+        Page<FreelancerListItemResponse> response = users.map(u -> {
+            AuthResponse.UserResponse userRes = buildUserResponse(u, false);
+            String relationStatus = "NONE";
+            Long conversationId = null;
+            if (currentUserId != null && !currentUserId.equals(u.getId())) {
+                friendService.getRelationBetween(currentUserId, u.getId())
+                        .ifPresent(info -> {
+                            // use wrapper to set final vars
+                        });
+                var info = friendService.getRelationBetween(currentUserId, u.getId());
+                if (info.isPresent()) {
+                    relationStatus = info.get().relationStatus();
+                    conversationId = info.get().conversationId();
+                }
+            }
+            return FreelancerListItemResponse.builder()
+                    .user(userRes)
+                    .relationStatus(relationStatus)
+                    .conversationId(conversationId)
+                    .build();
+        });
+        return ResponseEntity.ok(ApiResponse.success("Thành công", response));
     }
 
     @GetMapping

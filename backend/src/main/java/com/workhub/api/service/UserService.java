@@ -51,6 +51,10 @@ public class UserService {
         return userRepository.findAll(pageable);
     }
 
+    public Page<User> getFreelancers(Pageable pageable) {
+        return userRepository.findByRolesNameAndEnabledTrue(ERole.ROLE_FREELANCER, pageable);
+    }
+
     @Transactional
     public User updateProfile(Long userId, UpdateProfileRequest req) {
         User user = getById(userId);

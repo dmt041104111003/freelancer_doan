@@ -32,7 +32,7 @@ const topLinks = [
 const mainNavItems = [
   { label: "TÌM VIỆC", href: "/jobs" },
   { label: "TÌM FREELANCER", href: "/freelancers" },
-  { label: "ĐĂNG VIỆC", href: "/my-posted-jobs/create" },
+  { label: "BLOG", href: "/blog" },
   { label: "CÁCH HOẠT ĐỘNG", href: "/how-it-works" },
 ];
 
@@ -240,12 +240,6 @@ export default function Header() {
                           {isBecomingEmployer ? "Đang xử lý..." : "Đăng ký bên thuê"}
                         </DropdownMenuItem>
                       )}
-                      <DropdownMenuItem asChild>
-                        <Link href="/settings">
-                          <Icon name="settings" size={20} />
-                          Cài đặt
-                        </Link>
-                      </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem variant="destructive" onClick={logout}>
                         <Icon name="logout" size={20} />

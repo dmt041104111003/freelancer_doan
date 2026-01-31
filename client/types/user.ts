@@ -25,6 +25,13 @@ export interface User {
   untrustScore?: number;
 }
 
+/** Item từ API GET /api/users/freelancers (user + quan hệ bạn bè) */
+export interface FreelancerListItem {
+  user: User;
+  relationStatus: "NONE" | "PENDING" | "ACCEPTED" | "BLOCKED" | "REJECTED";
+  conversationId: number | null;
+}
+
 export type UserRole = "ROLE_ADMIN" | "ROLE_EMPLOYER" | "ROLE_FREELANCER";
 
 export const ROLE_CONFIG: Record<string, { label: string; description: string }> = {

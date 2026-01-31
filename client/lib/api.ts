@@ -1,4 +1,4 @@
-import { User } from "@/types/user";
+import { User, FreelancerListItem } from "@/types/user";
 import { Job, Page, CreateJobRequest, UpdateJobRequest, JobStatus, JobHistory } from "@/types/job";
 import { BalanceDeposit, DepositStatus, BalanceStatistics } from "@/types/balance";
 import { clearAuthData, getUser } from "@/constant/auth";
@@ -91,6 +91,15 @@ export const api = {
 
   // Roles
   becomeEmployer: () => request<User>("/api/users/me/become-employer", { method: "POST" }),
+
+  getFreelancers: (params?: { page?: number; size?: number; sortBy?: string; sortDir?: string }) => {
+    const query = new URLSearchParams();
+    if (params?.page !== undefined) query.append("page", params.page.toString());
+    if (params?.size !== undefined) query.append("size", params.size.toString());
+    if (params?.sortBy) query.append("sortBy", params.sortBy);
+    if (params?.sortDir) query.append("sortDir", params.sortDir);
+    return request<Page<FreelancerListItem>>(`/api/users/freelancers${query.toString() ? `?${query}` : ""}`);
+  },
 
   // Jobs
   // Tạo job mới (DRAFT)

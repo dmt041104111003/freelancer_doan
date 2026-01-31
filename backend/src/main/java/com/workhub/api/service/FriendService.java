@@ -69,6 +69,26 @@ public class FriendService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public java.util.Optional<RelationInfo> getRelationBetween(Long currentUserId, Long otherUserId) {
+        if (currentUserId == null || otherUserId == null || currentUserId.equals(otherUserId)) {
+            return java.util.Optional.empty();
+        }
+        User currentUser = userRepository.findById(currentUserId).orElse(null);
+        User otherUser = userRepository.findById(otherUserId).orElse(null);
+        if (currentUser == null || otherUser == null) {
+            return java.util.Optional.empty();
+        }
+        Optional<Conversation> conv = conversationRepository.findByUsers(currentUser, otherUser);
+        if (conv.isEmpty()) {
+            return java.util.Optional.of(new RelationInfo("NONE", null));
+        }
+        Conversation c = conv.get();
+        return java.util.Optional.of(new RelationInfo(c.getStatus().name(), c.getId()));
+    }
+
+    public record RelationInfo(String relationStatus, Long conversationId) {}
+
     /**
      * Gửi chat request (tin nhắn đầu tiên)
      */
