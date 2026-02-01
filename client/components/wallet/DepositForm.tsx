@@ -31,7 +31,7 @@ type GatewayType = "ZALOPAY" | "VNPAY";
 export default function DepositForm({ onSuccess, onRefresh, disabled, setProcessing }: DepositFormProps) {
   const [tab, setTab] = useState<TabType>("deposit");
   const [amount, setAmount] = useState("");
-  const [gateway, setGateway] = useState<GatewayType>("ZALOPAY");
+  const [gateway, setGateway] = useState<GatewayType>("VNPAY");
   const [isLoading, setIsLoading] = useState(false);
   const [showQR, setShowQR] = useState(false);
   const [deposit, setDeposit] = useState<BalanceDeposit | null>(null);
@@ -132,29 +132,17 @@ export default function DepositForm({ onSuccess, onRefresh, disabled, setProcess
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Chọn phương thức thanh toán
                 </label>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <button
                     type="button"
-                    onClick={() => setGateway("ZALOPAY")}
-                    className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all text-left ${
-                      gateway === "ZALOPAY"
-                        ? "border-[#0068FF] bg-[#0068FF]/8 shadow-sm"
-                        : "border-gray-200 bg-gray-50/50 hover:border-gray-300 hover:bg-gray-100/50"
-                    }`}
+                    disabled
+                    className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-gray-200 bg-gray-100/80 cursor-not-allowed opacity-60"
                   >
-                    <span
-                      className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                        gateway === "ZALOPAY" ? "bg-[#0068FF]/15 text-[#0068FF]" : "bg-gray-200 text-gray-500"
-                      }`}
-                    >
+                    <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-200 text-gray-400">
                       <Icon name="qr_code_2" size={24} />
                     </span>
-                    <span className={`font-semibold text-sm ${gateway === "ZALOPAY" ? "text-[#0068FF]" : "text-gray-700"}`}>
-                      ZaloPay
-                    </span>
-                    <span className="text-xs text-gray-500 text-center">
-                      Quét mã QR qua app ZaloPay
-                    </span>
+                    <span className="font-semibold text-sm text-gray-500">ZaloPay</span>
+                    <span className="text-xs text-gray-400 text-center">Tạm thời không khả dụng</span>
                   </button>
                   <button
                     type="button"
@@ -205,9 +193,7 @@ export default function DepositForm({ onSuccess, onRefresh, disabled, setProcess
               <Button onClick={handleDeposit} disabled={isDisabled || !amount} className="w-full bg-[#04A0EF] hover:bg-[#0380BF]">
                 {isLoading
                   ? "Đang xử lý..."
-                  : gateway === "VNPAY"
-                    ? "Tiếp tục thanh toán VNPAY"
-                    : "Tạo mã QR ZaloPay"}
+                  : "Tiếp tục thanh toán VNPAY"}
               </Button>
             </fieldset>
           ) : (

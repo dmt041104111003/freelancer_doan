@@ -95,12 +95,6 @@ public class User {
     @Column(name = "last_daily_credit_date")
     private LocalDate lastDailyCreditDate;
 
-    @Column(name = "bank_account_number", length = 50)
-    private String bankAccountNumber;
-
-    @Column(name = "bank_name", length = 100)
-    private String bankName;
-
     @Column(name = "trust_score", nullable = false)
     @Builder.Default
     private Integer trustScore = 0;
@@ -139,8 +133,7 @@ public class User {
     public void updateProfile(String fullName, String phoneNumber, String avatarUrl,
                               String coverImageUrl, String title, String location,
                               String company, String bio, Set<String> skills,
-                              Boolean isOpenToWork, Set<String> openToWorkRoles,
-                              String bankAccountNumber, String bankName) {
+                              Boolean isOpenToWork, Set<String> openToWorkRoles) {
         if (fullName != null && !fullName.isBlank()) {
             this.fullName = fullName;
         }
@@ -164,8 +157,6 @@ public class User {
         if (openToWorkRoles != null) {
             this.openToWorkRoles = openToWorkRoles;
         }
-        this.bankAccountNumber = bankAccountNumber;
-        this.bankName = bankName;
     }
     
     public void verify() {
@@ -243,11 +234,6 @@ public class User {
             return true;
         }
         return false;
-    }
-
-    public boolean hasBankInfo() {
-        return this.bankAccountNumber != null && !this.bankAccountNumber.isBlank()
-                && this.bankName != null && !this.bankName.isBlank();
     }
 
     public void addTrustScore(int amount) {

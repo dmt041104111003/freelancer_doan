@@ -157,7 +157,7 @@ src/main/java/com/workhub/api/
 │   ├── OtpService.java
 │   └── ...
 │
-└── WorkHubApplication.java    # Main class
+└── WorkHubApplication.java    # Main class (Freelancer)
 ```
 
 ## Cài đặt
@@ -675,8 +675,6 @@ ws://localhost:8080/ws
 | `credits` | INT | DEFAULT 20 | Số credits hiện có |
 | `balance` | DECIMAL(15,2) | DEFAULT 0 | Số dư ví (VND) |
 | `last_daily_credit_date` | DATE | | Ngày nhận credit hàng ngày |
-| `bank_account_number` | VARCHAR(50) | | Số tài khoản ngân hàng |
-| `bank_name` | VARCHAR(100) | | Tên ngân hàng |
 | `trust_score` | INT | DEFAULT 0 | Điểm uy tín |
 | `untrust_score` | INT | DEFAULT 0 | Điểm không uy tín |
 | `last_active_at` | TIMESTAMP | | Lần hoạt động cuối |
@@ -687,6 +685,8 @@ ws://localhost:8080/ws
 - `user_skills` - Skills của user (1:N)
 - `user_open_to_work_roles` - Các role muốn nhận việc (1:N)
 - `user_roles` - Phân quyền (M:N với `roles`)
+
+Nếu CSDL hiện tại đã có cột `bank_account_number` và `bank_name`, chạy script `src/main/resources/db/drop-bank-columns.sql` một lần để xóa.
 
 ---
 

@@ -251,9 +251,6 @@ public class AuthService {
                 .roles(roleList)
                 .credits(user.getCredits())
                 .balance(user.getBalance())
-                .bankAccountNumber(user.getBankAccountNumber())
-                .bankName(user.getBankName())
-                .hasBankInfo(user.hasBankInfo())
                 .build();
 
         AuthResponse authRes = AuthResponse.builder()

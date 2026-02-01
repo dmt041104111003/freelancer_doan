@@ -71,7 +71,7 @@ public class BalanceService {
         String gateway = req.getGateway() != null ? req.getGateway().toUpperCase() : "ZALOPAY";
 
         String appTransId = generateAppTransId(userId);
-        String description = "WorkHub - Nap so du " + amount.toPlainString() + " VND";
+        String description = "Freelancer - Nap so du " + amount.toPlainString() + " VND";
 
         BalanceDeposit deposit = BalanceDeposit.builder()
                 .appTransId(appTransId)

@@ -48,8 +48,5 @@ public class AuthResponse {
         private List<String> roles;
         private Integer credits;
         private BigDecimal balance;
-        private String bankAccountNumber;  // private - chỉ admin và chính user thấy
-        private String bankName;           // private - chỉ admin và chính user thấy
-        private Boolean hasBankInfo;       // public - cho biết đã có thông tin ngân hàng chưa
     }
 }

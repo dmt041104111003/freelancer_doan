@@ -41,10 +41,6 @@ public class JobService {
     public ApiResponse<JobResponse> createJob(Long employerId, CreateJobRequest req) {
         User employer = userService.getById(employerId);
 
-        if (!employer.hasBankInfo()) {
-            throw new IllegalStateException("Vui lòng cập nhật số tài khoản ngân hàng trong profile trước khi đăng tin tuyển dụng");
-        }
-
         if (req.getBudget() == null || req.getBudget().compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalStateException("Job cần khai báo ngân sách hợp lệ");
         }

@@ -36,8 +36,6 @@ export default function ProfileCard({ user, onUpdate, isLoading }: ProfileCardPr
     phoneNumber: user.phoneNumber || "",
     isOpenToWork: user.isOpenToWork ?? false,
     openToWorkRoles: user.openToWorkRoles || [],
-    bankAccountNumber: user.bankAccountNumber || "",
-    bankName: user.bankName || "",
   });
 
   const handleOpenEdit = () => {
@@ -49,8 +47,6 @@ export default function ProfileCard({ user, onUpdate, isLoading }: ProfileCardPr
       phoneNumber: user.phoneNumber || "",
       isOpenToWork: user.isOpenToWork ?? false,
       openToWorkRoles: user.openToWorkRoles || [],
-      bankAccountNumber: user.bankAccountNumber || "",
-      bankName: user.bankName || "",
     });
     setRoleInput("");
     setIsEditOpen(true);
@@ -347,33 +343,6 @@ export default function ProfileCard({ user, onUpdate, isLoading }: ProfileCardPr
                   )}
                 </div>
               )}
-            </div>
-
-            <div className="border-t pt-4">
-              <Label className="text-base font-medium">Thông tin ngân hàng</Label>
-              <p className="text-sm text-gray-500 mb-3">Để nhận thanh toán từ các công việc</p>
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="bankName">Tên ngân hàng</Label>
-                  <Input
-                    id="bankName"
-                    value={formData.bankName}
-                    onChange={(e) => setFormData({ ...formData, bankName: e.target.value })}
-                    placeholder="VD: Vietcombank"
-                    disabled={isLoading}
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="bankAccountNumber">So tai khoan</Label>
-                  <Input
-                    id="bankAccountNumber"
-                    value={formData.bankAccountNumber}
-                    onChange={(e) => setFormData({ ...formData, bankAccountNumber: e.target.value })}
-                    placeholder="VD: 1234567890"
-                    disabled={isLoading}
-                  />
-                </div>
-              </div>
             </div>
           </div>
           <DialogFooter>

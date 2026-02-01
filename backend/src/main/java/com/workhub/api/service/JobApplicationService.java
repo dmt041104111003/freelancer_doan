@@ -60,10 +60,6 @@ public class JobApplicationService {
             throw new IllegalStateException("Bạn đã ứng tuyển vào công việc này rồi");
         }
 
-        if (!user.hasBankInfo()) {
-            throw new IllegalStateException("Vui lòng cập nhật thông tin tài khoản ngân hàng trong hồ sơ trước khi ứng tuyển");
-        }
-
         if (!user.hasEnoughCredits(1)) {
             throw new IllegalStateException("Không đủ credit. Vui lòng mua thêm credit để ứng tuyển.");
         }

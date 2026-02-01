@@ -69,9 +69,7 @@ public class UserService {
                 req.getBio(),
                 req.getSkills(),
                 req.getIsOpenToWork(),
-                req.getOpenToWorkRoles(),
-                req.getBankAccountNumber(),
-                req.getBankName()
+                req.getOpenToWorkRoles()
         );
         return userRepository.save(user);
     }

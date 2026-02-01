@@ -73,7 +73,7 @@ public class UserController {
         Page<User> users = userService.getFreelancers(pageable);
         Long currentUserId = userDetails != null ? userDetails.getId() : null;
         Page<FreelancerListItemResponse> response = users.map(u -> {
-            AuthResponse.UserResponse userRes = buildUserResponse(u, false);
+            AuthResponse.UserResponse userRes = buildUserResponse(u);
             String relationStatus = "NONE";
             Long conversationId = null;
             if (currentUserId != null && !currentUserId.equals(u.getId())) {
@@ -154,15 +154,10 @@ public class UserController {
     }
 
     private AuthResponse.UserResponse buildUserResponse(User user) {
-        return buildUserResponse(user, true);
-    }
-
-    private AuthResponse.UserResponse buildUserResponse(User user, boolean includeBankInfo) {
         List<String> roles = user.getRoles().stream()
                 .map(r -> r.getName().name())
                 .toList();
-
-        AuthResponse.UserResponse.UserResponseBuilder builder = AuthResponse.UserResponse.builder()
+        return AuthResponse.UserResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .fullName(user.getFullName())
@@ -182,13 +177,6 @@ public class UserController {
                 .roles(roles)
                 .credits(user.getCredits())
                 .balance(user.getBalance())
-                .hasBankInfo(user.hasBankInfo());
-
-        if (includeBankInfo) {
-            builder.bankAccountNumber(user.getBankAccountNumber())
-                   .bankName(user.getBankName());
-        }
-
-        return builder.build();
+                .build();
     }
 }

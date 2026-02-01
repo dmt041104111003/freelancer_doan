@@ -18,14 +18,10 @@ export interface User {
   roles?: string[];
   credits?: number;
   balance?: number;
-  hasBankInfo?: boolean;
-  bankAccountNumber?: string;
-  bankName?: string;
   trustScore?: number;
   untrustScore?: number;
 }
 
-/** Item từ API GET /api/users/freelancers (user + quan hệ bạn bè) */
 export interface FreelancerListItem {
   user: User;
   relationStatus: "NONE" | "PENDING" | "ACCEPTED" | "BLOCKED" | "REJECTED";

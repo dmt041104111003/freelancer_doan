@@ -20,14 +20,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import NotificationDropdown from "./NotificationDropdown";
 
-// Top bar links
-const topLinks = [
-  { label: "Dành cho Freelancer", href: "/jobs" },
-  { label: "Dành cho Doanh nghiệp", href: "/my-posted-jobs/create" },
-  { label: "Blog", href: "/blog" },
-  { label: "Hỗ trợ", href: "/contact" },
-];
-
 // Main navigation
 const mainNavItems = [
   { label: "TÌM VIỆC", href: "/jobs" },
@@ -79,28 +71,6 @@ export default function Header() {
 
   return (
     <header className="w-full md:sticky md:top-0 z-40">
-      {/* Top Bar - Hidden on mobile */}
-      <div className="hidden md:block bg-[#1a3a4a] text-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-end h-8 gap-1">
-            {topLinks.map((link, index) => (
-              <div key={link.href} className="flex items-center">
-                <Link
-                  href={link.href}
-                  className="text-xs hover:text-[#04A0EF] transition-colors px-2"
-                >
-                  {link.label}
-                </Link>
-                {index < topLinks.length - 1 && (
-                  <span className="text-gray-500">|</span>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Main Header */}
       <div className="bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-16 md:h-20">
@@ -329,21 +299,6 @@ export default function Header() {
                 </Link>
               ))}
             </nav>
-
-            {/* Top Links */}
-            <div className="px-6 py-4 border-t border-gray-200">
-              <p className="text-xs text-gray-400 mb-3 uppercase tracking-wider">Liên kết</p>
-              {topLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block py-2 text-sm text-gray-600 hover:text-[#04A0EF]"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
 
             {/* User Actions */}
             {isAuthenticated && user ? (

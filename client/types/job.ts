@@ -1,11 +1,9 @@
-// Enums matching backend
 export type JobStatus = "DRAFT" | "PENDING_APPROVAL" | "OPEN" | "REJECTED" | "IN_PROGRESS" | "DISPUTED" | "COMPLETED" | "CLOSED" | "CANCELLED";
 export type JobComplexity = "ENTRY" | "INTERMEDIATE" | "EXPERT";
 export type JobDuration = "SHORT_TERM" | "MEDIUM_TERM" | "LONG_TERM";
 export type WorkType = "PART_TIME" | "FULL_TIME";
 export type WorkStatus = "NOT_STARTED" | "IN_PROGRESS" | "SUBMITTED" | "REVISION_REQUESTED" | "APPROVED";
 
-// Employer info in job response
 export interface JobEmployer {
   id: number;
   fullName: string;
@@ -14,11 +12,10 @@ export interface JobEmployer {
   company?: string;
   location?: string;
   isVerified?: boolean;
-  trustScore?: number;      // Nhân phẩm tốt
-  untrustScore?: number;    // Nhân phẩm tệ
+  trustScore?: number;
+  untrustScore?: number;
 }
 
-// Job response from backend
 export interface Job {
   id: number;
   title: string;
@@ -31,15 +28,15 @@ export interface Job {
   duration: JobDuration;
   workType: WorkType;
   budget?: number;
-  escrowAmount?: number;  // Số tiền đã giữ (budget + fee)
+  escrowAmount?: number;
   currency: string;
   applicationDeadline?: string;
   submissionDays?: number;
   reviewDays?: number;
   status: JobStatus;
-  rejectionReason?: string;  // Lý do từ chối (nếu REJECTED)
-  workSubmissionDeadline?: string;  // Hạn nộp sản phẩm
-  workReviewDeadline?: string;      // Hạn review sản phẩm
+  rejectionReason?: string;
+  workSubmissionDeadline?: string;
+  workReviewDeadline?: string;
   viewCount: number;
   applicationCount: number;
   employer: JobEmployer;
@@ -51,7 +48,6 @@ export interface Job {
   workSubmittedAt?: string;
 }
 
-// Request DTOs
 export interface CreateJobRequest {
   title: string;
   description: string;
@@ -86,7 +82,6 @@ export interface UpdateJobRequest {
   reviewDays?: number;
 }
 
-// Paginated response
 export interface Page<T> {
   content: T[];
   totalElements: number;
@@ -98,7 +93,6 @@ export interface Page<T> {
   empty: boolean;
 }
 
-// UI Config
 export const JOB_STATUS_CONFIG = {
   DRAFT: { label: "Bản nháp", color: "bg-gray-100 text-gray-600" },
   PENDING_APPROVAL: { label: "Chờ duyệt", color: "bg-gray-100 text-gray-600" },
@@ -128,7 +122,6 @@ export const WORK_TYPE_CONFIG = {
   FULL_TIME: { label: "Toàn thời gian", description: "Trên 30 giờ/tuần" },
 } as const;
 
-// Job History
 export type JobHistoryAction =
   | "JOB_CREATED"
   | "JOB_UPDATED"

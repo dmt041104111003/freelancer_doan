@@ -12,21 +12,14 @@ export interface ApiResponse<T> {
 }
 
 function handleUnauthorized(endpoint: string) {
-  // Bỏ qua các endpoint auth
   if (endpoint.startsWith("/api/auth/")) {
     return;
   }
-  
-  // Chỉ xử lý nếu user đã đăng nhập trước đó (có data trong localStorage)
   const existingUser = getUser();
   if (!existingUser) {
-    return; // Không có user -> không cần redirect
+    return;
   }
-  
-  // Xóa auth data cũ
   clearAuthData();
-  
-  // Redirect về login nếu đang ở trang protected
   if (typeof window !== "undefined") {
     const path = window.location.pathname;
     const publicPaths = ["/", "/login", "/register", "/forgot-password", "/jobs", "/how-it-works", "/freelancers", "/blog"];
@@ -59,7 +52,6 @@ async function request<T>(endpoint: string, options?: RequestInit): Promise<ApiR
 }
 
 export const api = {
-  // Auth
   register: (data: { email: string; password: string; fullName: string }) =>
     request("/api/auth/register", { method: "POST", body: JSON.stringify(data) }),
 
@@ -81,15 +73,13 @@ export const api = {
   logout: () => request("/api/auth/logout", { method: "POST" }),
 
   googleAuth: (credential: string) =>
-    request("/api/auth/google", { method: "POST", body: JSON.stringify({ credential }) }),
+    request("/api/auth/google", { method: "POST", body: JSON.stringify({ credential })   }),
 
-  // Profile
   getProfile: () => request<User>("/api/users/me"),
 
   updateProfile: (data: Partial<User>) =>
-    request<User>("/api/users/me", { method: "PUT", body: JSON.stringify(data) }),
+    request<User>("/api/users/me", { method: "PUT", body: JSON.stringify(data)   }),
 
-  // Roles
   becomeEmployer: () => request<User>("/api/users/me/become-employer", { method: "POST" }),
 
   getFreelancers: (params?: { page?: number; size?: number; sortBy?: string; sortDir?: string }) => {
@@ -101,12 +91,9 @@ export const api = {
     return request<Page<FreelancerListItem>>(`/api/users/freelancers${query.toString() ? `?${query}` : ""}`);
   },
 
-  // Jobs
-  // Tạo job mới (DRAFT)
   createJob: (data: CreateJobRequest) =>
-    request<Job>("/api/jobs", { method: "POST", body: JSON.stringify(data) }),
+    request<Job>("/api/jobs", { method: "POST", body: JSON.stringify(data)   }),
 
-  // Lấy danh sách jobs đang tuyển (công khai)
   getOpenJobs: (params?: { page?: number; size?: number; sortBy?: string; sortDir?: string }) => {
     const query = new URLSearchParams();
     if (params?.page !== undefined) query.append("page", params.page.toString());
@@ -116,10 +103,8 @@ export const api = {
     return request<Page<Job>>(`/api/jobs${query.toString() ? `?${query}` : ""}`);
   },
 
-  // Lấy chi tiết job
   getJobById: (id: number) => request<Job>(`/api/jobs/${id}`),
 
-  // Lấy danh sách jobs của tôi (employer)
   getMyJobs: (params?: { status?: JobStatus; page?: number; size?: number; sortBy?: string; sortDir?: string }) => {
     const query = new URLSearchParams();
     if (params?.status) query.append("status", params.status);
@@ -130,7 +115,6 @@ export const api = {
     return request<Page<Job>>(`/api/jobs/my-jobs${query.toString() ? `?${query}` : ""}`);
   },
 
-  // Lấy danh sách jobs đang làm của freelancer
   getMyWorkingJobs: (params?: { status?: JobStatus; page?: number; size?: number; sortBy?: string; sortDir?: string }) => {
     const query = new URLSearchParams();
     if (params?.status) query.append("status", params.status);
@@ -141,11 +125,9 @@ export const api = {
     return request<Page<Job>>(`/api/jobs/my-working-jobs${query.toString() ? `?${query}` : ""}`);
   },
 
-  // Lấy thống kê jobs của freelancer
   getMyWorkingJobsStats: () =>
     request<{ inProgress: number; completed: number; disputed: number; totalEarnings: number }>("/api/jobs/my-working-jobs/stats"),
 
-  // Tìm kiếm jobs
   searchJobs: (params: { keyword: string; page?: number; size?: number }) => {
     const query = new URLSearchParams({ keyword: params.keyword });
     if (params.page !== undefined) query.append("page", params.page.toString());
@@ -153,7 +135,6 @@ export const api = {
     return request<Page<Job>>(`/api/jobs/search?${query}`);
   },
 
-  // Tìm jobs theo skills
   getJobsBySkills: (params: { skills: string[]; page?: number; size?: number }) => {
     const query = new URLSearchParams();
     params.skills.forEach((skill) => query.append("skills", skill));
@@ -162,23 +143,18 @@ export const api = {
     return request<Page<Job>>(`/api/jobs/by-skills?${query}`);
   },
 
-  // Cập nhật job
   updateJob: (id: number, data: UpdateJobRequest) =>
     request<Job>(`/api/jobs/${id}`, { method: "PUT", body: JSON.stringify(data) }),
 
-  // Đóng tin tuyển dụng
   closeJob: (id: number) =>
     request<Job>(`/api/jobs/${id}/close`, { method: "PATCH" }),
 
-  // Chuyển đổi trạng thái (DRAFT <-> OPEN)
   toggleJobStatus: (id: number) =>
     request<Job>(`/api/jobs/${id}/toggle-status`, { method: "PATCH" }),
 
-  // Xóa job
   deleteJob: (id: number) =>
     request<void>(`/api/jobs/${id}`, { method: "DELETE" }),
 
-  // Job Applications
   applyJob: (jobId: number, data: { coverLetter?: string }) =>
     request<JobApplication>(`/api/jobs/${jobId}/apply`, { method: "POST", body: JSON.stringify(data) }),
 
@@ -204,7 +180,6 @@ export const api = {
   withdrawApplication: (applicationId: number) =>
     request<void>(`/api/jobs/applications/${applicationId}`, { method: "DELETE" }),
 
-  // Job History
   getJobHistory: (jobId: number) =>
     request<JobHistory[]>(`/api/jobs/${jobId}/history`),
 
@@ -215,7 +190,6 @@ export const api = {
     return request<Page<JobHistory>>(`/api/jobs/${jobId}/history/paged${query.toString() ? `?${query}` : ""}`);
   },
 
-  // Work Submission
   submitWork: (jobId: number, data: { url: string; note?: string }) =>
     request<JobApplication>(`/api/jobs/${jobId}/work/submit`, { method: "POST", body: JSON.stringify(data) }),
 
@@ -228,7 +202,6 @@ export const api = {
   getWorkSubmission: (jobId: number) =>
     request<JobApplication | null>(`/api/jobs/${jobId}/work`),
 
-  // Balance - Nạp số dư
   createDeposit: (amount: number, gateway?: "ZALOPAY" | "VNPAY") =>
     request<BalanceDeposit>("/api/balance/deposit", {
       method: "POST",
@@ -241,7 +214,6 @@ export const api = {
   confirmVnPayReturn: (queryString: string) =>
     request<BalanceDeposit>(`/api/balance/vnpay/confirm-return${queryString ? (queryString.startsWith("?") ? queryString : "?" + queryString) : ""}`),
 
-  // Lấy lịch sử nạp tiền của tôi
   getMyDeposits: (params?: { status?: DepositStatus; page?: number; size?: number }) => {
     const query = new URLSearchParams();
     if (params?.status) query.append("status", params.status);
@@ -250,7 +222,6 @@ export const api = {
     return request<Page<BalanceDeposit>>(`/api/balance/my-deposits${query.toString() ? `?${query}` : ""}`);
   },
 
-  // Credits - Mua credit bằng số dư
   getCreditPackages: () => request<CreditPackage[]>("/api/credits/packages"),
 
   purchaseCredits: (creditPackage: string) =>
@@ -264,7 +235,6 @@ export const api = {
     return request<Page<CreditPurchase>>(`/api/credits/my-purchases${query.toString() ? `?${query}` : ""}`);
   },
 
-  // Saved Jobs (Công việc đã lưu)
   saveJob: (jobId: number) =>
     request<SavedJob>(`/api/saved-jobs/${jobId}`, { method: "POST" }),
 
@@ -287,9 +257,7 @@ export const api = {
   isJobSaved: (jobId: number) =>
     request<boolean>(`/api/saved-jobs/${jobId}/check`),
 
-  // ADMIN 
 
-  // Admin - Users
   adminGetAllUsers: (params?: { page?: number; size?: number; sortBy?: string; sortDir?: string }) => {
     const query = new URLSearchParams();
     if (params?.page !== undefined) query.append("page", params.page.toString());
@@ -307,7 +275,6 @@ export const api = {
   adminGrantCredits: (id: number, amount: number) =>
     request<User>(`/api/users/${id}/credits`, { method: "POST", body: JSON.stringify({ amount }) }),
 
-  // Admin - Balance (Nạp tiền)
   adminGetBalanceStatistics: () =>
     request<BalanceStatistics>("/api/admin/balance/statistics"),
 
@@ -319,7 +286,6 @@ export const api = {
     return request<Page<BalanceDeposit>>(`/api/admin/balance${query.toString() ? `?${query}` : ""}`);
   },
 
-  // Admin - Job Approval (Kiểm duyệt job)
   adminGetPendingJobs: (params?: { page?: number; size?: number }) => {
     const query = new URLSearchParams();
     if (params?.page !== undefined) query.append("page", params.page.toString());
@@ -343,7 +309,6 @@ export const api = {
   adminCountPendingJobs: () =>
     request<number>("/api/jobs/admin/count/pending"),
 
-  // Admin - Disputes (TH3)
   adminGetPendingDisputes: (params?: { page?: number; size?: number }) => {
     const query = new URLSearchParams();
     if (params?.page !== undefined) query.append("page", params.page.toString());
@@ -366,7 +331,6 @@ export const api = {
       body: JSON.stringify({ employerWins, note }),
     }),
 
-  // Disputes - Employer
   createDispute: (
     jobId: number,
     description: string,
@@ -381,7 +345,6 @@ export const api = {
   getDispute: (jobId: number) =>
     request<Dispute | null>(`/api/jobs/${jobId}/disputes`),
 
-  // Disputes - Freelancer
   submitDisputeResponse: (
     disputeId: number,
     description: string,
@@ -393,7 +356,6 @@ export const api = {
       body: JSON.stringify({ description, evidenceUrl, fileId }),
     }),
 
-  // Notifications
   getNotifications: () =>
     request<Notification[]>("/api/notifications"),
 
@@ -413,7 +375,6 @@ export const api = {
   markAllNotificationsAsRead: () =>
     request<void>("/api/notifications/read-all", { method: "PATCH" }),
 
-  // Withdrawal Requests
   createFreelancerWithdrawal: (jobId: number, reason: string) =>
     request<WithdrawalRequest>(`/api/jobs/${jobId}/withdrawal/freelancer`, {
       method: "POST",
@@ -447,44 +408,33 @@ export const api = {
   getWithdrawalRequestHistory: (jobId: number) =>
     request<WithdrawalRequest[]>(`/api/jobs/${jobId}/withdrawal/history`),
 
-  // ==================== CHAT ====================
-  
-  // Search users to add friend
   chatSearchUsers: (email: string) =>
     request<ChatUserSearchResult[]>(`/api/chat/users/search?email=${encodeURIComponent(email)}`),
 
-  // Send chat request (first message to add friend)
   sendChatRequest: (receiverId: number, message: string) =>
     request<ChatConversation>("/api/chat/request", {
       method: "POST",
       body: JSON.stringify({ receiverId, message }),
     }),
 
-  // Get pending requests (received from others)
   getPendingChatRequests: () =>
     request<ChatConversation[]>("/api/chat/requests/pending"),
 
-  // Get sent requests (waiting for accept)
   getSentChatRequests: () =>
     request<ChatConversation[]>("/api/chat/requests/sent"),
 
-  // Accept chat request
   acceptChatRequest: (conversationId: number) =>
     request<ChatConversation>(`/api/chat/requests/${conversationId}/accept`, { method: "POST" }),
 
-  // Reject chat request
   rejectChatRequest: (conversationId: number) =>
     request<void>(`/api/chat/requests/${conversationId}/reject`, { method: "POST" }),
 
-  // Cancel sent chat request (hủy yêu cầu đã gửi)
   cancelChatRequest: (conversationId: number) =>
     request<void>(`/api/chat/requests/${conversationId}/cancel`, { method: "POST" }),
 
-  // Get all accepted conversations
   getConversations: () =>
     request<ChatConversation[]>("/api/chat/conversations"),
 
-  // Get messages for a conversation
   getMessages: (conversationId: number, params?: { page?: number; size?: number }) => {
     const query = new URLSearchParams();
     if (params?.page !== undefined) query.append("page", params.page.toString());
@@ -492,33 +442,27 @@ export const api = {
     return request<Page<ChatMessage>>(`/api/chat/conversations/${conversationId}/messages${query.toString() ? `?${query}` : ""}`);
   },
 
-  // Mark messages as read
   markMessagesAsRead: (conversationId: number) =>
     request<void>(`/api/chat/conversations/${conversationId}/read`, { method: "POST" }),
 
-  // Send message (REST fallback)
   sendMessage: (receiverId: number, content: string, messageType: ChatMessageType = "TEXT", replyToId?: number, fileId?: number) =>
     request<ChatMessage>("/api/chat/send", {
       method: "POST",
       body: JSON.stringify({ receiverId, content, messageType, replyToId, fileId }),
     }),
 
-  // Update message
   updateMessage: (messageId: number, content: string) =>
     request<ChatMessage>(`/api/chat/messages/${messageId}`, {
       method: "PUT",
       body: JSON.stringify({ content }),
     }),
 
-  // Delete message
   deleteMessage: (messageId: number) =>
     request<ChatMessage>(`/api/chat/messages/${messageId}`, { method: "DELETE" }),
 
-  // Get chat counts (unread + pending requests)
   getChatCounts: () =>
     request<{ unreadMessages: number; pendingRequests: number }>("/api/chat/counts"),
 
-  // Block user
   blockUser: (conversationId: number) =>
     request<void>(`/api/chat/conversations/${conversationId}/block`, { method: "POST" }),
 
@@ -541,7 +485,6 @@ export const api = {
     return res.json();
   },
 
-  // Upload document (max 5MB)
   uploadDocument: async (file: File, usage: string): Promise<ApiResponse<FileUploadResponse>> => {
     const formData = new FormData();
     formData.append("file", file);
@@ -555,7 +498,6 @@ export const api = {
     return res.json();
   },
 
-  // Upload file (auto detect type)
   uploadFile: async (file: File, usage: string): Promise<ApiResponse<FileUploadResponse>> => {
     const formData = new FormData();
     formData.append("file", file);
@@ -569,13 +511,11 @@ export const api = {
     return res.json();
   },
 
-  // Delete file
   deleteFile: (fileId: number) =>
     request<void>(`/api/files/${fileId}`, { method: "DELETE" }),
 
 };
 
-// ==================== FILE UPLOAD TYPES ====================
 export interface FileUploadResponse {
   id: number;
   publicId: string;
@@ -597,7 +537,6 @@ export interface FileUploadResponse {
   createdAt: string;
 }
 
-// Withdrawal Request types
 export type WithdrawalRequestType = "FREELANCER_WITHDRAW" | "EMPLOYER_CANCEL";
 export type WithdrawalRequestStatus = "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
 
@@ -639,7 +578,6 @@ export const WITHDRAWAL_REQUEST_STATUS_CONFIG: Record<WithdrawalRequestStatus, {
   CANCELLED: { label: "Đã hủy yêu cầu", color: "bg-gray-100 text-gray-700" },
 };
 
-// Notification types
 export type NotificationType =
   | "APPLICATION_ACCEPTED"
   | "APPLICATION_REJECTED"
@@ -711,7 +649,6 @@ export const NOTIFICATION_TYPE_CONFIG: Record<NotificationType, { icon: string; 
   SYSTEM: { icon: "info", color: "text-gray-600" },
 };
 
-// Credit types
 export interface CreditPackage {
   packageId: string;
   credits: number;
@@ -738,7 +675,6 @@ export interface CreditPurchase {
   createdAt: string;
 }
 
-// Job Application types
 export type ApplicationStatus = "PENDING" | "ACCEPTED" | "REJECTED" | "WITHDRAWN";
 export type WorkStatus = "NOT_STARTED" | "IN_PROGRESS" | "SUBMITTED" | "REVISION_REQUESTED" | "APPROVED";
 
@@ -761,12 +697,11 @@ export interface JobApplication {
     phoneNumber?: string;
     bio?: string;
     skills?: string[];
-    trustScore?: number;      // Nhân phẩm tốt
-    untrustScore?: number;    // Nhân phẩm tệ
+    trustScore?: number;
+    untrustScore?: number;
   };
   coverLetter?: string;
   status: ApplicationStatus;
-  // Work submission fields
   workStatus?: WorkStatus;
   workStatusLabel?: string;
   workSubmissionUrl?: string;
@@ -777,7 +712,6 @@ export interface JobApplication {
   updatedAt: string;
 }
 
-// Saved Job types
 export interface SavedJob {
   id: number;
   jobId: number;
@@ -796,7 +730,6 @@ export interface SavedJob {
   savedAt: string;
 }
 
-// Dispute types (TH3)
 export type DisputeStatus = 
   | "PENDING_FREELANCER_RESPONSE" 
   | "PENDING_ADMIN_DECISION" 
@@ -846,8 +779,6 @@ export interface Dispute {
   createdAt: string;
   updatedAt: string;
 }
-
-// ==================== CHAT TYPES ====================
 
 export type ChatMessageType = "TEXT" | "IMAGE" | "FILE" | "LIKE";
 export type ChatMessageStatus = "SENT" | "DELIVERED" | "READ" | "FAILED";

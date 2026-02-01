@@ -72,7 +72,7 @@ public class CreditService {
         userService.save(user);
 
         String appTransId = generateAppTransId(userId);
-        String description = "WorkHub - Mua " + creditPackage.getCredits() + " credit bằng số dư";
+        String description = "Freelancer - Mua " + creditPackage.getCredits() + " credit bằng số dư";
 
         CreditPurchase purchase = CreditPurchase.builder()
                 .appTransId(appTransId)

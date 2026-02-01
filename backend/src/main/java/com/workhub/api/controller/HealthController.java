@@ -19,7 +19,7 @@ public class HealthController {
         Map<String, Object> healthData = new HashMap<>();
         healthData.put("status", "UP");
         healthData.put("timestamp", LocalDateTime.now());
-        healthData.put("service", "WorkHub API");
+        healthData.put("service", "Freelancer API");
         
         return ResponseEntity.ok(ApiResponse.success("Service is healthy", healthData));
     }
@@ -29,7 +29,7 @@ public class HealthController {
         Map<String, Object> healthData = new HashMap<>();
         healthData.put("status", "UP");
         healthData.put("timestamp", LocalDateTime.now());
-        healthData.put("service", "WorkHub API");
+        healthData.put("service", "Freelancer API");
         
         return ResponseEntity.ok(healthData);
     }

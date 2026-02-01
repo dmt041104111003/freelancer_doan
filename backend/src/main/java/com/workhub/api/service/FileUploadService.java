@@ -190,7 +190,7 @@ public class FileUploadService {
             User uploader = userRepository.findById(uploaderId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-            String folder = "workhub/" + usage.name().toLowerCase();
+            String folder = "freelancer/" + usage.name().toLowerCase();
 
             Map<String, Object> options = ObjectUtils.asMap(
                 "folder", folder,
