@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Icon from "@/components/ui/Icon";
 import { Button } from "@/components/ui/button";
@@ -40,15 +40,15 @@ export default function JobApplyDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent showCloseButton={!isLoading}>
-        <DialogHeader>
+      <DialogContent showCloseButton={!isLoading} className="max-h-[90vh] flex flex-col">
+        <DialogHeader className="shrink-0">
           <DialogTitle>Ứng tuyển công việc</DialogTitle>
-          <DialogDescription>
-            Gửi đơn ứng tuyển cho công việc &quot;{jobTitle}&quot;
+          <DialogDescription className="min-w-0">
+            <span className="block truncate">Gửi đơn ứng tuyển cho công việc &quot;{jobTitle}&quot;</span>
           </DialogDescription>
         </DialogHeader>
 
-        <div className="py-4">
+        <div className="py-4 min-w-0 min-h-0 flex-1 overflow-y-auto">
           <div>
             <Label htmlFor="coverLetter" className="text-sm text-gray-700">
               Thư giới thiệu (không bắt buộc)
@@ -59,12 +59,12 @@ export default function JobApplyDialog({
               value={coverLetter}
               onChange={(e) => onCoverLetterChange(e.target.value)}
               disabled={isLoading}
-              className="mt-2 min-h-[120px]"
+              className="mt-2 min-h-[120px] max-h-[40vh] resize-y w-full break-words overflow-x-hidden"
             />
           </div>
         </div>
 
-        <DialogFooter>
+        <DialogFooter className="shrink-0">
           <Button variant="outline" onClick={handleClose} disabled={isLoading}>
             Hủy
           </Button>
