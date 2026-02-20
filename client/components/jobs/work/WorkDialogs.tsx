@@ -292,19 +292,19 @@ export function WorkReviewDialog({
                 </div>
 
                 {workSubmission.workSubmissionNote && (
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-sm text-gray-500 mb-1">Ghi chú từ người làm:</p>
-                    <p className="text-gray-700 whitespace-pre-wrap bg-white p-3 rounded border">
+                    <div className="text-gray-700 whitespace-pre-wrap break-words overflow-x-hidden bg-white p-3 rounded border max-h-32 overflow-y-auto">
                       {workSubmission.workSubmissionNote}
-                    </p>
+                    </div>
                   </div>
                 )}
               </div>
             </div>
 
             {workSubmission.workRevisionNote && (
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <p className="text-sm text-gray-600">
+              <div className="bg-gray-50 p-3 rounded-lg min-w-0">
+                <p className="text-sm text-gray-600 break-words">
                   <strong>Yêu cầu chỉnh sửa trước đó:</strong> {workSubmission.workRevisionNote}
                 </p>
               </div>
