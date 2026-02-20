@@ -96,16 +96,16 @@ export function FileUpload({
         disabled={disabled || isUploading}
       />
       {file || value ? (
-        <div className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-[#04A0EF]/5">
-          <Icon name="picture_as_pdf" size={20} className="text-red-500" />
-          <span className="flex-1 text-sm text-gray-700 truncate">
+        <div className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-[#04A0EF]/5 min-w-0 overflow-hidden">
+          <Icon name="picture_as_pdf" size={20} className="text-red-500 shrink-0" />
+          <span className="flex-1 min-w-0 text-sm text-gray-700 truncate">
             {file?.name || "File đã upload"}
           </span>
           <button
             type="button"
             onClick={handleRemove}
             disabled={disabled}
-            className="text-gray-400 hover:text-red-500 disabled:opacity-50"
+            className="shrink-0 text-gray-400 hover:text-red-500 disabled:opacity-50"
           >
             <Icon name="close" size={18} />
           </button>
