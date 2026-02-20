@@ -137,17 +137,27 @@ public class User {
         if (fullName != null && !fullName.isBlank()) {
             this.fullName = fullName;
         }
-        this.phoneNumber = phoneNumber;
         if (avatarUrl != null) {
             this.avatarUrl = avatarUrl;
         }
         if (coverImageUrl != null) {
             this.coverImageUrl = coverImageUrl;
         }
-        this.title = title;
-        this.location = location;
-        this.company = company;
-        this.bio = bio;
+        if (title != null) {
+            this.title = title;
+        }
+        if (location != null) {
+            this.location = location;
+        }
+        if (company != null) {
+            this.company = company;
+        }
+        if (bio != null) {
+            this.bio = bio;
+        }
+        if (phoneNumber != null) {
+            this.phoneNumber = phoneNumber;
+        }
         if (skills != null) {
             this.skills = skills;
         }
