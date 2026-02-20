@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { toast } from "sonner";
@@ -182,16 +182,6 @@ export function CreateDisputeDialog({
             required
             disabled={isSubmitting}
           />
-
-          {selectedEvidence && (
-            <EvidenceCard
-              url={selectedEvidence.url}
-              name={selectedEvidence.name}
-              size={formatFileSize(selectedEvidence.size)}
-              label="Bằng chứng đã chọn"
-              onRemove={() => setSelectedEvidence(null)}
-            />
-          )}
 
           <div className="bg-gray-50 border border-gray-200 p-3 rounded-lg text-sm text-gray-600">
             <p className="font-medium mb-1 flex items-center gap-1">

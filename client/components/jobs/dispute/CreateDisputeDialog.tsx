@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { toast } from "sonner";
@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import Icon from "@/components/ui/Icon";
 import { FileUpload } from "@/components/ui/file-upload";
-import EvidenceCard, { EvidenceMeta, formatFileSize } from "./EvidenceCard";
+import type { EvidenceMeta } from "./EvidenceCard";
 
 interface CreateDisputeDialogProps {
   open: boolean;
@@ -115,16 +115,6 @@ export default function CreateDisputeDialog({
             required
             disabled={isSubmitting}
           />
-
-          {selectedEvidence && (
-            <EvidenceCard
-              url={selectedEvidence.url}
-              name={selectedEvidence.name}
-              size={formatFileSize(selectedEvidence.size)}
-              label="Bằng chứng đã chọn"
-              onRemove={() => setSelectedEvidence(null)}
-            />
-          )}
 
           <div className="bg-gray-50 border border-gray-200 p-3 rounded-lg text-sm text-gray-600">
             <p className="font-medium mb-1 flex items-center gap-1">
