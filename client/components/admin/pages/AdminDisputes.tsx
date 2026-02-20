@@ -299,17 +299,16 @@ export default function AdminDisputes() {
 
       {/* Detail Dialog */}
       <Dialog open={detailDialogOpen} onOpenChange={setDetailDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto scrollbar-thin rounded-lg">
-          <DialogHeader>
+        <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
+          <DialogHeader className="shrink-0">
             <DialogTitle>Chi tiết khiếu nại #{selectedDispute?.id}</DialogTitle>
-            <DialogDescription>
-              Công việc: {selectedDispute?.jobTitle}
+            <DialogDescription className="min-w-0">
+              <span className="block truncate">Công việc: {selectedDispute?.jobTitle}</span>
             </DialogDescription>
           </DialogHeader>
 
           {selectedDispute && (
-            <div className="space-y-4">
-              {/* Status */}
+            <div className="space-y-4 min-h-0 flex-1 overflow-y-auto">
               <div className="flex items-center gap-2">
                 <span className="text-sm text-gray-500">Trạng thái:</span>
                 <span className={`px-2 py-1 rounded-full text-xs ${
@@ -319,12 +318,13 @@ export default function AdminDisputes() {
                 </span>
               </div>
 
-              {/* Bên thuê khiếu nại */}
-              <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 min-w-0">
                 <h4 className="font-medium text-gray-800 mb-2">
                   Khiếu nại từ bên thuê: {selectedDispute.employer.fullName}
                 </h4>
-                <p className="text-sm text-gray-600 whitespace-pre-wrap">{selectedDispute.employerDescription}</p>
+                <div className="max-h-[40vh] overflow-y-auto rounded border border-gray-100 bg-white p-3">
+                  <p className="text-sm text-gray-600 whitespace-pre-wrap break-words">{selectedDispute.employerDescription}</p>
+                </div>
                 {selectedDispute.employerEvidenceUrl && (
                   <a
                     href={selectedDispute.employerEvidenceUrl}
@@ -340,13 +340,14 @@ export default function AdminDisputes() {
                 )}
               </div>
 
-              {/* Người làm phản hồi */}
               {selectedDispute.freelancerDescription ? (
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 min-w-0">
                   <h4 className="font-medium text-gray-800 mb-2">
                     Phản hồi từ người làm: {selectedDispute.freelancer.fullName}
                   </h4>
-                  <p className="text-sm text-gray-600 whitespace-pre-wrap">{selectedDispute.freelancerDescription}</p>
+                  <div className="max-h-[40vh] overflow-y-auto rounded border border-gray-100 bg-white p-3">
+                    <p className="text-sm text-gray-600 whitespace-pre-wrap break-words">{selectedDispute.freelancerDescription}</p>
+                  </div>
                   {selectedDispute.freelancerEvidenceUrl && (
                     <a
                       href={selectedDispute.freelancerEvidenceUrl}

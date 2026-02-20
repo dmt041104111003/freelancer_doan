@@ -290,11 +290,13 @@ export function DisputeResponseDialog({
             </span>
           </div>
 
-          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 min-w-0">
             <h4 className="font-medium text-gray-800 mb-2">
               Khiếu nại từ: {dispute.employer.fullName}
             </h4>
-            <p className="text-sm text-gray-600 whitespace-pre-wrap">{dispute.employerDescription}</p>
+            <div className="max-h-[40vh] overflow-y-auto rounded border border-gray-100 bg-white p-3">
+              <p className="text-sm text-gray-600 whitespace-pre-wrap break-words">{dispute.employerDescription}</p>
+            </div>
             {renderEvidenceCard(dispute.employerEvidenceFile, dispute.employerEvidenceUrl, "Bằng chứng bên thuê")}
           </div>
 
@@ -307,11 +309,13 @@ export function DisputeResponseDialog({
           )}
 
           {dispute.freelancerDescription && (
-            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 min-w-0">
               <h4 className="font-medium text-gray-800 mb-2">
                 Phản hồi của bạn
               </h4>
-              <p className="text-sm text-gray-600 whitespace-pre-wrap">{dispute.freelancerDescription}</p>
+              <div className="max-h-[40vh] overflow-y-auto rounded border border-gray-100 bg-white p-3">
+                <p className="text-sm text-gray-600 whitespace-pre-wrap break-words">{dispute.freelancerDescription}</p>
+              </div>
               {renderEvidenceCard(dispute.freelancerEvidenceFile, dispute.freelancerEvidenceUrl, "Bằng chứng phản hồi")}
             </div>
           )}
@@ -418,18 +422,18 @@ export function ViewDisputeDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto scrollbar-thin rounded-lg">
-        <DialogHeader>
+      <DialogContent className="max-w-lg max-h-[90vh] flex flex-col overflow-hidden">
+        <DialogHeader className="shrink-0">
           <DialogTitle className="flex items-center gap-2">
             <Icon name="gavel" size={20} className="text-gray-500" />
             Chi tiết khiếu nại
           </DialogTitle>
-          <DialogDescription>
-            Công việc: <strong>{dispute.jobTitle}</strong>
+          <DialogDescription className="min-w-0">
+            <span className="block truncate">Công việc: <strong>{dispute.jobTitle}</strong></span>
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4">
+        <div className="space-y-4 min-h-0 flex-1 overflow-y-auto">
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-500">Trạng thái:</span>
             <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
@@ -437,11 +441,13 @@ export function ViewDisputeDialog({
             </span>
           </div>
 
-          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 min-w-0">
             <h4 className="font-medium text-gray-800 mb-2">
               Khiếu nại từ bên thuê: {dispute.employer.fullName}
             </h4>
-            <p className="text-sm text-gray-600 whitespace-pre-wrap">{dispute.employerDescription}</p>
+            <div className="max-h-[40vh] overflow-y-auto rounded border border-gray-100 bg-white p-3">
+              <p className="text-sm text-gray-600 whitespace-pre-wrap break-words">{dispute.employerDescription}</p>
+            </div>
             {dispute.employerEvidenceUrl && (
               <a
                 href={dispute.employerEvidenceUrl}
@@ -458,11 +464,13 @@ export function ViewDisputeDialog({
           </div>
 
           {dispute.freelancerDescription ? (
-            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 min-w-0">
               <h4 className="font-medium text-gray-800 mb-2">
                 Phản hồi từ người làm: {dispute.freelancer.fullName}
               </h4>
-              <p className="text-sm text-gray-600 whitespace-pre-wrap">{dispute.freelancerDescription}</p>
+              <div className="max-h-[40vh] overflow-y-auto rounded border border-gray-100 bg-white p-3">
+                <p className="text-sm text-gray-600 whitespace-pre-wrap break-words">{dispute.freelancerDescription}</p>
+              </div>
               {dispute.freelancerEvidenceUrl && (
                 <a
                   href={dispute.freelancerEvidenceUrl}
@@ -509,7 +517,7 @@ export function ViewDisputeDialog({
           )}
         </div>
 
-        <DialogFooter>
+        <DialogFooter className="shrink-0">
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Đóng
           </Button>
