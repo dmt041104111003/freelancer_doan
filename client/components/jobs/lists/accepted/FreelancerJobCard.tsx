@@ -129,7 +129,7 @@ export default function FreelancerJobCard({ job, onSubmitWork, onViewDispute }: 
             </Button>
           </Link>
           {job.status === "IN_PROGRESS" && !isApprovedWork && (
-            hasSubmittedWork ? (
+            job.workStatus === "SUBMITTED" ? (
               <Button
                 size="sm"
                 variant="outline"
@@ -145,9 +145,9 @@ export default function FreelancerJobCard({ job, onSubmitWork, onViewDispute }: 
                 className="bg-[#04A0EF] hover:bg-[#0380BF]"
                 onClick={() => onSubmitWork({ id: job.id, title: job.title })}
               >
-                <Icon name="upload" size={16} />
+                <Icon name={job.workStatus === "REVISION_REQUESTED" ? "edit_note" : "upload"} size={16} />
                 <span className="sm:hidden lg:inline ml-1">
-                  {job.workStatus === "REVISION_REQUESTED" ? "Nộp lại" : "Nộp bài"}
+                  {job.workStatus === "REVISION_REQUESTED" ? "Sửa và nộp lại" : "Nộp bài"}
                 </span>
               </Button>
             )

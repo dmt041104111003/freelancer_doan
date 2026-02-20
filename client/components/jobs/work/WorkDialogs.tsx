@@ -78,7 +78,7 @@ export function WorkSubmitDialog({
   return (
     <Dialog open={open} onOpenChange={(open) => !isSubmitting && onOpenChange(open)}>
       <DialogContent 
-        className="max-w-lg"
+        className="max-w-lg min-w-0 w-full overflow-hidden"
         onPointerDownOutside={(e) => isSubmitting && e.preventDefault()}
         onEscapeKeyDown={(e) => isSubmitting && e.preventDefault()}
       >
@@ -87,12 +87,12 @@ export function WorkSubmitDialog({
             <Icon name="upload_file" size={20} className="text-[#04A0EF]" />
             Nộp sản phẩm
           </DialogTitle>
-          <DialogDescription>
-            Công việc: <strong>{jobTitle}</strong>
+          <DialogDescription className="min-w-0">
+            <span className="block truncate">Công việc: <strong>{jobTitle}</strong></span>
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4">
+        <div className="space-y-4 min-w-0 overflow-hidden">
           <FileUpload
             value={url}
             onChange={(uploadedUrl, _file, uploadedFileId) => {
@@ -115,7 +115,7 @@ export function WorkSubmitDialog({
               placeholder="Mô tả những gì đã hoàn thành, hướng dẫn sử dụng..."
               rows={3}
               disabled={isSubmitting}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#04A0EF] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full min-w-0 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#04A0EF] disabled:opacity-50 disabled:cursor-not-allowed break-words overflow-x-hidden"
             />
           </div>
 

@@ -81,7 +81,7 @@ export function FileUpload({
   };
 
   return (
-    <div>
+    <div className="min-w-0 max-w-full">
       {label && (
         <label className="block text-sm font-medium text-gray-700 mb-1">
           {label} {required && <span className="text-red-500">*</span>}
@@ -96,9 +96,9 @@ export function FileUpload({
         disabled={disabled || isUploading}
       />
       {file || value ? (
-        <div className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-[#04A0EF]/5 min-w-0 overflow-hidden">
+        <div className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-[#04A0EF]/5 min-w-0 max-w-full overflow-hidden">
           <Icon name="picture_as_pdf" size={20} className="text-red-500 shrink-0" />
-          <span className="flex-1 min-w-0 text-sm text-gray-700 truncate">
+          <span className="flex-1 min-w-0 overflow-hidden text-sm text-gray-700 truncate">
             {file?.name || "File đã upload"}
           </span>
           <button
