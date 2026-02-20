@@ -1,12 +1,13 @@
-﻿"use client";
+"use client";
 
 import Icon from "@/components/ui/Icon";
 import { ChatMessage } from "@/lib/api";
 import { formatTime, getMessageStatusIcon } from "@/lib/format";
 import MessageReply from "./MessageReply";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { createPortal } from "react-dom";
+import { downloadFileFromUrl } from "@/lib/utils";
 
 interface MessageBubbleProps {
   message: ChatMessage;
@@ -36,13 +37,7 @@ export default function MessageBubble({
   const isFileMessage = message.messageType === "FILE" && message.file;
 
   const handleDownload = (url: string, filename: string) => {
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = filename;
-    link.target = "_blank";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    downloadFileFromUrl(url, filename || "file");
   };
 
   const renderImageMessage = () => {

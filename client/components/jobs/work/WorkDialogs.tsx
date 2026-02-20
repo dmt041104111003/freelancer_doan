@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import Icon from "@/components/ui/Icon";
 import { FileUpload } from "@/components/ui/file-upload";
+import { downloadFileFromUrl } from "@/lib/utils";
 
 interface WorkSubmitDialogProps {
   open: boolean;
@@ -278,17 +279,26 @@ export function WorkReviewDialog({
               <div className="space-y-3">
                 <div>
                   <p className="text-sm text-gray-500 mb-2">File sản phẩm:</p>
-                  <a
-                    href={workSubmission.workSubmissionUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    download
-                    className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-[#04A0EF]/5 hover:bg-[#04A0EF]/10 transition-colors"
-                  >
-                    <Icon name="picture_as_pdf" size={20} className="text-red-500 shrink-0" />
-                    <span className="flex-1 text-sm text-gray-700">Sản phẩm đã nộp</span>
-                    <Icon name="download" size={18} className="text-gray-500 shrink-0" />
-                  </a>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <a
+                      href={workSubmission.workSubmissionUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-[#04A0EF]/5 hover:bg-[#04A0EF]/10 transition-colors"
+                    >
+                      <Icon name="picture_as_pdf" size={20} className="text-red-500 shrink-0" />
+                      <span className="text-sm text-gray-700">Xem file</span>
+                      <Icon name="open_in_new" size={18} className="text-gray-500 shrink-0" />
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => downloadFileFromUrl(workSubmission.workSubmissionUrl!, "san-pham-da-nop.pdf")}
+                      className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-gray-50 hover:bg-gray-100 transition-colors text-sm text-gray-700"
+                    >
+                      <Icon name="download" size={18} className="text-gray-500 shrink-0" />
+                      Tải xuống
+                    </button>
+                  </div>
                 </div>
 
                 {workSubmission.workSubmissionNote && (

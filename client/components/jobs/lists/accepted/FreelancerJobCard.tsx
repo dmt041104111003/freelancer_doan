@@ -1,10 +1,11 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { Job, JOB_STATUS_CONFIG, WorkStatus } from "@/types/job";
 import Icon from "@/components/ui/Icon";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { downloadFileFromUrl } from "@/lib/utils";
 
 const WORK_STATUS_CONFIG: Record<WorkStatus, { label: string; color: string; icon: string }> = {
   NOT_STARTED: { label: "Chưa bắt đầu", color: "bg-gray-100 text-gray-600", icon: "hourglass_empty" },
@@ -97,17 +98,26 @@ export default function FreelancerJobCard({ job, onSubmitWork, onViewDispute }: 
           )}
 
           {job.workSubmissionUrl && (
-            <a
-              href={job.workSubmissionUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              download
-              className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-[#04A0EF]/5 hover:bg-[#04A0EF]/10 transition-colors mb-2"
-            >
-              <Icon name="picture_as_pdf" size={20} className="text-red-500 shrink-0" />
-              <span className="flex-1 text-sm text-gray-700 truncate">Sản phẩm đã nộp</span>
-              <Icon name="download" size={18} className="text-gray-500 shrink-0" />
-            </a>
+            <div className="flex items-center gap-2 flex-wrap mb-2">
+              <a
+                href={job.workSubmissionUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-[#04A0EF]/5 hover:bg-[#04A0EF]/10 transition-colors"
+              >
+                <Icon name="picture_as_pdf" size={20} className="text-red-500 shrink-0" />
+                <span className="text-sm text-gray-700">Xem file</span>
+                <Icon name="open_in_new" size={18} className="text-gray-500 shrink-0" />
+              </a>
+              <button
+                type="button"
+                onClick={() => downloadFileFromUrl(job.workSubmissionUrl!, "san-pham-da-nop.pdf")}
+                className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-gray-50 hover:bg-gray-100 transition-colors text-sm text-gray-700"
+              >
+                <Icon name="download" size={18} className="text-gray-500 shrink-0" />
+                Tải xuống
+              </button>
+            </div>
           )}
         </div>
 

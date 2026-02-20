@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
@@ -8,6 +8,7 @@ import Icon from "@/components/ui/Icon";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { downloadFileFromUrl } from "@/lib/utils";
 
 interface JobHistoryTimelineProps {
   jobId: number;
@@ -118,24 +119,31 @@ export default function JobHistoryTimeline({ jobId }: JobHistoryTimelineProps) {
               )}
 
               {fileAttachment && (
-                <a
-                  href={fileAttachment.secureUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  download
-                  className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-[#04A0EF]/5 hover:bg-[#04A0EF]/10 transition-colors mb-2"
-                >
-                  <Icon name="picture_as_pdf" size={18} className="text-red-500 shrink-0" />
-                  <div className="flex-1 text-sm text-gray-700 truncate">
-                    <span className="font-medium">{fileAttachment.originalFilename || "Tệp đã nộp"}</span>
-                    {fileAttachment.readableSize && (
-                      <span className="block text-xs text-gray-500">
-                        {fileAttachment.readableSize}
-                      </span>
-                    )}
-                  </div>
-                  <Icon name="download" size={16} className="text-gray-500 shrink-0" />
-                </a>
+                <div className="flex items-center gap-2 flex-wrap mb-2">
+                  <a
+                    href={fileAttachment.secureUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-[#04A0EF]/5 hover:bg-[#04A0EF]/10 transition-colors"
+                  >
+                    <Icon name="picture_as_pdf" size={18} className="text-red-500 shrink-0" />
+                    <div className="text-sm text-gray-700 truncate max-w-[140px] sm:max-w-[200px]">
+                      <span className="font-medium">{fileAttachment.originalFilename || "Tệp đã nộp"}</span>
+                      {fileAttachment.readableSize && (
+                        <span className="block text-xs text-gray-500">{fileAttachment.readableSize}</span>
+                      )}
+                    </div>
+                    <Icon name="open_in_new" size={16} className="text-gray-500 shrink-0" />
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => downloadFileFromUrl(fileAttachment.secureUrl, fileAttachment.originalFilename || "san-pham-da-nop.pdf")}
+                    className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-gray-50 hover:bg-gray-100 transition-colors text-sm text-gray-700"
+                  >
+                    <Icon name="download" size={16} className="text-gray-500 shrink-0" />
+                    Tải xuống
+                  </button>
+                </div>
               )}
 
               {/* User info */}
