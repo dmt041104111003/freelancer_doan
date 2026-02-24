@@ -370,7 +370,7 @@ export default function JobApplicationsTable() {
               Từ {viewingApp?.freelancer.fullName}
             </DialogDescription>
           </DialogHeader>
-          <div className="py-4">
+          <div className="py-4 max-h-96 overflow-y-auto">
             {viewingApp?.coverLetter ? (
               <p className="text-gray-700 whitespace-pre-wrap">{viewingApp.coverLetter}</p>
             ) : (

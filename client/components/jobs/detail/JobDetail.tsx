@@ -1,9 +1,9 @@
 ﻿"use client";
 
-import { useEffect, useState } from "react";
-import { useParams, useRouter, notFound } from "next/navigation";
+import { useEffect, useState, useCallback } from "react";
+import { useParams, useRouter, notFound, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { api, JobApplication } from "@/lib/api";
+import { api, JobApplication, Dispute } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { Job } from "@/types/job";
 import Icon from "@/components/ui/Icon";
@@ -11,12 +11,14 @@ import JobDetailHeader from "./JobDetailHeader";
 import JobDetailContent from "./JobDetailContent";
 import JobDetailSidebar from "./JobDetailSidebar";
 import JobApplyDialog from "./JobApplyDialog";
+import DisputeResponseDialog from "../dispute/DisputeResponseDialog";
 
 const DEFAULT_COVER_LETTER = "Chào anh/chị,\n\nTôi rất quan tâm đến vị trí này và tin rằng kỹ năng cùng kinh nghiệm của tôi sẽ phù hợp với yêu cầu công việc.\n\nRất mong được hợp tác cùng anh/chị.\n\nTrân trọng.";
 
 export default function JobDetail() {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { user } = useAuth();
   const jobId = Number(params.id);
 
@@ -31,8 +33,46 @@ export default function JobDetail() {
   const [isApplying, setIsApplying] = useState(false);
   const [myApplication, setMyApplication] = useState<JobApplication | null>(null);
 
+  // Dispute dialog
+  const [showDisputeDialog, setShowDisputeDialog] = useState(false);
+  const [dispute, setDispute] = useState<Dispute | null>(null);
+  const [isLoadingDispute, setIsLoadingDispute] = useState(false);
+
   const isOwner = user && job && user.id === job.employer.id;
   const hasApplied = !!myApplication;
+
+  const fetchDisputeData = useCallback(async () => {
+    if (!user || !job) return;
+    
+    console.log('Fetching dispute for job:', jobId);
+    setIsLoadingDispute(true);
+    try {
+      const response = await api.getDispute(jobId);
+      console.log('Dispute API response:', response);
+      if (response.status === "SUCCESS" && response.data) {
+        setDispute(response.data);
+        setShowDisputeDialog(true);
+        console.log('Dispute dialog should open now');
+      } else {
+        console.log('No dispute found or API error:', response.message);
+      }
+    } catch (error) {
+      console.error("Error fetching dispute:", error);
+      toast.error("Không thể tải thông tin khiếu nại");
+    } finally {
+      setIsLoadingDispute(false);
+    }
+  }, [user, job, jobId]);
+
+  // Check for dispute query parameter and fetch dispute data
+  useEffect(() => {
+    const disputeParam = searchParams.get('dispute');
+    console.log('Dispute param:', disputeParam, 'User:', !!user, 'Job:', !!job);
+    if (disputeParam === 'true' && user && job) {
+      console.log('Fetching dispute data...');
+      fetchDisputeData();
+    }
+  }, [searchParams, user, job, fetchDisputeData]);
 
   useEffect(() => {
     const fetchJob = async () => {
@@ -209,6 +249,16 @@ export default function JobDetail() {
         onSubmit={handleApply}
         isLoading={isApplying}
       />
+
+      {/* Dispute Response Dialog */}
+      {dispute && (
+        <DisputeResponseDialog
+          open={showDisputeDialog}
+          onOpenChange={setShowDisputeDialog}
+          dispute={dispute}
+          onSuccess={fetchDisputeData}
+        />
+      )}
     </div>
   );
 }

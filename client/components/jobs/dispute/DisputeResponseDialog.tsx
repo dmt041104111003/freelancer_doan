@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import Icon from "@/components/ui/Icon";
 import { FileUpload } from "@/components/ui/file-upload";
-import EvidenceCard, { EvidenceMeta, formatFileSize } from "./EvidenceCard";
+import { EvidenceMeta } from "./EvidenceCard";
 import renderEvidenceCard from "./renderEvidenceCard";
 
 interface DisputeResponseDialogProps {
@@ -74,7 +74,7 @@ export default function DisputeResponseDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto scrollbar-thin rounded-lg">
+      <DialogContent className="max-w-lg max-h-[85vh] flex flex-col min-h-0 rounded-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Icon name="gavel" size={20} className="text-gray-500" />
@@ -85,7 +85,7 @@ export default function DisputeResponseDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4">
+        <div className="flex-1 min-h-0 overflow-y-auto scrollbar-thin space-y-4 pr-1">
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-500">Trạng thái:</span>
             <span className={`px-2 py-1 rounded-full text-xs ${
@@ -159,16 +159,6 @@ export default function DisputeResponseDialog({
                 required
                 disabled={isSubmitting}
               />
-
-              {selectedEvidence && (
-                <EvidenceCard
-                  url={selectedEvidence.url}
-                  name={selectedEvidence.name}
-                  size={formatFileSize(selectedEvidence.size)}
-                  label="Bằng chứng đã chọn"
-                  onRemove={() => setSelectedEvidence(null)}
-                />
-              )}
             </>
           )}
 

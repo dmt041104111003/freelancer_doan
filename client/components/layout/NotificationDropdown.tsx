@@ -74,9 +74,21 @@ export default function NotificationDropdown() {
   };
 
   const getNotificationLink = (notification: Notification): string => {
-    if (notification.referenceType === "JOB" && notification.referenceId) {
-      return `/jobs/${notification.referenceId}`;
+    const refId = notification.referenceId;
+    if (!refId) return "#";
+
+    if (notification.type.startsWith("DISPUTE_")) {
+      return `/jobs/${refId}?dispute=true`;
     }
+
+    if (notification.referenceType === "JOB") {
+      return `/jobs/${refId}`;
+    }
+
+    if (notification.referenceType === "CONVERSATION") {
+      return `/messages?conversationId=${refId}`;
+    }
+
     return "#";
   };
 
