@@ -58,6 +58,22 @@ public class DisputeController {
     // ===== FREELANCER ENDPOINTS =====
 
     /**
+     * Freelancer tạo khiếu nại (sau khi bị từ chối tối thiểu 3 lần)
+     * POST /api/jobs/{jobId}/disputes/freelancer
+     */
+    @PostMapping("/jobs/{jobId}/disputes/freelancer")
+    @PreAuthorize("hasRole('FREELANCER')")
+    public ResponseEntity<ApiResponse<DisputeResponse>> createDisputeByFreelancer(
+            @PathVariable Long jobId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @Valid @RequestBody CreateDisputeRequest request) {
+
+        ApiResponse<DisputeResponse> response = disputeService.createDisputeByFreelancer(
+                jobId, userDetails.getId(), request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    /**
      * Freelancer gửi phản hồi khiếu nại
      * PUT /api/disputes/{disputeId}/respond
      */

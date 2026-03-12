@@ -27,4 +27,6 @@ public interface JobHistoryRepository extends JpaRepository<JobHistory, Long> {
     List<JobHistory> findByJobIdAndActionIn(@Param("jobId") Long jobId, @Param("actions") List<EJobHistoryAction> actions);
 
     long countByJobId(Long jobId);
+
+    long countByJobIdAndAction(Long jobId, EJobHistoryAction action);
 }

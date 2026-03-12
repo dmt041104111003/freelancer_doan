@@ -353,6 +353,22 @@ public class NotificationService {
     }
 
     /**
+     * Thông báo cho employer khi freelancer tạo khiếu nại
+     */
+    @Transactional
+    public void notifyDisputeCreatedByFreelancer(User employer, Job job, User freelancer) {
+        Notification notification = Notification.builder()
+                .user(employer)
+                .type(ENotificationType.DISPUTE_CREATED)
+                .title("Có khiếu nại mới")
+                .message(freelancer.getFullName() + " đã tạo khiếu nại cho công việc \"" + job.getTitle() + "\". Công việc đã bị khóa, chờ admin xử lý.")
+                .referenceId(job.getId())
+                .referenceType("JOB")
+                .build();
+        notificationRepository.save(notification);
+    }
+
+    /**
      * Thông báo cho freelancer khi admin yêu cầu phản hồi
      */
     @Transactional

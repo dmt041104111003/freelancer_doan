@@ -10,6 +10,7 @@ import com.workhub.api.entity.*;
 import com.workhub.api.exception.UnauthorizedAccessException;
 import com.workhub.api.repository.DisputeRepository;
 import com.workhub.api.repository.JobApplicationRepository;
+import com.workhub.api.repository.JobHistoryRepository;
 import com.workhub.api.repository.JobRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,7 @@ public class DisputeService {
     private final DisputeRepository disputeRepository;
     private final JobRepository jobRepository;
     private final JobApplicationRepository jobApplicationRepository;
+    private final JobHistoryRepository jobHistoryRepository;
     private final JobService jobService;
     private final UserService userService;
     private final NotificationService notificationService;
@@ -103,6 +105,79 @@ public class DisputeService {
         // Thông báo cho admin (system notification)
         // Thông báo cho freelancer
         notificationService.notifyDisputeCreated(freelancer, job, employer);
+
+        return ApiResponse.success("Đã tạo khiếu nại thành công. Chờ admin xử lý.", buildResponse(saved));
+    }
+
+    /**
+     * Freelancer tạo khiếu nại (sau khi bị từ chối tối thiểu 3 lần)
+     */
+    @Transactional
+    public ApiResponse<DisputeResponse> createDisputeByFreelancer(Long jobId, Long userId, CreateDisputeRequest req) {
+        Job job = jobService.getById(jobId);
+        User freelancer = userService.getById(userId);
+
+        // Kiểm tra freelancer là người đang làm job
+        JobApplication application = jobApplicationRepository.findByJobIdAndFreelancerId(jobId, userId)
+                .orElseThrow(() -> new UnauthorizedAccessException("Bạn không phải freelancer của công việc này"));
+
+        if (application.getStatus() != EApplicationStatus.ACCEPTED) {
+            throw new UnauthorizedAccessException("Bạn không phải freelancer đang thực hiện công việc này");
+        }
+
+        // Kiểm tra trạng thái job
+        if (!job.isInProgress()) {
+            throw new IllegalStateException("Chỉ có thể tạo khiếu nại khi công việc đang thực hiện");
+        }
+
+        // Kiểm tra freelancer đã nộp sản phẩm chưa
+        if (!application.isWorkSubmitted()) {
+            throw new IllegalStateException("Chỉ có thể tạo khiếu nại sau khi đã nộp sản phẩm");
+        }
+
+        // Kiểm tra đã có khiếu nại chưa
+        List<EDisputeStatus> activeStatuses = List.of(
+                EDisputeStatus.PENDING_FREELANCER_RESPONSE,
+                EDisputeStatus.PENDING_ADMIN_DECISION
+        );
+        if (disputeRepository.existsByJobIdAndStatusIn(jobId, activeStatuses)) {
+            throw new IllegalStateException("Công việc này đã có khiếu nại đang xử lý");
+        }
+
+        // Kiểm tra số lần bị yêu cầu chỉnh sửa (WORK_REJECTED)
+        long rejectedCount = jobHistoryRepository.countByJobIdAndAction(jobId, EJobHistoryAction.WORK_REJECTED);
+        if (rejectedCount < 3) {
+            throw new IllegalStateException("Bạn chỉ có thể tạo khiếu nại sau khi bị yêu cầu chỉnh sửa ít nhất 3 lần");
+        }
+
+        User employer = job.getEmployer();
+
+        // Tạo dispute do freelancer khởi tạo
+        Dispute dispute = Dispute.builder()
+                .job(job)
+                .employer(employer)
+                .freelancer(freelancer)
+                .freelancerEvidenceUrl(req.getEvidenceUrl())
+                .freelancerEvidenceFileId(req.getFileId())
+                .freelancerDescription(req.getDescription())
+                .status(EDisputeStatus.PENDING_ADMIN_DECISION)
+                .build();
+
+        // Khóa job
+        job.dispute();
+        jobRepository.save(job);
+
+        Dispute saved = disputeRepository.save(dispute);
+        if (req.getFileId() != null) {
+            fileUploadService.assignFileToReference(req.getFileId(), "DISPUTE", saved.getId());
+        }
+
+        // Ghi lịch sử
+        jobHistoryService.logHistory(job, freelancer, EJobHistoryAction.DISPUTE_CREATED,
+                "Freelancer tạo khiếu nại: " + req.getDescription());
+
+        // Thông báo cho employer
+        notificationService.notifyDisputeCreatedByFreelancer(employer, job, freelancer);
 
         return ApiResponse.success("Đã tạo khiếu nại thành công. Chờ admin xử lý.", buildResponse(saved));
     }
