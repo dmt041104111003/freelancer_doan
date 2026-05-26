@@ -3,15 +3,12 @@ package com.workhub.api.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
-
-import java.util.concurrent.TimeUnit;
 
 @Configuration
 @RequiredArgsConstructor
 public class RateLimitConfig {
 
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final InMemoryCache cache;
 
     @Value("${app.rate-limit.register.capacity}")
     private int registerCapacity;
@@ -27,19 +24,12 @@ public class RateLimitConfig {
 
     public boolean isAllowed(String key, int limit, long windowSeconds) {
         String redisKey = "rate:" + key;
-        Long count = redisTemplate.opsForValue().increment(redisKey);
-
-        if (count != null && count == 1) {
-            redisTemplate.expire(redisKey, windowSeconds, TimeUnit.SECONDS);
-        }
-
-        return count != null && count <= limit;
+        Long count = cache.increment(redisKey, windowSeconds);
+        return count <= limit;
     }
 
     public long getRetryAfter(String key) {
-        String redisKey = "rate:" + key;
-        Long ttl = redisTemplate.getExpire(redisKey, TimeUnit.SECONDS);
-        return ttl != null && ttl > 0 ? ttl : 0;
+        return cache.ttlSeconds("rate:" + key);
     }
 
     public boolean isRegisterAllowed(String ip) {
@@ -51,11 +41,11 @@ public class RateLimitConfig {
     }
 
     public boolean isOtpAllowed(String ip) {
-        return isAllowed("otp:" + ip, 5, 600); // 5 attempts per 10 minutes
+        return isAllowed("otp:" + ip, 5, 600);
     }
 
     public boolean isForgotPasswordAllowed(String ip) {
-        return isAllowed("forgot:" + ip, 3, 3600); // 3 attempts per hour
+        return isAllowed("forgot:" + ip, 3, 3600);
     }
 
     public long getRegisterRetryAfter(String ip) {

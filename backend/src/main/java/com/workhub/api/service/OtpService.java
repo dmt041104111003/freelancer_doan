@@ -1,26 +1,25 @@
 package com.workhub.api.service;
 
+import com.workhub.api.config.InMemoryCache;
 import com.workhub.api.entity.EOtpType;
 import com.workhub.api.entity.User;
 import com.workhub.api.exception.InvalidOtpException;
 import com.workhub.api.exception.OtpExpiredException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
-import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
 public class OtpService {
 
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final InMemoryCache cache;
     private final EmailService emailService;
 
     @Value("${app.otp.expiration}")
-    private long otpExpiration; // milliseconds
+    private long otpExpiration;
 
     @Value("${app.otp.max-attempts}")
     private int maxAttempts;
@@ -28,63 +27,61 @@ public class OtpService {
     private static final SecureRandom random = new SecureRandom();
 
     public void generateAndSendOtp(User user, EOtpType otpType) {
-        String otpKey = "otp:" + otpType + ":" + user.getEmail();
-        String attemptsKey = "otp_attempts:" + otpType + ":" + user.getEmail();
+        String otpKey = otpKey(otpType, user.getEmail());
+        String attemptsKey = attemptsKey(otpType, user.getEmail());
 
-        // Xóa OTP cũ
-        redisTemplate.delete(otpKey);
-        redisTemplate.delete(attemptsKey);
+        cache.delete(otpKey);
+        cache.delete(attemptsKey);
 
-        // Tạo OTP mới
-        String otpCode = String.format("%06d", random.nextInt(1000000));
+        String otpCode = String.format("%06d", random.nextInt(1_000_000));
         long ttlSeconds = otpExpiration / 1000;
+        cache.set(otpKey, otpCode, ttlSeconds);
 
-        // Lưu vào Redis
-        redisTemplate.opsForValue().set(otpKey, otpCode, ttlSeconds, TimeUnit.SECONDS);
-
-        // Gửi email
         emailService.sendOtpEmail(user.getEmail(), user.getFullName(), otpCode, otpType.name());
     }
 
     public void verifyOtp(String email, String otpCode, EOtpType otpType) {
-        String otpKey = "otp:" + otpType + ":" + email;
-        String attemptsKey = "otp_attempts:" + otpType + ":" + email;
+        String otpKey = otpKey(otpType, email);
+        String attemptsKey = attemptsKey(otpType, email);
 
-        // Kiểm tra OTP tồn tại
-        String storedOtp = (String) redisTemplate.opsForValue().get(otpKey);
+        String storedOtp = cache.getString(otpKey);
         if (storedOtp == null) {
             throw new OtpExpiredException("OTP hết hạn. Vui lòng yêu cầu mã mới.");
         }
 
-        // Kiểm tra số lần thử
-        Integer attempts = (Integer) redisTemplate.opsForValue().get(attemptsKey);
+        Integer attempts = cache.getInt(attemptsKey);
         if (attempts != null && attempts >= maxAttempts) {
-            redisTemplate.delete(otpKey);
-            redisTemplate.delete(attemptsKey);
+            cache.delete(otpKey);
+            cache.delete(attemptsKey);
             throw new InvalidOtpException("Quá số lần thử. Vui lòng yêu cầu mã mới.");
         }
 
-        // Tăng số lần thử
-        redisTemplate.opsForValue().increment(attemptsKey);
-        redisTemplate.expire(attemptsKey, otpExpiration / 1000, TimeUnit.SECONDS);
+        cache.increment(attemptsKey, otpExpiration / 1000);
 
-        // Kiểm tra OTP
         if (!storedOtp.equals(otpCode)) {
-            int remaining = maxAttempts - (attempts == null ? 1 : attempts + 1);
+            int used = attempts == null ? 1 : attempts + 1;
+            int remaining = maxAttempts - used;
             throw new InvalidOtpException("OTP sai. Còn " + remaining + " lần thử.");
         }
 
-        // Xóa OTP sau khi verify thành công
-        redisTemplate.delete(otpKey);
-        redisTemplate.delete(attemptsKey);
+        cache.delete(otpKey);
+        cache.delete(attemptsKey);
     }
 
     public void deleteOtp(String email, EOtpType otpType) {
-        redisTemplate.delete("otp:" + otpType + ":" + email);
-        redisTemplate.delete("otp_attempts:" + otpType + ":" + email);
+        cache.delete(otpKey(otpType, email));
+        cache.delete(attemptsKey(otpType, email));
     }
 
     public long getOtpExpirationSeconds() {
         return otpExpiration / 1000;
+    }
+
+    private static String otpKey(EOtpType type, String email) {
+        return "otp:" + type + ":" + email;
+    }
+
+    private static String attemptsKey(EOtpType type, String email) {
+        return "otp_attempts:" + type + ":" + email;
     }
 }
