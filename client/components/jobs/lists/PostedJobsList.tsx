@@ -25,6 +25,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import EmployerJobCard from "./posted/EmployerJobCard";
+import {
+  filterPostedJobs,
+  postedJobsFetchParams,
+  type PostedJobsFilter,
+} from "@/lib/jobFilters";
 
 const FILTER_TABS: { key: JobStatus | "all" | "history" | "review"; label: string }[] = [
   { key: "all", label: "Tất cả" },
@@ -41,7 +46,7 @@ export default function PostedJobsList() {
   const router = useRouter();
   const { user, isAuthenticated, isHydrated } = useAuth();
   const { jobs, page, isLoading, error, fetchJobs } = usePostedJobs();
-  const [filter, setFilter] = useState<JobStatus | "all" | "history" | "review">("all");
+  const [filter, setFilter] = useState<PostedJobsFilter>("all");
   const isHistoryTab = filter === "history";
   const isReviewTab = filter === "review";
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -76,19 +81,11 @@ export default function PostedJobsList() {
 
   useEffect(() => {
     if (isHydrated && isAuthenticated && hasAccess) {
-      if (filter === "history") {
-        // Tab lịch sử: lấy job IN_PROGRESS và COMPLETED
-        fetchJobs({ status: "IN_PROGRESS" as JobStatus });
-      } else if (filter === "review") {
-        // Tab chờ nghiệm thu: lấy job IN_PROGRESS có workReviewDeadline
-        fetchJobs({ status: "IN_PROGRESS" as JobStatus });
-      } else if (filter === "all") {
-        fetchJobs({});
-      } else {
-        fetchJobs({ status: filter as JobStatus });
-      }
+      fetchJobs(postedJobsFetchParams(filter));
     }
   }, [isHydrated, isAuthenticated, hasAccess, filter, fetchJobs]);
+
+  const displayJobs = filterPostedJobs(jobs, filter);
 
   const formatBudget = (budget?: number, currency?: string) => {
     if (!budget) return "Thương lượng";
@@ -149,7 +146,7 @@ export default function PostedJobsList() {
         toast.success(response.message || "Xóa công việc thành công");
         setDeleteDialogOpen(false);
         setJobToDelete(null);
-        fetchJobs(filter === "all" || filter === "history" ? {} : { status: filter as JobStatus });
+        fetchJobs(postedJobsFetchParams(filter));
       } else {
         toast.error(response.message || "Không thể xóa công việc");
       }
@@ -216,73 +213,16 @@ export default function PostedJobsList() {
       {/* Loading State */}
       {isLoading ? (
         <JobsLoading />
-      ) : isReviewTab ? (
-        /* Review Tab Content - Jobs waiting for review */
-        <div className="space-y-3">
-          {(() => {
-            const reviewJobs = jobs.filter(j => j.workReviewDeadline);
-            return reviewJobs.length === 0 ? (
-              <JobsEmptyState 
-                icon="rate_review" 
-                message="Không có sản phẩm nào chờ nghiệm thu"
-              />
-            ) : (
-              reviewJobs.map((job) => (
-                <div key={job.id} className="bg-white rounded-lg shadow p-4 sm:p-6">
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex flex-wrap items-center gap-2 mb-2">
-                        <span className="text-xs text-gray-400">#{job.id}</span>
-                        <Link href={`/jobs/${job.id}`} className="text-lg font-semibold text-gray-900 hover:text-[#04A0EF]">
-                          {job.title}
-                        </Link>
-                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${JOB_STATUS_CONFIG[job.status]?.color}`}>
-                          {JOB_STATUS_CONFIG[job.status]?.label}
-                        </span>
-                      </div>
-                      
-                      <p className="text-sm text-gray-600 mb-3">{formatBudget(job.budget, job.currency)}</p>
-
-                      {job.workReviewDeadline && (
-                        <div className="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 px-3 py-2 rounded-lg mb-3">
-                          <Icon name="timer" size={16} />
-                          <span>Hạn nghiệm thu: {formatDate(job.workReviewDeadline)}</span>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex flex-row sm:flex-col gap-2 shrink-0">
-                      <Button
-                        size="sm"
-                        className="flex-1 sm:flex-none bg-[#04A0EF] hover:bg-[#0380BF]"
-                        onClick={() => handleReviewWork(job)}
-                      >
-                        <Icon name="rate_review" size={16} />
-                        <span className="ml-1">Duyệt sản phẩm</span>
-                      </Button>
-                      <Link href={`/jobs/${job.id}`}>
-                        <Button variant="outline" size="sm" className="w-full">
-                          <Icon name="visibility" size={16} />
-                          <span className="ml-1">Chi tiết</span>
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              ))
-            );
-          })()}
-        </div>
       ) : isHistoryTab ? (
         /* History Tab Content */
         <div className="space-y-3">
-          {jobs.filter(j => j.status === "IN_PROGRESS" || j.status === "COMPLETED").length === 0 ? (
+          {displayJobs.length === 0 ? (
             <JobsEmptyState 
               icon="history" 
               message="Chưa có công việc nào có lịch sử hoạt động"
             />
           ) : (
-            jobs.filter(j => j.status === "IN_PROGRESS" || j.status === "COMPLETED").map((job) => (
+            displayJobs.map((job) => (
               <div key={job.id} className="bg-white rounded-lg shadow overflow-hidden">
                 {/* Job Header - Clickable */}
                 <button
@@ -321,10 +261,17 @@ export default function PostedJobsList() {
       ) : (
         /* Normal Job List */
         <div className="space-y-3">
-          {jobs.length === 0 ? (
-            <JobsEmptyState message="Không có công việc nào" />
+          {displayJobs.length === 0 ? (
+            <JobsEmptyState
+              message={
+                isReviewTab
+                  ? "Không có sản phẩm nào chờ nghiệm thu"
+                  : "Không có công việc nào"
+              }
+              icon={isReviewTab ? "rate_review" : undefined}
+            />
           ) : (
-            jobs.map((job) => (
+            displayJobs.map((job) => (
               <EmployerJobCard
                 key={job.id}
                 job={job}
@@ -344,36 +291,6 @@ export default function PostedJobsList() {
         </div>
       )}
 
-      {/* Pagination - not shown for history tab */}
-      {!isHistoryTab && page && page.totalPages > 1 && (
-        <div className="mt-6 flex justify-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={page.first}
-            onClick={() => fetchJobs({ 
-              status: filter === "all" ? undefined : filter as JobStatus, 
-              page: page.number - 1 
-            })}
-          >
-            Trước
-          </Button>
-          <span className="px-4 py-2 text-sm text-gray-600">
-            Trang {page.number + 1} / {page.totalPages}
-          </span>
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={page.last}
-            onClick={() => fetchJobs({ 
-              status: filter === "all" ? undefined : filter as JobStatus, 
-              page: page.number + 1 
-            })}
-          >
-            Sau
-          </Button>
-        </div>
-      )}
 
       {/* Delete Confirmation Dialog */}
       <Dialog 
@@ -456,7 +373,7 @@ export default function PostedJobsList() {
           jobId={disputeJob.id}
           jobTitle={disputeJob.title}
           onSuccess={() => {
-            fetchJobs(filter === "all" || filter === "history" ? {} : { status: filter as JobStatus });
+            fetchJobs(postedJobsFetchParams(filter));
           }}
         />
       )}
@@ -477,11 +394,7 @@ export default function PostedJobsList() {
           jobTitle={selectedJobForReview.title}
           onSuccess={() => {
             // Refresh jobs after review
-            if (filter === "all" || filter === "history" || filter === "review") {
-              fetchJobs(filter === "review" ? { status: "IN_PROGRESS" as JobStatus } : {});
-            } else {
-              fetchJobs({ status: filter as JobStatus });
-            }
+            fetchJobs(postedJobsFetchParams(filter));
           }}
         />
       )}

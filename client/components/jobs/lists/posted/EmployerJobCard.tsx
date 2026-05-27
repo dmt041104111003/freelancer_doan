@@ -4,6 +4,7 @@ import Link from "next/link";
 import Icon from "@/components/ui/Icon";
 import { Button } from "@/components/ui/button";
 import { Job, JOB_STATUS_CONFIG } from "@/types/job";
+import { downloadFileFromUrl } from "@/lib/utils";
 
 interface EmployerJobCardProps {
   job: Job;
@@ -31,6 +32,7 @@ export default function EmployerJobCard({
   const budgetLabel = formatBudget(job);
   const hasReviewDeadline = Boolean(job.workReviewDeadline);
   const hasSubmissionDeadline = Boolean(job.workSubmissionDeadline);
+  const hasDeliverable = Boolean(job.workSubmissionUrl);
   const canEdit =
     job.status === "DRAFT" && job.applicationCount === 0;
   const canDelete =
@@ -104,10 +106,46 @@ export default function EmployerJobCard({
               <span>Hạn duyệt sản phẩm: {formatDate(job.workReviewDeadline)}</span>
             </div>
           )}
-          {job.status === "IN_PROGRESS" && hasSubmissionDeadline && (
+          {job.status === "IN_PROGRESS" && hasSubmissionDeadline && !hasDeliverable && (
             <div className="mt-3 flex items-center gap-2 text-sm text-gray-600 bg-gray-50 px-3 py-2 rounded-lg">
               <Icon name="upload_file" size={16} />
               <span>Chờ người làm nộp bài (hạn: {formatDate(job.workSubmissionDeadline)})</span>
+            </div>
+          )}
+
+          {hasDeliverable && (
+            <div className="mt-3 p-3 rounded-lg border border-gray-200 bg-gray-50 space-y-2">
+              <p className="text-sm font-medium text-gray-800 flex items-center gap-2">
+                <Icon name="inventory_2" size={16} className="text-[#04A0EF]" />
+                Sản phẩm đã nộp
+                {job.workSubmittedAt && (
+                  <span className="text-xs font-normal text-gray-500">
+                    • {formatDate(job.workSubmittedAt)}
+                  </span>
+                )}
+              </p>
+              {job.workSubmissionNote && (
+                <p className="text-sm text-gray-600 whitespace-pre-wrap break-words">{job.workSubmissionNote}</p>
+              )}
+              <div className="flex flex-wrap gap-2">
+                <a
+                  href={job.workSubmissionUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-3 py-1.5 text-sm border border-gray-300 rounded-md bg-white hover:bg-gray-100"
+                >
+                  <Icon name="open_in_new" size={16} />
+                  Xem file
+                </a>
+                <button
+                  type="button"
+                  onClick={() => downloadFileFromUrl(job.workSubmissionUrl!, "san-pham-hoan-thanh.pdf")}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 text-sm border border-gray-300 rounded-md bg-white hover:bg-gray-100"
+                >
+                  <Icon name="download" size={16} />
+                  Tải xuống
+                </button>
+              </div>
             </div>
           )}
         </div>

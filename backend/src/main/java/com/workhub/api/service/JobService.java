@@ -128,7 +128,7 @@ public class JobService {
             jobs = jobRepository.findByEmployerId(employerId, pageable);
         }
 
-        Page<JobResponse> response = jobs.map(this::buildJobResponse);
+        Page<JobResponse> response = jobs.map(this::buildJobResponseWithAcceptedWorkInfo);
         return ApiResponse.success("Thành công", response);
     }
 
@@ -396,21 +396,30 @@ public class JobService {
     }
 
     /**
+     * Build response với work submission từ ứng viên đã được chấp nhận (cho employer)
+     */
+    public JobResponse buildJobResponseWithAcceptedWorkInfo(Job job) {
+        JobResponse response = buildJobResponse(job);
+        jobApplicationRepository.findFirstByJobIdAndStatus(job.getId(), EApplicationStatus.ACCEPTED)
+                .ifPresent(application -> applyWorkInfo(response, application));
+        return response;
+    }
+
+    /**
      * Build response với work submission info (cho freelancer's working jobs)
      */
     public JobResponse buildJobResponseWithWorkInfo(Job job, Long freelancerId) {
         JobResponse response = buildJobResponse(job);
-        
-        // Lấy application của freelancer cho job này
         jobApplicationRepository.findByJobIdAndFreelancerId(job.getId(), freelancerId)
-                .ifPresent(application -> {
-                    response.setWorkStatus(application.getWorkStatus());
-                    response.setWorkSubmissionUrl(application.getWorkSubmissionUrl());
-                    response.setWorkSubmissionNote(application.getWorkSubmissionNote());
-                    response.setWorkRevisionNote(application.getWorkRevisionNote());
-                    response.setWorkSubmittedAt(application.getWorkSubmittedAt());
-                });
-        
+                .ifPresent(application -> applyWorkInfo(response, application));
         return response;
+    }
+
+    private void applyWorkInfo(JobResponse response, JobApplication application) {
+        response.setWorkStatus(application.getWorkStatus());
+        response.setWorkSubmissionUrl(application.getWorkSubmissionUrl());
+        response.setWorkSubmissionNote(application.getWorkSubmissionNote());
+        response.setWorkRevisionNote(application.getWorkRevisionNote());
+        response.setWorkSubmittedAt(application.getWorkSubmittedAt());
     }
 }

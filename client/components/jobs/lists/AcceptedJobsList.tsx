@@ -26,6 +26,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import {
+  acceptedJobsFetchStatus,
+  filterAcceptedJobs,
+  type AcceptedJobsFilter,
+} from "@/lib/jobFilters";
 
 const APPLICATION_STATUS_CONFIG: Record<ApplicationStatus, { label: string; color: string }> = {
   PENDING: { label: "Chờ duyệt", color: "bg-gray-100 text-gray-600" },
@@ -38,7 +43,7 @@ export default function AcceptedJobsList() {
   const router = useRouter();
   const { user, isAuthenticated, isHydrated } = useAuth();
   const { jobs, stats, isLoading, error, fetchJobs, fetchStats } = useAcceptedJobs();
-  const [filter, setFilter] = useState<string>("all");
+  const [filter, setFilter] = useState<AcceptedJobsFilter>("all");
 
   // Applications state
   const [applications, setApplications] = useState<JobApplication[]>([]);
@@ -94,18 +99,16 @@ export default function AcceptedJobsList() {
         fetchApplications();
       } else if (isSavedTab) {
         fetchSavedJobs();
-      } else if (isHistoryTab) {
-        // Tab lịch sử: lấy job IN_PROGRESS và COMPLETED
-        fetchJobs("IN_PROGRESS");
-      } else if (isSubmittedTab) {
-        // Tab đã nộp: lấy jobs IN_PROGRESS có workStatus là SUBMITTED hoặc APPROVED
-        fetchJobs("IN_PROGRESS");
       } else {
-        fetchJobs(filter);
-        fetchStats();
+        fetchJobs(acceptedJobsFetchStatus(filter));
+        if (filter === "all" || filter === "IN_PROGRESS" || filter === "COMPLETED" || filter === "DISPUTED") {
+          fetchStats();
+        }
       }
     }
-  }, [isHydrated, isAuthenticated, hasAccess, filter, fetchJobs, fetchStats, isAppliedTab, isSavedTab, isHistoryTab, isSubmittedTab]);
+  }, [isHydrated, isAuthenticated, hasAccess, filter, fetchJobs, fetchStats, isAppliedTab, isSavedTab]);
+
+  const displayJobs = filterAcceptedJobs(jobs, filter);
 
   const fetchApplications = async () => {
     setApplicationsLoading(true);
@@ -404,13 +407,13 @@ export default function AcceptedJobsList() {
         <div className="space-y-3">
           {isLoading ? (
             <JobsLoading />
-          ) : jobs.filter(j => j.status === "IN_PROGRESS" || j.status === "COMPLETED").length === 0 ? (
+          ) : displayJobs.length === 0 ? (
             <JobsEmptyState 
               icon="history" 
               message="Chưa có công việc nào có lịch sử hoạt động"
             />
           ) : (
-            jobs.filter(j => j.status === "IN_PROGRESS" || j.status === "COMPLETED").map((job) => (
+            displayJobs.map((job) => (
               <div key={job.id} className="bg-white rounded-lg shadow overflow-hidden">
                 {/* Job Header - Clickable */}
                 <button
@@ -598,33 +601,22 @@ export default function AcceptedJobsList() {
           ) : (
             /* Job List */
             <div className="space-y-4">
-              {(() => {
-                const displayJobs = isSubmittedTab
-                  ? jobs.filter(
-                      (job) =>
-                        job.workStatus === "SUBMITTED" ||
-                        job.workStatus === "APPROVED" ||
-                        Boolean(job.workSubmissionUrl)
-                    )
-                  : jobs;
-
-                return displayJobs.length === 0 ? (
-                  <JobsEmptyState
-                    message={
-                      isSubmittedTab ? "Chưa có sản phẩm nào được nộp" : "Không có công việc nào"
-                    }
+              {displayJobs.length === 0 ? (
+                <JobsEmptyState
+                  message={
+                    isSubmittedTab ? "Chưa có sản phẩm nào được nộp" : "Không có công việc nào"
+                  }
+                />
+              ) : (
+                displayJobs.map((job) => (
+                  <FreelancerJobCard
+                    key={job.id}
+                    job={job}
+                    onSubmitWork={handleSubmitWork}
+                    onViewDispute={handleViewDispute}
                   />
-                ) : (
-                  displayJobs.map((job) => (
-                    <FreelancerJobCard
-                      key={job.id}
-                      job={job}
-                      onSubmitWork={handleSubmitWork}
-                      onViewDispute={handleViewDispute}
-                    />
-                  ))
-                );
-              })()}
+                ))
+              )}
             </div>
           )}
         </>
@@ -637,7 +629,7 @@ export default function AcceptedJobsList() {
           onOpenChange={setDisputeDialogOpen}
           dispute={currentDispute}
           onSuccess={() => {
-            fetchJobs(filter);
+            fetchJobs(acceptedJobsFetchStatus(filter));
           }}
         />
       )}

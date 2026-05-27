@@ -22,9 +22,10 @@ public interface JobRepository extends JpaRepository<Job, Long> {
 
     Page<Job> findByEmployerIdAndStatus(Long employerId, EJobStatus status, Pageable pageable);
 
-    @Query("SELECT j FROM Job j WHERE j.status = :status AND " +
-           "(LOWER(j.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-           "LOWER(j.description) LIKE LOWER(CONCAT('%', :keyword, '%')))")
+    @Query("SELECT DISTINCT j FROM Job j LEFT JOIN j.skills s WHERE j.status = :status AND (" +
+           "LOWER(j.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+           "LOWER(j.description) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+           "LOWER(s) LIKE LOWER(CONCAT('%', :keyword, '%')))")
     Page<Job> searchJobs(@Param("keyword") String keyword, 
                          @Param("status") EJobStatus status, 
                          Pageable pageable);

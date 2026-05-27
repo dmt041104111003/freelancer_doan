@@ -18,7 +18,7 @@ export function usePostedJobs() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await api.getMyJobs(params);
+      const response = await api.getMyJobs({ size: 100, ...params });
       if (response.status === "SUCCESS" && response.data) {
         setJobs(response.data.content);
         setPage(response.data);

@@ -20,7 +20,7 @@ export function useAcceptedJobs() {
     setError(null);
     try {
       const params: { status?: JobStatus; size?: number } = { size: 100 };
-      if (status && status !== "all") {
+      if (status && status !== "all" && status !== "history" && status !== "submitted") {
         params.status = status as JobStatus;
       }
       const res = await api.getMyWorkingJobs(params);
