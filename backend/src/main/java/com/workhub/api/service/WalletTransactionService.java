@@ -151,27 +151,113 @@ public class WalletTransactionService {
     }
 
     public ApiResponse<Page<WalletHistoryResponse>> getAdminTransactions(EWalletTransactionType type, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<WalletTransaction> txPage;
+        // Gom tất cả nguồn: WalletTransaction + BalanceDeposit (kể cả pending/cancel/expired)
+        // để admin xem "lịch sử giao dịch" chung 1 nơi.
+        // Lấy nhiều hơn `size` để đảm bảo khi trộn nhiều nguồn (WalletTransaction + BalanceDeposit + CreditPurchase)
+        // thì trang đầu vẫn có đủ item theo thứ tự thời gian.
+        int fetchLimit = Math.min(20000, (page + 1) * size * 20);
+        Pageable fetchPageable = PageRequest.of(0, fetchLimit);
+
+        List<WalletHistoryResponse> items = new ArrayList<>();
+
+        // 1) WalletTransaction (đã log các event đã được ghi vào wallet)
         if (type != null) {
-            txPage = walletTransactionRepository.findByTypeOrderByCreatedAtDesc(type, pageable);
+            walletTransactionRepository.findByTypeOrderByCreatedAtDesc(type, fetchPageable)
+                    .forEach(tx -> items.add(WalletHistoryResponse.builder()
+                            .id(tx.getId())
+                            .type(tx.getType())
+                            .typeLabel(WalletHistoryResponse.getTypeLabel(tx.getType()))
+                            .amount(tx.getAmount())
+                            .credits(tx.getCredits())
+                            .description(tx.getDescription())
+                            .referenceId(tx.getReferenceId())
+                            .referenceType(tx.getReferenceType())
+                            .userId(tx.getUser().getId())
+                            .userName(tx.getUser().getFullName())
+                            .createdAt(tx.getCreatedAt())
+                            .build()));
         } else {
-            txPage = walletTransactionRepository.findAllByOrderByCreatedAtDesc(pageable);
+            walletTransactionRepository.findAllByOrderByCreatedAtDesc(fetchPageable)
+                    .forEach(tx -> items.add(WalletHistoryResponse.builder()
+                            .id(tx.getId())
+                            .type(tx.getType())
+                            .typeLabel(WalletHistoryResponse.getTypeLabel(tx.getType()))
+                            .amount(tx.getAmount())
+                            .credits(tx.getCredits())
+                            .description(tx.getDescription())
+                            .referenceId(tx.getReferenceId())
+                            .referenceType(tx.getReferenceType())
+                            .userId(tx.getUser().getId())
+                            .userName(tx.getUser().getFullName())
+                            .createdAt(tx.getCreatedAt())
+                            .build()));
         }
-        Page<WalletHistoryResponse> result = txPage.map(tx -> WalletHistoryResponse.builder()
-                .id(tx.getId())
-                .type(tx.getType())
-                .typeLabel(WalletHistoryResponse.getTypeLabel(tx.getType()))
-                .amount(tx.getAmount())
-                .credits(tx.getCredits())
-                .description(tx.getDescription())
-                .referenceId(tx.getReferenceId())
-                .referenceType(tx.getReferenceType())
-                .userId(tx.getUser().getId())
-                .userName(tx.getUser().getFullName())
-                .createdAt(tx.getCreatedAt())
-                .build());
-        return ApiResponse.success("Thành công", result);
+
+        // 2) Nạp tiền (BalanceDeposit) - thường pending/cancel/expired sẽ chưa có WalletTransaction
+        if (type == null || type == EWalletTransactionType.DEPOSIT) {
+            balanceDepositRepository.findAllByOrderByCreatedAtDesc(fetchPageable).getContent().forEach(deposit -> {
+                if (walletTransactionRepository.existsByReferenceTypeAndReferenceId("DEPOSIT", deposit.getId())) {
+                    return; // đã có record trong WalletTransaction rồi
+                }
+
+                boolean isPending = deposit.isPending();
+                boolean isPaid = deposit.isPaid();
+
+                items.add(WalletHistoryResponse.builder()
+                        .id(deposit.getId())
+                        .type(EWalletTransactionType.DEPOSIT)
+                        .typeLabel(
+                                isPending
+                                        ? "Nạp tiền (chờ thanh toán)"
+                                        : WalletHistoryResponse.getTypeLabel(EWalletTransactionType.DEPOSIT)
+                        )
+                        .amount(deposit.getAmount())
+                        .description(deposit.getDescription() != null ? deposit.getDescription() : "Nạp tiền vào ví")
+                        .referenceId(deposit.getId())
+                        .referenceType("DEPOSIT")
+                        .status(deposit.getStatus().name())
+                        .orderUrl(deposit.getOrderUrl())
+                        .appTransId(deposit.getAppTransId())
+                        .userId(deposit.getUser().getId())
+                        .userName(deposit.getUser().getFullName())
+                        .createdAt(isPaid && deposit.getPaidAt() != null ? deposit.getPaidAt() : deposit.getCreatedAt())
+                        .build());
+            });
+        }
+
+        // 3) CreditPurchase (chỗ này giữ giống getMyHistory cho trường hợp chưa được log vào WalletTransaction)
+        if (type == null || type == EWalletTransactionType.CREDIT_PURCHASE) {
+            creditPurchaseRepository.findAllByOrderByCreatedAtDesc(fetchPageable).getContent().forEach(purchase -> {
+                if (!Boolean.TRUE.equals(purchase.getCreditsGranted())) return;
+                if (walletTransactionRepository.existsByReferenceTypeAndReferenceId("CREDIT_PURCHASE", purchase.getId())) return;
+
+                items.add(WalletHistoryResponse.builder()
+                        .id(purchase.getId())
+                        .type(EWalletTransactionType.CREDIT_PURCHASE)
+                        .typeLabel(WalletHistoryResponse.getTypeLabel(EWalletTransactionType.CREDIT_PURCHASE))
+                        .amount(purchase.getTotalAmount() != null ? purchase.getTotalAmount().negate() : null)
+                        .credits(purchase.getCreditsAmount())
+                        .description(purchase.getDescription())
+                        .referenceId(purchase.getId())
+                        .referenceType("CREDIT_PURCHASE")
+                        .userId(purchase.getUser().getId())
+                        .userName(purchase.getUser().getFullName())
+                        .createdAt(purchase.getPaidAt() != null ? purchase.getPaidAt() : purchase.getCreatedAt())
+                        .build());
+            });
+        }
+
+        items.sort(Comparator.comparing(WalletHistoryResponse::getCreatedAt,
+                Comparator.nullsLast(Comparator.reverseOrder())));
+
+        int start = page * size;
+        int end = Math.min(start + size, items.size());
+        List<WalletHistoryResponse> pageContent = start >= items.size()
+                ? List.of()
+                : items.subList(start, end);
+
+        Pageable pageable = PageRequest.of(page, size);
+        return ApiResponse.success("Thành công", new PageImpl<>(pageContent, pageable, items.size()));
     }
 
     public void logDepositPaid(BalanceDeposit deposit) {

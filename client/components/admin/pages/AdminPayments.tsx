@@ -3,14 +3,7 @@
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { formatCurrency, formatDateTime } from "@/lib/format";
-import {
-  BalanceDeposit,
-  BalanceStatistics,
-  DepositStatus,
-  DEPOSIT_STATUS_CONFIG,
-  WalletHistoryItem,
-  WalletTransactionType,
-} from "@/types/balance";
+import { BalanceStatistics, WalletHistoryItem, WalletTransactionType } from "@/types/balance";
 import { Page } from "@/types/job";
 import { Pagination } from "@/components/ui/pagination";
 import Icon from "@/components/ui/Icon";
@@ -18,20 +11,11 @@ import AdminLoading from "../shared/AdminLoading";
 import AdminPageHeader from "../shared/AdminPageHeader";
 import AdminEmptyState from "../shared/AdminEmptyState";
 
-type SubTab = "overview" | "deposits" | "transactions";
+type SubTab = "overview" | "transactions";
 
 const SUB_TABS: { id: SubTab; label: string; icon: string }[] = [
   { id: "overview", label: "Thống kê", icon: "bar_chart" },
-  { id: "deposits", label: "Nạp tiền", icon: "account_balance_wallet" },
   { id: "transactions", label: "Lịch sử GD", icon: "receipt_long" },
-];
-
-const DEPOSIT_STATUS_OPTIONS: { value: DepositStatus | ""; label: string }[] = [
-  { value: "", label: "Tất cả" },
-  { value: "PAID", label: "Đã TT" },
-  { value: "PENDING", label: "Chờ TT" },
-  { value: "CANCELLED", label: "Đã hủy" },
-  { value: "EXPIRED", label: "Hết hạn" },
 ];
 
 const TX_TYPE_OPTIONS: { value: WalletTransactionType | ""; label: string }[] = [
@@ -163,126 +147,6 @@ function OverviewTab() {
           </div>
         </div>
       </div>
-    </div>
-  );
-}
-
-function DepositsTab() {
-  const [deposits, setDeposits] = useState<BalanceDeposit[]>([]);
-  const [page, setPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
-  const [totalElements, setTotalElements] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-  const [statusFilter, setStatusFilter] = useState<DepositStatus | "">("");
-
-  useEffect(() => {
-    (async () => {
-      setIsLoading(true);
-      try {
-        const res = await api.adminGetAllDeposits({
-          page,
-          size: 10,
-          status: statusFilter || undefined,
-        });
-        if (res.status === "SUCCESS" && res.data) {
-          const pageData = res.data as Page<BalanceDeposit>;
-          setDeposits(pageData.content);
-          setTotalPages(pageData.totalPages);
-          setTotalElements(pageData.totalElements);
-        }
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setIsLoading(false);
-      }
-    })();
-  }, [page, statusFilter]);
-
-  if (isLoading && deposits.length === 0) return <AdminLoading />;
-
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-500">{totalElements} giao dịch</p>
-        <select
-          value={statusFilter}
-          onChange={(e) => { setStatusFilter(e.target.value as DepositStatus | ""); setPage(0); }}
-          className="h-8 px-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#04A0EF]"
-        >
-          {DEPOSIT_STATUS_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
-          ))}
-        </select>
-      </div>
-
-      {deposits.length === 0 ? (
-        <AdminEmptyState message="Không có giao dịch nào" />
-      ) : (
-        <>
-          <div className="md:hidden space-y-3">
-            {deposits.map((d) => (
-              <div key={d.id} className="bg-white rounded-lg shadow p-4 space-y-2">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900 truncate">{d.userFullName || `User #${d.userId}`}</p>
-                    <p className="text-xs text-gray-500 font-mono truncate">{d.appTransId}</p>
-                  </div>
-                  <span className={`text-xs px-2 py-1 rounded-full whitespace-nowrap ${DEPOSIT_STATUS_CONFIG[d.status]?.color || ""}`}>
-                    {DEPOSIT_STATUS_CONFIG[d.status]?.label || d.status}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <p className="text-lg font-semibold text-[#04A0EF]">{formatCurrency(d.amount)}</p>
-                </div>
-                <div className="grid grid-cols-2 gap-2 text-xs text-gray-500 pt-2 border-t">
-                  <div><p className="text-gray-400">Ngày tạo</p><p>{formatDateTime(d.createdAt)}</p></div>
-                  <div><p className="text-gray-400">Thanh toán</p><p>{formatDateTime(d.paidAt)}</p></div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="hidden md:block bg-white rounded-lg shadow overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Mã GD</th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Người nạp</th>
-                    <th className="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">Số tiền</th>
-                    <th className="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase">Trạng thái</th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Ngày tạo</th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Thanh toán</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {deposits.map((d) => (
-                    <tr key={d.id} className="hover:bg-gray-50">
-                      <td className="px-3 py-2 font-mono text-gray-900">{d.appTransId}</td>
-                      <td className="px-3 py-2">
-                        <p className="font-medium text-gray-900">{d.userFullName || `User #${d.userId}`}</p>
-                        <p className="text-xs text-gray-500">#{d.userId}</p>
-                      </td>
-                      <td className="px-3 py-2 text-right font-medium text-gray-900">{formatCurrency(d.amount)}</td>
-                      <td className="px-3 py-2 text-center">
-                        <span className={`text-xs px-2 py-1 rounded-full ${DEPOSIT_STATUS_CONFIG[d.status]?.color || ""}`}>
-                          {DEPOSIT_STATUS_CONFIG[d.status]?.label || d.status}
-                        </span>
-                      </td>
-                      <td className="px-3 py-2 text-gray-500">{formatDateTime(d.createdAt)}</td>
-                      <td className="px-3 py-2 text-gray-500">{formatDateTime(d.paidAt)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow md:rounded-none md:shadow-none">
-            <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} disabled={isLoading} />
-          </div>
-        </>
-      )}
     </div>
   );
 }
@@ -455,7 +319,6 @@ export default function AdminPayments() {
       </div>
 
       {activeTab === "overview" && <OverviewTab />}
-      {activeTab === "deposits" && <DepositsTab />}
       {activeTab === "transactions" && <TransactionsTab />}
     </div>
   );
