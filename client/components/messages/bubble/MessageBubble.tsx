@@ -36,7 +36,7 @@ export default function MessageBubble({
   const isImageMessage = message.messageType === "IMAGE" && message.file;
   const isFileMessage = message.messageType === "FILE" && message.file;
 
-  const handleDownload = (url: string, filename: string) => {
+  const handleDownload = (url: string, filename?: string) => {
     downloadFileFromUrl(url, filename || "file");
   };
 
@@ -136,6 +136,7 @@ export default function MessageBubble({
             e.stopPropagation();
             handleDownload(secureUrl, originalFilename);
           }}
+          aria-label="Tải file"
         >
           <Icon name="download" size={20} />
         </button>

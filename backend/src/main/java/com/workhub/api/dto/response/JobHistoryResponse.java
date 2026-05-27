@@ -68,7 +68,7 @@ public class JobHistoryResponse {
             case AUTO_APPROVED -> "Tự động duyệt";
             case DISPUTE_CREATED -> "Tạo khiếu nại";
             case DISPUTE_RESPONSE_SUBMITTED -> "Phản hồi khiếu nại";
-            case DISPUTE_RESOLVED -> "Giải quyết tranh chấp";
+            case DISPUTE_RESOLVED -> "Đã xử lý tranh chấp";
         };
     }
 }

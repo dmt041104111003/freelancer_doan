@@ -54,6 +54,73 @@ public class NotificationService {
         return ApiResponse.success("Đã đánh dấu tất cả đã đọc", null);
     }
 
+    // ==================== WALLET/CREDIT NOTIFICATIONS ====================
+
+    @Transactional
+    public void notifyDepositPaid(User user, BalanceDeposit deposit) {
+        Notification notification = Notification.builder()
+                .user(user)
+                .type(ENotificationType.DEPOSIT_PAID)
+                .title("Nạp tiền thành công")
+                .message("Bạn đã nạp thành công " + deposit.getAmount().toPlainString() + " VND vào ví.")
+                .referenceId(deposit.getId())
+                .referenceType("DEPOSIT")
+                .build();
+        notificationRepository.save(notification);
+    }
+
+    @Transactional
+    public void notifyAdminGrantedCredits(User user, int credits) {
+        Notification notification = Notification.builder()
+                .user(user)
+                .type(ENotificationType.CREDIT_ADMIN_GRANTED)
+                .title("Admin cấp credit")
+                .message("Bạn được admin cấp " + credits + " credit.")
+                .referenceId(user.getId())
+                .referenceType("USER")
+                .build();
+        notificationRepository.save(notification);
+    }
+
+    @Transactional
+    public void notifyDailyCredits(User user, int credits) {
+        Notification notification = Notification.builder()
+                .user(user)
+                .type(ENotificationType.CREDIT_DAILY_GRANTED)
+                .title("Credit hàng ngày")
+                .message("Bạn nhận " + credits + " credit hôm nay.")
+                .referenceId(user.getId())
+                .referenceType("USER")
+                .build();
+        notificationRepository.save(notification);
+    }
+
+    @Transactional
+    public void notifyCreditPurchased(User user, CreditPurchase purchase) {
+        Notification notification = Notification.builder()
+                .user(user)
+                .type(ENotificationType.CREDIT_PURCHASED)
+                .title("Mua credit thành công")
+                .message("Bạn đã mua " + purchase.getCreditsAmount() + " credit.")
+                .referenceId(purchase.getId())
+                .referenceType("CREDIT_PURCHASE")
+                .build();
+        notificationRepository.save(notification);
+    }
+
+    @Transactional
+    public void notifyCreditSpent(User user, Job job) {
+        Notification notification = Notification.builder()
+                .user(user)
+                .type(ENotificationType.CREDIT_SPENT)
+                .title("Đã tiêu credit")
+                .message("Bạn đã tiêu 1 credit để ứng tuyển công việc \"" + job.getTitle() + "\".")
+                .referenceId(job.getId())
+                .referenceType("JOB")
+                .build();
+        notificationRepository.save(notification);
+    }
+
     @Transactional
     public void notifyApplicationAccepted(User freelancer, Job job) {
         Notification notification = Notification.builder()

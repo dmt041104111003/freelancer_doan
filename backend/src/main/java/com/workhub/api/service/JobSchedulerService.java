@@ -28,6 +28,7 @@ public class JobSchedulerService {
     private final UserService userService;
     private final NotificationService notificationService;
     private final JobHistoryService jobHistoryService;
+    private final WalletTransactionService walletTransactionService;
 
     /**
      * Chạy mỗi 5 phút để kiểm tra các deadline
@@ -187,6 +188,14 @@ public class JobSchedulerService {
         // 3. Thanh toán cho freelancer
         if (payment != null && payment.compareTo(BigDecimal.ZERO) > 0) {
             freelancer.addBalance(payment);
+            walletTransactionService.logBalance(
+                    freelancer,
+                    EWalletTransactionType.JOB_PAYMENT,
+                    payment,
+                    "Nhận thanh toán dự án (tự động): " + job.getTitle(),
+                    job.getId(),
+                    "JOB"
+            );
         }
         
         // 4. Cả 2 bên +1 nhân phẩm tốt

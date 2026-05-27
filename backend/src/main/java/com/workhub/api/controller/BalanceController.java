@@ -4,9 +4,11 @@ import com.workhub.api.dto.request.DepositBalanceRequest;
 import com.workhub.api.dto.request.ZaloPayCallbackRequest;
 import com.workhub.api.dto.response.ApiResponse;
 import com.workhub.api.dto.response.BalanceDepositResponse;
+import com.workhub.api.dto.response.WalletHistoryResponse;
 import com.workhub.api.entity.EDepositStatus;
 import com.workhub.api.security.UserDetailsImpl;
 import com.workhub.api.service.BalanceService;
+import com.workhub.api.service.WalletTransactionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,6 +26,7 @@ import java.util.Map;
 public class BalanceController {
 
     private final BalanceService balanceService;
+    private final WalletTransactionService walletTransactionService;
 
     @PostMapping("/deposit")
     public ResponseEntity<ApiResponse<BalanceDepositResponse>> createDeposit(
@@ -69,5 +72,13 @@ public class BalanceController {
             @RequestParam(defaultValue = "10") int size) {
 
         return ResponseEntity.ok(balanceService.getMyDeposits(userDetails.getId(), status, page, size));
+    }
+
+    @GetMapping("/history")
+    public ResponseEntity<ApiResponse<Page<WalletHistoryResponse>>> getMyHistory(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        return ResponseEntity.ok(walletTransactionService.getMyHistory(userDetails.getId(), page, size));
     }
 }

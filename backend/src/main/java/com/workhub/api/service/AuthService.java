@@ -97,9 +97,9 @@ public class AuthService {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(req.getEmail(), req.getPassword()));
 
-        boolean dailyClaimed = user.claimDailyCredits();
+        boolean dailyClaimed = userService.claimDailyCredits(user.getId());
         if (dailyClaimed) {
-            userService.save(user);
+            user = userService.getById(user.getId());
         }
 
         String message = dailyClaimed 
@@ -190,8 +190,10 @@ public class AuthService {
                 user.verifyEmail();
             }
 
-            boolean dailyClaimed = user.claimDailyCredits();
-            userService.save(user);
+            boolean dailyClaimed = userService.claimDailyCredits(user.getId());
+            if (dailyClaimed) {
+                user = userService.getById(user.getId());
+            }
 
             String message = dailyClaimed 
                     ? "Đăng nhập Google thành công. Bạn đã nhận 10 credit hôm nay!" 

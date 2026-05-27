@@ -4,13 +4,13 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { api } from "@/lib/api";
 import { User } from "@/types/user";
-import { BalanceDeposit } from "@/types/balance";
+import { WalletHistoryItem } from "@/types/balance";
 import { Page } from "@/types/job";
 import Icon from "@/components/ui/Icon";
 import BalanceCards from "./BalanceCards";
 import DepositForm from "./DepositForm";
 import CreditPackages from "./CreditPackages";
-import DepositHistory from "./DepositHistory";
+import WalletHistory from "./WalletHistory";
 
 interface WalletContentProps {
   user: User;
@@ -19,7 +19,7 @@ interface WalletContentProps {
 export default function WalletContent({ user }: WalletContentProps) {
   const [balance, setBalance] = useState(user.balance ?? 0);
   const [credits, setCredits] = useState(user.credits ?? 0);
-  const [deposits, setDeposits] = useState<BalanceDeposit[]>([]);
+  const [history, setHistory] = useState<WalletHistoryItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -35,12 +35,12 @@ export default function WalletContent({ user }: WalletContentProps) {
     }
   };
 
-  const fetchDeposits = async () => {
+  const fetchHistory = async () => {
     setIsLoading(true);
     try {
-      const res = await api.getMyDeposits({ page: 0, size: 10 });
+      const res = await api.getMyWalletHistory({ page: 0, size: 20 });
       if (res.status === "SUCCESS" && res.data) {
-        setDeposits((res.data as Page<BalanceDeposit>).content);
+        setHistory((res.data as Page<WalletHistoryItem>).content);
       }
     } catch (e) {
       console.error(e);
@@ -51,7 +51,7 @@ export default function WalletContent({ user }: WalletContentProps) {
 
   useEffect(() => {
     fetchProfile();
-    fetchDeposits();
+    fetchHistory();
   }, []);
 
   return (
@@ -69,7 +69,7 @@ export default function WalletContent({ user }: WalletContentProps) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-3">
         <DepositForm 
           onSuccess={(amt) => setBalance((b) => b + amt)} 
-          onRefresh={fetchDeposits} 
+          onRefresh={fetchHistory} 
           disabled={isProcessing}
           setProcessing={setIsProcessing}
         />
@@ -80,7 +80,7 @@ export default function WalletContent({ user }: WalletContentProps) {
           setProcessing={setIsProcessing}
         />
       </div>
-      <DepositHistory deposits={deposits} isLoading={isLoading} />
+      <WalletHistory items={history} isLoading={isLoading} />
     </div>
   );
 }

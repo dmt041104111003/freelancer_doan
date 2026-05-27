@@ -27,6 +27,8 @@ public class CreditService {
 
     private final CreditPurchaseRepository creditPurchaseRepository;
     private final UserService userService;
+    private final WalletTransactionService walletTransactionService;
+    private final NotificationService notificationService;
     private static final BigDecimal PRICE_PER_CREDIT = new BigDecimal("10000");
 
     public ApiResponse<List<CreditPackageResponse>> getCreditPackages() {
@@ -88,6 +90,23 @@ public class CreditService {
                 .build();
 
         CreditPurchase saved = creditPurchaseRepository.save(purchase);
+        walletTransactionService.logCredits(
+                user,
+                EWalletTransactionType.CREDIT_PURCHASE,
+                creditPackage.getCredits(),
+                description,
+                saved.getId(),
+                "CREDIT_PURCHASE"
+        );
+        walletTransactionService.logBalance(
+                user,
+                EWalletTransactionType.CREDIT_PURCHASE,
+                price.negate(),
+                "Trừ số dư mua " + creditPackage.getCredits() + " credit",
+                saved.getId(),
+                "CREDIT_PURCHASE_BALANCE"
+        );
+        notificationService.notifyCreditPurchased(user, saved);
         return ApiResponse.success("Mua credit thành công từ số dư (còn " + user.getBalance() + " VND)", buildPurchaseResponse(saved));
     }
 

@@ -59,10 +59,16 @@ public class JobHistoryService {
         String role = "USER";
         if (user.isAdmin()) {
             role = "ADMIN";
-        } else if (user.hasRole(ERole.ROLE_EMPLOYER)) {
-            role = "EMPLOYER";
-        } else if (user.hasRole(ERole.ROLE_FREELANCER)) {
-            role = "FREELANCER";
+        } else {
+            // A user can have both roles. Determine role based on relation to this job.
+            Long employerId = history.getJob().getEmployer() != null ? history.getJob().getEmployer().getId() : null;
+            if (employerId != null && employerId.equals(user.getId())) {
+                role = "EMPLOYER";
+            } else if (user.hasRole(ERole.ROLE_FREELANCER)) {
+                role = "FREELANCER";
+            } else if (user.hasRole(ERole.ROLE_EMPLOYER)) {
+                role = "EMPLOYER";
+            }
         }
 
         return JobHistoryResponse.builder()

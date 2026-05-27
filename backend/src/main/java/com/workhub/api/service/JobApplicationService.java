@@ -32,6 +32,7 @@ public class JobApplicationService {
     private final UserService userService;
     private final JobHistoryService jobHistoryService;
     private final NotificationService notificationService;
+    private final WalletTransactionService walletTransactionService;
 
     /**
      * Freelancer ứng tuyển job
@@ -83,6 +84,16 @@ public class JobApplicationService {
             job.incrementApplicationCount();
             jobRepository.save(job);
         }
+
+        walletTransactionService.logCredits(
+                user,
+                EWalletTransactionType.CREDIT_USED,
+                -1,
+                "Ứng tuyển công việc: " + job.getTitle(),
+                saved.getId(),
+                "JOB_APPLICATION"
+        );
+        notificationService.notifyCreditSpent(user, job);
 
         // Ghi lịch sử - Freelancer ứng tuyển
         jobHistoryService.logHistory(job, user, EJobHistoryAction.APPLICATION_SUBMITTED,

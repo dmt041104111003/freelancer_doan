@@ -47,6 +47,7 @@ export interface Job {
   workSubmissionNote?: string;
   workRevisionNote?: string;
   workSubmittedAt?: string;
+  hadDispute?: boolean;
 }
 
 export interface CreateJobRequest {
@@ -211,5 +212,5 @@ export const JOB_HISTORY_ACTION_CONFIG: Record<JobHistoryAction, { label: string
   AUTO_APPROVED: { label: "Tự động duyệt", icon: "auto_awesome", color: "text-purple-600" },
   DISPUTE_CREATED: { label: "Tạo khiếu nại", icon: "report_problem", color: "text-red-600" },
   DISPUTE_RESPONSE_SUBMITTED: { label: "Phản hồi khiếu nại", icon: "reply", color: "text-blue-600" },
-  DISPUTE_RESOLVED: { label: "Giải quyết tranh chấp", icon: "gavel", color: "text-purple-600" },
+  DISPUTE_RESOLVED: { label: "Đã xử lý tranh chấp", icon: "gavel", color: "text-green-600" },
 };

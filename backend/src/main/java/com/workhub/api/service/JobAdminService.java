@@ -25,6 +25,7 @@ public class JobAdminService {
     private final JobService jobService;
     private final UserService userService;
     private final NotificationService notificationService;
+    private final WalletTransactionService walletTransactionService;
 
     /**
      * [ADMIN] Lấy danh sách jobs chờ duyệt
@@ -83,6 +84,14 @@ public class JobAdminService {
         if (escrowAmount != null && escrowAmount.compareTo(BigDecimal.ZERO) > 0) {
             employer.addBalance(escrowAmount);
             userService.save(employer);
+            walletTransactionService.logBalance(
+                    employer,
+                    EWalletTransactionType.ESCROW_REFUND,
+                    escrowAmount,
+                    "Hoàn tiền escrow (admin từ chối): " + job.getTitle(),
+                    job.getId(),
+                    "JOB"
+            );
         }
 
         job.reject(reason);

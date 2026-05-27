@@ -3,8 +3,10 @@ package com.workhub.api.service;
 import com.workhub.api.dto.request.ChangePasswordRequest;
 import com.workhub.api.dto.request.UpdateProfileRequest;
 import com.workhub.api.entity.ERole;
+import com.workhub.api.entity.EWalletTransactionType;
 import com.workhub.api.entity.Role;
 import com.workhub.api.entity.User;
+import com.workhub.api.entity.ENotificationType;
 import com.workhub.api.exception.UserNotFoundException;
 import com.workhub.api.repository.RoleRepository;
 import com.workhub.api.repository.UserRepository;
@@ -23,6 +25,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final WalletTransactionService walletTransactionService;
+    private final NotificationService notificationService;
     private final PasswordEncoder passwordEncoder;
 
     public Optional<User> findByEmail(String email) {
@@ -120,7 +124,17 @@ public class UserService {
     public User grantCredits(Long userId, int amount) {
         User user = getById(userId);
         user.addCredits(amount);
-        return userRepository.save(user);
+        User saved = userRepository.save(user);
+        walletTransactionService.logCredits(
+                saved,
+                EWalletTransactionType.CREDIT_ADMIN_GRANT,
+                amount,
+                "Admin cấp " + amount + " credit",
+                null,
+                null
+        );
+        notificationService.notifyAdminGrantedCredits(saved, amount);
+        return saved;
     }
 
     @Transactional
@@ -129,6 +143,15 @@ public class UserService {
         boolean claimed = user.claimDailyCredits();
         if (claimed) {
             userRepository.save(user);
+            walletTransactionService.logCredits(
+                    user,
+                    EWalletTransactionType.CREDIT_DAILY,
+                    10,
+                    "Nhận 10 credit hàng ngày",
+                    null,
+                    null
+            );
+            notificationService.notifyDailyCredits(user, 10);
         }
         return claimed;
     }

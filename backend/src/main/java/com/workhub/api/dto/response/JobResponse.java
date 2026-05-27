@@ -52,6 +52,9 @@ public class JobResponse {
     private String workSubmissionNote;
     private String workRevisionNote;
     private LocalDateTime workSubmittedAt;
+    
+    // Dispute info
+    private Boolean hadDispute;  // Job từng có tranh chấp
 
     @Data
     @Builder

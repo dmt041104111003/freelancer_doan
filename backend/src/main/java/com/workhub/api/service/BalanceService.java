@@ -50,8 +50,10 @@ public class BalanceService {
 
     private final BalanceDepositRepository balanceDepositRepository;
     private final UserService userService;
+    private final WalletTransactionService walletTransactionService;
     private final ZaloPayConfig zaloPayConfig;
     private final VNPayConfig vnPayConfig;
+    private final NotificationService notificationService;
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -205,6 +207,8 @@ public class BalanceService {
                 User user = deposit.getUser();
                 user.addBalance(deposit.getAmount());
                 userService.save(user);
+                walletTransactionService.logDepositPaid(deposit);
+                notificationService.notifyDepositPaid(user, deposit);
                 log.info("Đã cộng {} vào số dư user {}", deposit.getAmount(), user.getId());
             }
 
@@ -245,6 +249,8 @@ public class BalanceService {
                         User user = deposit.getUser();
                         user.addBalance(deposit.getAmount());
                         userService.save(user);
+                        walletTransactionService.logDepositPaid(deposit);
+                        notificationService.notifyDepositPaid(user, deposit);
                         log.info("Đã cộng {} vào số dư user {} (từ query)", deposit.getAmount(), user.getId());
                     }
 
@@ -321,6 +327,8 @@ public class BalanceService {
                 User user = deposit.getUser();
                 user.addBalance(deposit.getAmount());
                 userService.save(user);
+                walletTransactionService.logDepositPaid(deposit);
+                notificationService.notifyDepositPaid(user, deposit);
                 balanceDepositRepository.save(deposit);
                 log.info("VNPAY IPN - Da cong {} vao so du user {}", deposit.getAmount(), user.getId());
             }
@@ -370,6 +378,8 @@ public class BalanceService {
         User user = deposit.getUser();
         user.addBalance(deposit.getAmount());
         userService.save(user);
+        walletTransactionService.logDepositPaid(deposit);
+        notificationService.notifyDepositPaid(user, deposit);
         balanceDepositRepository.save(deposit);
         log.info("VNPAY confirm-return: da cong {} vao so du user {}", deposit.getAmount(), user.getId());
         return ApiResponse.success("Nạp tiền thành công", buildDepositResponse(deposit));

@@ -1,7 +1,7 @@
 ﻿"use client";
 
-import { useState } from "react";
 import Icon from "@/components/ui/Icon";
+import { downloadFileFromUrl } from "@/lib/utils";
 
 export type EvidenceMeta = {
   url: string;
@@ -32,37 +32,7 @@ export default function EvidenceCard({
   label,
   onRemove,
 }: EvidenceCardProps) {
-  const [isDownloading, setIsDownloading] = useState(false);
-
-  const downloadFile = async () => {
-    if (!url || isDownloading) return;
-    setIsDownloading(true);
-    try {
-      const res = await fetch(url);
-      if (!res.ok) {
-        throw new Error(`Failed to download: ${res.status}`);
-      }
-      const blob = await res.blob();
-      const objectUrl = URL.createObjectURL(blob);
-
-      const baseName = (name || label || "evidence").trim();
-      const hasExtension = /\.[a-z0-9]+$/i.test(baseName);
-      const isPdf = blob.type === "application/pdf" || baseName.toLowerCase().endsWith(".pdf");
-      const filename = !hasExtension && isPdf ? `${baseName}.pdf` : baseName;
-
-      const a = document.createElement("a");
-      a.href = objectUrl;
-      a.download = filename || "evidence.pdf";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(objectUrl);
-    } catch {
-      window.open(url, "_blank", "noopener,noreferrer");
-    } finally {
-      setIsDownloading(false);
-    }
-  };
+  const filename = (name || label || "evidence.pdf").trim() || "evidence.pdf";
 
   return (
     <div className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-[#04A0EF]/5 hover:bg-[#04A0EF]/10 transition-colors">
@@ -73,11 +43,11 @@ export default function EvidenceCard({
       </div>
       <button
         type="button"
-        onClick={downloadFile}
-        disabled={isDownloading}
-        className="text-gray-500 hover:text-gray-700 disabled:opacity-50"
+        onClick={() => downloadFileFromUrl(url, filename)}
+        className="text-gray-500 hover:text-gray-700"
+        aria-label="Tải file"
       >
-        <Icon name={isDownloading ? "hourglass_top" : "download"} size={18} />
+        <Icon name="download" size={18} />
       </button>
       {onRemove && (
         <button onClick={onRemove} className="text-gray-500 hover:text-gray-700">

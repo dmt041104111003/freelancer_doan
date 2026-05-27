@@ -137,6 +137,14 @@ export default function NotificationDropdown() {
       case "SYSTEM":
         return "#";
 
+      // Wallet/Credit notifications -> wallet page
+      case "DEPOSIT_PAID":
+      case "CREDIT_ADMIN_GRANTED":
+      case "CREDIT_DAILY_GRANTED":
+      case "CREDIT_PURCHASED":
+      case "CREDIT_SPENT":
+        return "/wallet";
+
       // Default: use referenceType
       default:
         if (notification.referenceType === "CONVERSATION") {

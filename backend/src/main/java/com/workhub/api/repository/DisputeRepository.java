@@ -18,6 +18,8 @@ public interface DisputeRepository extends JpaRepository<Dispute, Long> {
 
     Optional<Dispute> findByJobId(Long jobId);
 
+    boolean existsByJobId(Long jobId);
+
     boolean existsByJobIdAndStatusIn(Long jobId, List<EDisputeStatus> statuses);
 
     // Admin queries

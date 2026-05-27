@@ -1,6 +1,6 @@
 import { User, FreelancerListItem } from "@/types/user";
 import { Job, Page, CreateJobRequest, UpdateJobRequest, JobStatus, JobHistory } from "@/types/job";
-import { BalanceDeposit, DepositStatus, BalanceStatistics } from "@/types/balance";
+import { BalanceDeposit, DepositStatus, BalanceStatistics, WalletHistoryItem } from "@/types/balance";
 import { clearAuthData, getUser } from "@/constant/auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -220,6 +220,13 @@ export const api = {
     if (params?.page !== undefined) query.append("page", params.page.toString());
     if (params?.size !== undefined) query.append("size", params.size.toString());
     return request<Page<BalanceDeposit>>(`/api/balance/my-deposits${query.toString() ? `?${query}` : ""}`);
+  },
+
+  getMyWalletHistory: (params?: { page?: number; size?: number }) => {
+    const query = new URLSearchParams();
+    if (params?.page !== undefined) query.append("page", params.page.toString());
+    if (params?.size !== undefined) query.append("size", params.size.toString());
+    return request<Page<WalletHistoryItem>>(`/api/balance/history${query.toString() ? `?${query}` : ""}`);
   },
 
   getCreditPackages: () => request<CreditPackage[]>("/api/credits/packages"),
@@ -605,6 +612,11 @@ export type NotificationType =
   | "CHAT_REQUEST_ACCEPTED"
   | "CHAT_REQUEST_REJECTED"
   | "CHAT_BLOCKED"
+  | "DEPOSIT_PAID"
+  | "CREDIT_ADMIN_GRANTED"
+  | "CREDIT_DAILY_GRANTED"
+  | "CREDIT_PURCHASED"
+  | "CREDIT_SPENT"
   | "SYSTEM";
 
 export interface Notification {
@@ -646,6 +658,11 @@ export const NOTIFICATION_TYPE_CONFIG: Record<NotificationType, { icon: string; 
   CHAT_REQUEST_ACCEPTED: { icon: "how_to_reg", color: "text-green-600" },
   CHAT_REQUEST_REJECTED: { icon: "person_remove", color: "text-red-600" },
   CHAT_BLOCKED: { icon: "block", color: "text-red-600" },
+  DEPOSIT_PAID: { icon: "account_balance_wallet", color: "text-green-600" },
+  CREDIT_ADMIN_GRANTED: { icon: "workspace_premium", color: "text-yellow-600" },
+  CREDIT_DAILY_GRANTED: { icon: "today", color: "text-yellow-600" },
+  CREDIT_PURCHASED: { icon: "credit_card", color: "text-emerald-600" },
+  CREDIT_SPENT: { icon: "local_activity", color: "text-orange-600" },
   SYSTEM: { icon: "info", color: "text-gray-600" },
 };
 

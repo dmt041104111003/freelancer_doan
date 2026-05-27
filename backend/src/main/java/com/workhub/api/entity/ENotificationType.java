@@ -40,6 +40,13 @@ public enum ENotificationType {
     CHAT_REQUEST_ACCEPTED,    // Yêu cầu kết bạn được chấp nhận
     CHAT_REQUEST_REJECTED,    // Yêu cầu kết bạn bị từ chối
     CHAT_BLOCKED,             // Bị chặn bởi người dùng
+
+    // Wallet/Credit notifications
+    DEPOSIT_PAID,             // Nạp tiền thành công
+    CREDIT_ADMIN_GRANTED,     // Admin cấp credit
+    CREDIT_DAILY_GRANTED,     // Nhận credit hàng ngày
+    CREDIT_PURCHASED,         // Mua credit
+    CREDIT_SPENT,             // Tiêu credit (ứng tuyển)
     
     // General
     SYSTEM                    // Thông báo hệ thống

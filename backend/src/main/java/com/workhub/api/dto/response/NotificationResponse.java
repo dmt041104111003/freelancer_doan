@@ -62,6 +62,11 @@ public class NotificationResponse {
             case CHAT_REQUEST_ACCEPTED -> "Yêu cầu kết bạn được chấp nhận";
             case CHAT_REQUEST_REJECTED -> "Yêu cầu kết bạn bị từ chối";
             case CHAT_BLOCKED -> "Bạn đã bị chặn";
+            case DEPOSIT_PAID -> "Nạp tiền thành công";
+            case CREDIT_ADMIN_GRANTED -> "Admin cấp credit";
+            case CREDIT_DAILY_GRANTED -> "Credit hàng ngày";
+            case CREDIT_PURCHASED -> "Mua credit";
+            case CREDIT_SPENT -> "Tiêu credit";
             case SYSTEM -> "Thông báo hệ thống";
         };
     }

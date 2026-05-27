@@ -39,6 +39,7 @@ public class DisputeService {
     private final NotificationService notificationService;
     private final JobHistoryService jobHistoryService;
     private final FileUploadService fileUploadService;
+    private final WalletTransactionService walletTransactionService;
 
     /**
      * Employer tạo khiếu nại (trong thời gian review sản phẩm)
@@ -315,6 +316,14 @@ public class DisputeService {
             if (escrowAmount != null && escrowAmount.compareTo(BigDecimal.ZERO) > 0) {
                 employer.addBalance(escrowAmount);
                 userService.save(employer);
+                walletTransactionService.logBalance(
+                        employer,
+                        EWalletTransactionType.DISPUTE_REFUND,
+                        escrowAmount,
+                        "Hoàn tiền tranh chấp (employer thắng): " + job.getTitle(),
+                        dispute.getId(),
+                        "DISPUTE"
+                );
             }
         } else {
             // Freelancer thắng
@@ -326,6 +335,14 @@ public class DisputeService {
             if (escrowAmount != null && escrowAmount.compareTo(BigDecimal.ZERO) > 0) {
                 freelancer.addBalance(escrowAmount);
                 userService.save(freelancer);
+                walletTransactionService.logBalance(
+                        freelancer,
+                        EWalletTransactionType.DISPUTE_REFUND,
+                        escrowAmount,
+                        "Hoàn tiền tranh chấp (freelancer thắng): " + job.getTitle(),
+                        dispute.getId(),
+                        "DISPUTE"
+                );
             }
         }
 

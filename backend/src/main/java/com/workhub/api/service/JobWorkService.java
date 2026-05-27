@@ -27,6 +27,7 @@ public class JobWorkService {
     private final JobHistoryService jobHistoryService;
     private final NotificationService notificationService;
     private final FileUploadService fileUploadService;
+    private final WalletTransactionService walletTransactionService;
 
     /**
      * Freelancer nộp sản phẩm
@@ -112,6 +113,14 @@ public class JobWorkService {
         if (payment != null && payment.compareTo(BigDecimal.ZERO) > 0) {
             freelancer.addBalance(payment);
             userService.save(freelancer);
+            walletTransactionService.logBalance(
+                    freelancer,
+                    EWalletTransactionType.JOB_PAYMENT,
+                    payment,
+                    "Nhận thanh toán dự án: " + job.getTitle(),
+                    job.getId(),
+                    "JOB"
+            );
         }
 
         // Cộng nhân phẩm tốt cho cả 2 bên

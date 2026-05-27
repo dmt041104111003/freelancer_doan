@@ -9,6 +9,7 @@ import { Pagination } from "@/components/ui/pagination";
 import AdminLoading from "../shared/AdminLoading";
 import AdminPageHeader from "../shared/AdminPageHeader";
 import AdminEmptyState from "../shared/AdminEmptyState";
+import { downloadFileFromUrl } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -19,9 +20,11 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/Icon";
-import { downloadFileFromUrl } from "@/lib/utils";
 
 export default function AdminDisputes() {
+  const handleDownloadEvidence = (url: string, filename: string) => {
+    downloadFileFromUrl(url, filename || "evidence.pdf");
+  };
   const [disputes, setDisputes] = useState<Dispute[]>([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -135,10 +138,6 @@ export default function AdminDisputes() {
     } finally {
       setIsProcessing(false);
     }
-  };
-
-  const handleDownloadEvidence = (url: string, filename: string) => {
-    downloadFileFromUrl(url, filename || "evidence.pdf");
   };
 
   const openRequestDialog = (dispute: Dispute) => {

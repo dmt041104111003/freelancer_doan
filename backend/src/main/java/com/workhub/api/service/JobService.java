@@ -7,6 +7,7 @@ import com.workhub.api.dto.response.JobResponse;
 import com.workhub.api.entity.*;
 import com.workhub.api.exception.JobNotFoundException;
 import com.workhub.api.exception.UnauthorizedAccessException;
+import com.workhub.api.repository.DisputeRepository;
 import com.workhub.api.repository.JobApplicationRepository;
 import com.workhub.api.repository.JobRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,9 @@ public class JobService {
 
     private final JobRepository jobRepository;
     private final JobApplicationRepository jobApplicationRepository;
+    private final DisputeRepository disputeRepository;
     private final UserService userService;
+    private final WalletTransactionService walletTransactionService;
 
     private static final BigDecimal FEE_PERCENT = new BigDecimal("5.00");
 
@@ -84,6 +87,15 @@ public class JobService {
         userService.save(employer);
 
         Job savedJob = jobRepository.save(job);
+
+        walletTransactionService.logBalance(
+                employer,
+                EWalletTransactionType.JOB_ESCROW,
+                total.negate(),
+                "Ký quỹ đăng việc: " + savedJob.getTitle(),
+                savedJob.getId(),
+                "JOB"
+        );
 
         return ApiResponse.success("Tạo job thành công, đang chờ admin duyệt", buildJobResponse(savedJob));
     }
@@ -307,6 +319,14 @@ public class JobService {
             User employer = job.getEmployer();
             employer.addBalance(job.getEscrowAmount());
             userService.save(employer);
+            walletTransactionService.logBalance(
+                    employer,
+                    EWalletTransactionType.ESCROW_REFUND,
+                    job.getEscrowAmount(),
+                    "Hoàn tiền escrow (xóa việc): " + job.getTitle(),
+                    job.getId(),
+                    "JOB"
+            );
         }
 
         jobRepository.delete(job);
@@ -366,6 +386,9 @@ public class JobService {
                 .untrustScore(employer.getUntrustScore())
                 .build();
 
+        // Check if job has/had dispute
+        boolean hadDispute = disputeRepository.existsByJobId(job.getId());
+
         return JobResponse.builder()
                 .id(job.getId())
                 .title(job.getTitle())
@@ -392,6 +415,7 @@ public class JobService {
                 .employer(employerResponse)
                 .createdAt(job.getCreatedAt())
                 .updatedAt(job.getUpdatedAt())
+                .hadDispute(hadDispute)
                 .build();
     }
 
