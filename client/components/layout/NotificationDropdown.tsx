@@ -75,21 +75,75 @@ export default function NotificationDropdown() {
 
   const getNotificationLink = (notification: Notification): string => {
     const refId = notification.referenceId;
+    const type = notification.type;
+
+    // Chat notifications -> messages
+    if (type.startsWith("CHAT_")) {
+      return refId ? `/messages?conversationId=${refId}` : "/messages";
+    }
+
+    // No reference ID -> fallback
     if (!refId) return "#";
 
-    if (notification.type.startsWith("DISPUTE_")) {
-      return `/jobs/${refId}?dispute=true`;
-    }
+    switch (type) {
+      // Employer: new application on their job
+      case "NEW_APPLICATION":
+        return `/jobs/${refId}/applications`;
 
-    if (notification.referenceType === "JOB") {
-      return `/jobs/${refId}`;
-    }
+      // Freelancer: their application was accepted/rejected
+      case "APPLICATION_ACCEPTED":
+        return `/my-accepted-jobs?highlight=${refId}`;
+      case "WORK_REVISION_REQUESTED":
+      case "WORK_APPROVED":
+      case "PAYMENT_RELEASED":
+        return `/my-accepted-jobs?highlight=${refId}`;
 
-    if (notification.referenceType === "CONVERSATION") {
-      return `/messages?conversationId=${refId}`;
-    }
+      case "APPLICATION_REJECTED":
+        return `/jobs/${refId}`;
 
-    return "#";
+      // Employer: job status changes
+      case "JOB_APPROVED":
+      case "JOB_REJECTED":
+        return `/my-posted-jobs?highlight=${refId}`;
+      case "WORK_SUBMITTED":
+      case "WORK_SUBMISSION_TIMEOUT":
+      case "WORK_REVIEW_TIMEOUT":
+        return `/my-posted-jobs?highlight=${refId}`;
+
+      // Job cancelled/reopened -> job detail
+      case "JOB_CANCELLED":
+      case "JOB_REOPENED":
+        return `/jobs/${refId}`;
+
+      // Job completed -> based on referenceType or job detail
+      case "JOB_COMPLETED":
+        return `/jobs/${refId}`;
+
+      // Withdrawal notifications -> my jobs
+      case "WITHDRAWAL_REQUESTED":
+      case "WITHDRAWAL_APPROVED":
+      case "WITHDRAWAL_REJECTED":
+        return `/jobs/${refId}`;
+
+      // Dispute notifications -> job detail with dispute param
+      case "DISPUTE_CREATED":
+      case "DISPUTE_RESPONSE_REQUESTED":
+      case "DISPUTE_RESPONSE_SUBMITTED":
+      case "DISPUTE_RESOLVED_WIN":
+      case "DISPUTE_RESOLVED_LOSE":
+        return `/jobs/${refId}`;
+
+      // System notification
+      case "SYSTEM":
+        return "#";
+
+      // Default: use referenceType
+      default:
+        if (notification.referenceType === "CONVERSATION") {
+          return `/messages?conversationId=${refId}`;
+        }
+        return `/jobs/${refId}`;
+    }
   };
 
   // Notification list content (reusable)

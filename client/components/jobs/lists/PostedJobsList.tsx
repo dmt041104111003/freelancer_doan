@@ -1,7 +1,7 @@
 ﻿"use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useAuth } from "@/context/AuthContext";
@@ -41,10 +41,13 @@ const FILTER_TABS: { key: PostedJobsFilter; label: string }[] = [
 
 export default function PostedJobsList() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { user, isAuthenticated, isHydrated } = useAuth();
   const { jobs, page, isLoading, error, fetchJobs } = usePostedJobs();
   const [filter, setFilter] = useState<PostedJobsFilter>("all");
   const isHistoryTab = filter === "history";
+  const [highlightedJobId, setHighlightedJobId] = useState<number | null>(null);
+  const highlightRef = useRef<HTMLDivElement>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [jobToDelete, setJobToDelete] = useState<Job | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -80,6 +83,20 @@ export default function PostedJobsList() {
       fetchJobs(postedJobsFetchParams(filter));
     }
   }, [isHydrated, isAuthenticated, hasAccess, filter, fetchJobs]);
+
+  // Handle highlight from notification
+  useEffect(() => {
+    const highlight = searchParams.get("highlight");
+    if (highlight && !isLoading) {
+      const jobId = parseInt(highlight, 10);
+      setHighlightedJobId(jobId);
+      setTimeout(() => {
+        highlightRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 100);
+      const timer = setTimeout(() => setHighlightedJobId(null), 6000);
+      return () => clearTimeout(timer);
+    }
+  }, [searchParams, isLoading]);
 
   const displayJobs = filterPostedJobs(jobs, filter);
 
@@ -261,20 +278,25 @@ export default function PostedJobsList() {
             <JobsEmptyState message="Không có công việc nào" />
           ) : (
             displayJobs.map((job) => (
-              <EmployerJobCard
+              <div
                 key={job.id}
-                job={job}
-                formatBudget={formatJobBudget}
-                formatDate={formatDate}
-                onDelete={handleDeleteClick}
-                onReviewWork={handleReviewWork}
-                onCreateDispute={handleCreateDispute}
-                onViewDispute={handleViewDispute}
-                onViewHistory={handleHistoryClick}
-                showHistoryButton={
-                  ["IN_PROGRESS", "COMPLETED", "DISPUTED"].includes(job.status)
-                }
-              />
+                ref={job.id === highlightedJobId ? highlightRef : undefined}
+                className={highlightedJobId === job.id ? "ring-2 ring-[#04A0EF] ring-offset-2 rounded-lg transition-all" : ""}
+              >
+                <EmployerJobCard
+                  job={job}
+                  formatBudget={formatJobBudget}
+                  formatDate={formatDate}
+                  onDelete={handleDeleteClick}
+                  onReviewWork={handleReviewWork}
+                  onCreateDispute={handleCreateDispute}
+                  onViewDispute={handleViewDispute}
+                  onViewHistory={handleHistoryClick}
+                  showHistoryButton={
+                    ["IN_PROGRESS", "COMPLETED", "DISPUTED"].includes(job.status)
+                  }
+                />
+              </div>
             ))
           )}
         </div>

@@ -1,7 +1,7 @@
 ﻿"use client";
 
-import { useEffect, useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState, useCallback, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { useAcceptedJobs } from "@/hooks/useAcceptedJobs";
@@ -27,9 +27,12 @@ import {
 
 export default function AcceptedJobsList() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { user, isAuthenticated, isHydrated } = useAuth();
   const { jobs, stats, isLoading, error, fetchJobs, fetchStats } = useAcceptedJobs();
   const [filter, setFilter] = useState<AcceptedJobsFilter>("all");
+  const [highlightedJobId, setHighlightedJobId] = useState<number | null>(null);
+  const highlightRef = useRef<HTMLDivElement>(null);
 
   const [searchKeyword, setSearchKeyword] = useState("");
 
@@ -91,6 +94,21 @@ export default function AcceptedJobsList() {
       }
     }
   }, [isHydrated, isAuthenticated, hasAccess, filter, fetchJobs, fetchStats, isSavedTab, fetchSavedJobs]);
+
+  // Handle highlight from notification
+  useEffect(() => {
+    const highlight = searchParams.get("highlight");
+    if (highlight && !isLoading) {
+      const jobId = parseInt(highlight, 10);
+      setHighlightedJobId(jobId);
+      setTimeout(() => {
+        highlightRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 100);
+      // Clear highlight after 3 seconds
+      const timer = setTimeout(() => setHighlightedJobId(null), 6000);
+      return () => clearTimeout(timer);
+    }
+  }, [searchParams, isLoading]);
 
   const displayJobs = filterAcceptedJobs(jobs, filter);
 
@@ -167,14 +185,14 @@ export default function AcceptedJobsList() {
       {/* Filter Tabs */}
       <div className="bg-white rounded-lg shadow mb-4">
         <div className="flex flex-wrap border-b border-gray-200">
-          {[
+          {([
             { key: "all", label: "Tất cả" },
             { key: "IN_PROGRESS", label: "Đang làm" },
             { key: "DISPUTED", label: "Tranh chấp" },
             { key: "COMPLETED", label: "Hoàn thành" },
             { key: "saved", label: "Đã lưu" },
             { key: "history", label: "Lịch sử" },
-          ].map((tab) => (
+          ] as { key: AcceptedJobsFilter; label: string }[]).map((tab) => (
             <button
               key={tab.key}
               onClick={() => setFilter(tab.key)}
@@ -438,12 +456,17 @@ export default function AcceptedJobsList() {
                 />
               ) : (
                 displayJobs.map((job) => (
-                  <FreelancerJobCard
+                  <div
                     key={job.id}
-                    job={job}
-                    onSubmitWork={handleSubmitWork}
-                    onViewDispute={handleViewDispute}
-                  />
+                    ref={job.id === highlightedJobId ? highlightRef : undefined}
+                    className={highlightedJobId === job.id ? "ring-2 ring-[#04A0EF] ring-offset-2 rounded-lg transition-all" : ""}
+                  >
+                    <FreelancerJobCard
+                      job={job}
+                      onSubmitWork={handleSubmitWork}
+                      onViewDispute={handleViewDispute}
+                    />
+                  </div>
                 ))
               )}
             </div>
