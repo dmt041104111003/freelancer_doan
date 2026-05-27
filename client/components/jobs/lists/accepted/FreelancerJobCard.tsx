@@ -81,6 +81,16 @@ export default function FreelancerJobCard({ job, onSubmitWork, onViewDispute }: 
             </div>
           )}
 
+          {job.workStatus === "REVISION_REQUESTED" && job.workRevisionNote && (
+            <div className="mb-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+              <p className="font-medium flex items-center gap-1 mb-1">
+                <Icon name="edit_note" size={16} />
+                Yêu cầu chỉnh sửa từ người đăng tuyển:
+              </p>
+              <p className="whitespace-pre-wrap">{job.workRevisionNote}</p>
+            </div>
+          )}
+
           {job.status === "IN_PROGRESS" && job.workSubmissionDeadline && effectiveWorkStatus !== "SUBMITTED" && (
             <div className="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 px-3 py-2 rounded-lg mb-2">
               <Icon name="timer" size={16} />

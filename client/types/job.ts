@@ -45,6 +45,7 @@ export interface Job {
   workStatus?: WorkStatus;
   workSubmissionUrl?: string;
   workSubmissionNote?: string;
+  workRevisionNote?: string;
   workSubmittedAt?: string;
 }
 

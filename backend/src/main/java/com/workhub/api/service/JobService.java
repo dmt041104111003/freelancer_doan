@@ -407,6 +407,7 @@ public class JobService {
                     response.setWorkStatus(application.getWorkStatus());
                     response.setWorkSubmissionUrl(application.getWorkSubmissionUrl());
                     response.setWorkSubmissionNote(application.getWorkSubmissionNote());
+                    response.setWorkRevisionNote(application.getWorkRevisionNote());
                     response.setWorkSubmittedAt(application.getWorkSubmittedAt());
                 });
         

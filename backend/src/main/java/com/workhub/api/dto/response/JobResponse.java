@@ -50,6 +50,7 @@ public class JobResponse {
     private EWorkStatus workStatus;
     private String workSubmissionUrl;
     private String workSubmissionNote;
+    private String workRevisionNote;
     private LocalDateTime workSubmittedAt;
 
     @Data

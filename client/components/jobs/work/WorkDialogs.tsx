@@ -34,17 +34,40 @@ export function WorkSubmitDialog({
 }: WorkSubmitDialogProps) {
   const [url, setUrl] = useState("");
   const [note, setNote] = useState("");
+  const [revisionNote, setRevisionNote] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoadingRevision, setIsLoadingRevision] = useState(false);
   const [fileId, setFileId] = useState<number | null>(null);
 
   useEffect(() => {
     if (!open) {
       setUrl("");
       setNote("");
+      setRevisionNote(null);
       setFileId(null);
       setIsSubmitting(false);
+      setIsLoadingRevision(false);
+      return;
     }
-  }, [open]);
+
+    const loadRevisionNote = async () => {
+      setIsLoadingRevision(true);
+      try {
+        const response = await api.getWorkSubmission(jobId);
+        if (response.status === "SUCCESS" && response.data?.workRevisionNote) {
+          setRevisionNote(response.data.workRevisionNote);
+        } else {
+          setRevisionNote(null);
+        }
+      } catch {
+        setRevisionNote(null);
+      } finally {
+        setIsLoadingRevision(false);
+      }
+    };
+
+    loadRevisionNote();
+  }, [open, jobId]);
 
   const handleSubmit = async () => {
     if (!url.trim()) {
@@ -93,6 +116,15 @@ export function WorkSubmitDialog({
         </DialogHeader>
 
         <div className="space-y-4 min-w-0 overflow-hidden">
+          {isLoadingRevision ? (
+            <div className="text-sm text-gray-500">Đang tải yêu cầu chỉnh sửa...</div>
+          ) : revisionNote ? (
+            <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+              <p className="font-medium mb-1">Yêu cầu chỉnh sửa từ người đăng tuyển:</p>
+              <p className="whitespace-pre-wrap">{revisionNote}</p>
+            </div>
+          ) : null}
+
           <FileUpload
             value={url}
             onChange={(uploadedUrl, _file, uploadedFileId) => {
