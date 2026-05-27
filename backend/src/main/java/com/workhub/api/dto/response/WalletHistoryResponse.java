@@ -21,6 +21,8 @@ public class WalletHistoryResponse {
     private String status;
     private String orderUrl;
     private String appTransId;
+    private Long userId;
+    private String userName;
     private LocalDateTime createdAt;
 
     public static String getTypeLabel(EWalletTransactionType type) {

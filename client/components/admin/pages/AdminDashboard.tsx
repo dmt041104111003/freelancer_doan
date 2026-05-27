@@ -18,12 +18,10 @@ export default function AdminDashboard() {
       try {
         const [statsRes, depositsRes] = await Promise.all([
           api.adminGetBalanceStatistics(),
-          api.adminGetAllDeposits({ status: "PAID", page: 0, size: 10 }),
+          api.adminGetAllDeposits({ status: "PAID", page: 0, size: 5 }),
         ]);
 
-        if (statsRes.status === "SUCCESS") {
-          setStats(statsRes.data);
-        }
+        if (statsRes.status === "SUCCESS") setStats(statsRes.data);
         if (depositsRes.status === "SUCCESS" && depositsRes.data) {
           setRecentDeposits(depositsRes.data.content || []);
         }
@@ -37,19 +35,25 @@ export default function AdminDashboard() {
     fetchData();
   }, []);
 
-  if (isLoading) {
-    return <AdminLoading />;
-  }
+  if (isLoading) return <AdminLoading />;
 
   return (
     <div className="space-y-4">
-      <AdminPageHeader title="Tổng quan nạp tiền" />
+      <AdminPageHeader title="Tổng quan" />
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      {/* Key Metrics */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <div className="bg-white rounded-lg shadow p-4">
           <div className="flex items-center gap-2 text-gray-500 mb-1">
-            <Icon name="account_balance_wallet" size={18} />
+            <Icon name="trending_up" size={18} className="text-green-500" />
+            <span className="text-xs">Doanh thu</span>
+          </div>
+          <p className="text-lg font-bold text-gray-900">{formatCurrency(stats?.totalRevenue || 0)}</p>
+        </div>
+
+        <div className="bg-white rounded-lg shadow p-4">
+          <div className="flex items-center gap-2 text-gray-500 mb-1">
+            <Icon name="account_balance_wallet" size={18} className="text-blue-500" />
             <span className="text-xs">Tổng nạp</span>
           </div>
           <p className="text-lg font-bold text-gray-900">{formatCurrency(stats?.totalDeposited || 0)}</p>
@@ -57,55 +61,43 @@ export default function AdminDashboard() {
 
         <div className="bg-white rounded-lg shadow p-4">
           <div className="flex items-center gap-2 text-gray-500 mb-1">
-            <Icon name="today" size={18} />
-            <span className="text-xs">Hôm nay</span>
+            <Icon name="group" size={18} className="text-indigo-500" />
+            <span className="text-xs">Người dùng</span>
           </div>
-          <p className="text-lg font-bold text-gray-900">{formatCurrency(stats?.todayDeposited || 0)}</p>
+          <p className="text-lg font-bold text-gray-900">{stats?.totalUsers || 0}</p>
         </div>
 
         <div className="bg-white rounded-lg shadow p-4">
           <div className="flex items-center gap-2 text-gray-500 mb-1">
-            <Icon name="date_range" size={18} />
-            <span className="text-xs">Tháng này</span>
+            <Icon name="work" size={18} className="text-orange-500" />
+            <span className="text-xs">Tổng việc</span>
           </div>
-          <p className="text-lg font-bold text-gray-900">{formatCurrency(stats?.monthDeposited || 0)}</p>
-        </div>
-
-        <div className="bg-white rounded-lg shadow p-4">
-          <div className="flex items-center gap-2 text-gray-500 mb-1">
-            <Icon name="receipt_long" size={18} />
-            <span className="text-xs">Tổng giao dịch</span>
-          </div>
-          <p className="text-lg font-bold text-gray-900">{stats?.totalTransactions || 0}</p>
+          <p className="text-lg font-bold text-gray-900">{stats?.totalJobs || 0}</p>
         </div>
       </div>
 
-      {/* Transaction Stats */}
+      {/* Quick Stats */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
         <div className="bg-white rounded-lg shadow p-4">
-          <h3 className="font-semibold text-gray-900 mb-3 text-sm">Trạng thái giao dịch</h3>
+          <h3 className="font-semibold text-gray-900 mb-3 text-sm">Nền tảng</h3>
           <div className="space-y-2 text-sm">
-            <div className="flex items-center justify-between">
-              <span className="text-gray-600">Thành công</span>
-              <span className="font-medium text-green-600">{stats?.paidTransactions || 0}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-gray-600">Đang chờ</span>
-              <span className="font-medium text-yellow-600">{stats?.pendingTransactions || 0}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-gray-600">Đã hủy</span>
-              <span className="font-medium text-gray-600">{stats?.cancelledTransactions || 0}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-gray-600">Hết hạn</span>
-              <span className="font-medium text-red-600">{stats?.expiredTransactions || 0}</span>
-            </div>
+            {[
+              { label: "Nhà tuyển dụng", value: stats?.totalEmployers, color: "text-blue-600" },
+              { label: "Freelancer", value: stats?.totalFreelancers, color: "text-teal-600" },
+              { label: "Tổng ứng tuyển", value: stats?.totalApplications, color: "text-indigo-600" },
+              { label: "Việc hoàn thành", value: stats?.completedJobs, color: "text-green-600" },
+              { label: "Việc đang tranh chấp", value: stats?.disputedJobs, color: "text-red-600" },
+            ].map((item) => (
+              <div key={item.label} className="flex items-center justify-between">
+                <span className="text-gray-600">{item.label}</span>
+                <span className={`font-medium ${item.color}`}>{item.value || 0}</span>
+              </div>
+            ))}
           </div>
         </div>
 
         <div className="bg-white rounded-lg shadow p-4">
-          <h3 className="font-semibold text-gray-900 mb-3 text-sm">Thống kê theo thời gian</h3>
+          <h3 className="font-semibold text-gray-900 mb-3 text-sm">Nạp tiền hôm nay</h3>
           <div className="space-y-3">
             <div>
               <p className="text-xs text-gray-500">Hôm nay</p>
@@ -131,7 +123,6 @@ export default function AdminDashboard() {
           <div className="p-6 text-center text-gray-500 text-sm">Chưa có giao dịch nào</div>
         ) : (
           <>
-            {/* Mobile: Card View */}
             <div className="md:hidden divide-y divide-gray-100">
               {recentDeposits.map((deposit) => (
                 <div key={deposit.id} className="p-4 space-y-2">
@@ -147,7 +138,6 @@ export default function AdminDashboard() {
               ))}
             </div>
 
-            {/* Desktop: Table View */}
             <div className="hidden md:block overflow-x-auto">
               <table className="w-full text-sm">
                 <thead className="bg-gray-50">
@@ -163,12 +153,8 @@ export default function AdminDashboard() {
                     <tr key={deposit.id} className="hover:bg-gray-50">
                       <td className="px-4 py-2 font-mono text-gray-900">{deposit.appTransId}</td>
                       <td className="px-4 py-2 text-gray-700">{deposit.userFullName || `User #${deposit.userId}`}</td>
-                      <td className="px-4 py-2 text-right font-medium text-gray-900">
-                        {formatCurrency(deposit.amount)}
-                      </td>
-                      <td className="px-4 py-2 text-gray-500">
-                        {formatDateTime(deposit.paidAt)}
-                      </td>
+                      <td className="px-4 py-2 text-right font-medium text-gray-900">{formatCurrency(deposit.amount)}</td>
+                      <td className="px-4 py-2 text-gray-500">{formatDateTime(deposit.paidAt)}</td>
                     </tr>
                   ))}
                 </tbody>

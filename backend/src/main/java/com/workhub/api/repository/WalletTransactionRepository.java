@@ -1,5 +1,6 @@
 package com.workhub.api.repository;
 
+import com.workhub.api.entity.EWalletTransactionType;
 import com.workhub.api.entity.WalletTransaction;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,4 +11,8 @@ public interface WalletTransactionRepository extends JpaRepository<WalletTransac
     Page<WalletTransaction> findByUserIdOrderByCreatedAtDesc(Long userId, Pageable pageable);
 
     boolean existsByReferenceTypeAndReferenceId(String referenceType, Long referenceId);
+
+    Page<WalletTransaction> findAllByOrderByCreatedAtDesc(Pageable pageable);
+
+    Page<WalletTransaction> findByTypeOrderByCreatedAtDesc(EWalletTransactionType type, Pageable pageable);
 }

@@ -23,6 +23,8 @@ export interface WalletHistoryItem {
   status?: string;
   orderUrl?: string;
   appTransId?: string;
+  userId?: number;
+  userName?: string;
   createdAt: string;
 }
 
@@ -57,6 +59,20 @@ export interface BalanceStatistics {
   expiredTransactions: number;
   todayTransactions: number;
   monthTransactions: number;
+  totalRevenue: number;
+  totalFreelancerPaid: number;
+  totalEscrowHeld: number;
+  totalEscrowRefunded: number;
+  totalUsers: number;
+  totalEmployers: number;
+  totalFreelancers: number;
+  totalJobs: number;
+  openJobs: number;
+  inProgressJobs: number;
+  completedJobs: number;
+  disputedJobs: number;
+  cancelledJobs: number;
+  totalApplications: number;
 }
 
 export const DEPOSIT_STATUS_CONFIG = {

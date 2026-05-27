@@ -21,7 +21,7 @@ const TABS = [
   { id: "jobs" as TabType, label: "Duyệt công việc", icon: "work" },
   { id: "disputes" as TabType, label: "Tranh chấp", icon: "gavel" },
   { id: "users" as TabType, label: "Người dùng", icon: "group" },
-  { id: "payments" as TabType, label: "Thanh toán", icon: "payments" },
+  { id: "payments" as TabType, label: "Tài chính", icon: "account_balance" },
 ];
 
 export default function AdminLayout() {

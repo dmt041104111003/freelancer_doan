@@ -71,4 +71,13 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     // Sum earnings for completed jobs
     @Query("SELECT COALESCE(SUM(j.budget), 0) FROM Job j WHERE j.status = 'COMPLETED' AND EXISTS (SELECT a FROM JobApplication a WHERE a.job = j AND a.freelancer.id = :freelancerId AND a.status = 'ACCEPTED')")
     long sumEarningsByAcceptedFreelancerId(@Param("freelancerId") Long freelancerId);
+
+    @Query("SELECT COALESCE(SUM(j.budget), 0) FROM Job j WHERE j.status = 'COMPLETED'")
+    java.math.BigDecimal sumBudgetByCompleted();
+
+    @Query("SELECT COALESCE(SUM(j.escrowAmount), 0) FROM Job j WHERE j.status IN ('OPEN','IN_PROGRESS','DISPUTED')")
+    java.math.BigDecimal sumEscrowHeld();
+
+    @Query("SELECT COALESCE(SUM(j.escrowAmount), 0) FROM Job j WHERE j.status IN ('CANCELLED','REJECTED')")
+    java.math.BigDecimal sumEscrowRefunded();
 }

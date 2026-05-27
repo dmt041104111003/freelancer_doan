@@ -150,6 +150,30 @@ public class WalletTransactionService {
                 .build();
     }
 
+    public ApiResponse<Page<WalletHistoryResponse>> getAdminTransactions(EWalletTransactionType type, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<WalletTransaction> txPage;
+        if (type != null) {
+            txPage = walletTransactionRepository.findByTypeOrderByCreatedAtDesc(type, pageable);
+        } else {
+            txPage = walletTransactionRepository.findAllByOrderByCreatedAtDesc(pageable);
+        }
+        Page<WalletHistoryResponse> result = txPage.map(tx -> WalletHistoryResponse.builder()
+                .id(tx.getId())
+                .type(tx.getType())
+                .typeLabel(WalletHistoryResponse.getTypeLabel(tx.getType()))
+                .amount(tx.getAmount())
+                .credits(tx.getCredits())
+                .description(tx.getDescription())
+                .referenceId(tx.getReferenceId())
+                .referenceType(tx.getReferenceType())
+                .userId(tx.getUser().getId())
+                .userName(tx.getUser().getFullName())
+                .createdAt(tx.getCreatedAt())
+                .build());
+        return ApiResponse.success("Thành công", result);
+    }
+
     public void logDepositPaid(BalanceDeposit deposit) {
         logBalance(
                 deposit.getUser(),

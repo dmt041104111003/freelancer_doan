@@ -9,10 +9,11 @@ import com.workhub.api.dto.request.ZaloPayCallbackRequest;
 import com.workhub.api.dto.response.ApiResponse;
 import com.workhub.api.dto.response.BalanceDepositResponse;
 import com.workhub.api.dto.response.BalanceStatisticsResponse;
-import com.workhub.api.entity.BalanceDeposit;
-import com.workhub.api.entity.EDepositStatus;
-import com.workhub.api.entity.User;
+import com.workhub.api.entity.*;
 import com.workhub.api.repository.BalanceDepositRepository;
+import com.workhub.api.repository.JobRepository;
+import com.workhub.api.repository.UserRepository;
+import com.workhub.api.repository.JobApplicationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,6 +55,9 @@ public class BalanceService {
     private final ZaloPayConfig zaloPayConfig;
     private final VNPayConfig vnPayConfig;
     private final NotificationService notificationService;
+    private final JobRepository jobRepository;
+    private final UserRepository userRepository;
+    private final JobApplicationRepository jobApplicationRepository;
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -435,6 +439,26 @@ public class BalanceService {
         Long monthTransactions = balanceDepositRepository.countByStatusAndPaidAtAfter(
                 EDepositStatus.PAID, startOfMonth);
 
+        // Doanh thu & lợi nhuận
+        BigDecimal totalFreelancerPaid = jobRepository.sumBudgetByCompleted();
+        BigDecimal totalEscrowHeld = jobRepository.sumEscrowHeld();
+        BigDecimal totalEscrowRefunded = jobRepository.sumEscrowRefunded();
+        BigDecimal totalRevenue = totalFreelancerPaid != null && totalFreelancerPaid.compareTo(BigDecimal.ZERO) > 0
+                ? totalFreelancerPaid.multiply(new BigDecimal("5")).divide(new BigDecimal("100"), 0, java.math.RoundingMode.CEILING)
+                : BigDecimal.ZERO;
+
+        // Nền tảng
+        long totalUsers = userRepository.count();
+        long totalEmployers = userRepository.findByRolesNameAndEnabledTrue(ERole.ROLE_EMPLOYER, PageRequest.of(0, 1)).getTotalElements();
+        long totalFreelancers = userRepository.findByRolesNameAndEnabledTrue(ERole.ROLE_FREELANCER, PageRequest.of(0, 1)).getTotalElements();
+        long totalJobs = jobRepository.count();
+        long openJobs = jobRepository.countByStatus(EJobStatus.OPEN);
+        long inProgressJobs = jobRepository.countByStatus(EJobStatus.IN_PROGRESS);
+        long completedJobs = jobRepository.countByStatus(EJobStatus.COMPLETED);
+        long disputedJobs = jobRepository.countByStatus(EJobStatus.DISPUTED);
+        long cancelledJobs = jobRepository.countByStatus(EJobStatus.CANCELLED);
+        long totalApplications = jobApplicationRepository.count();
+
         BalanceStatisticsResponse statistics = BalanceStatisticsResponse.builder()
                 .totalDeposited(totalDeposited)
                 .totalTransactions(totalTransactions)
@@ -446,9 +470,23 @@ public class BalanceService {
                 .todayTransactions(todayTransactions)
                 .monthDeposited(monthDeposited)
                 .monthTransactions(monthTransactions)
+                .totalRevenue(totalRevenue)
+                .totalFreelancerPaid(totalFreelancerPaid)
+                .totalEscrowHeld(totalEscrowHeld)
+                .totalEscrowRefunded(totalEscrowRefunded)
+                .totalUsers(totalUsers)
+                .totalEmployers(totalEmployers)
+                .totalFreelancers(totalFreelancers)
+                .totalJobs(totalJobs)
+                .openJobs(openJobs)
+                .inProgressJobs(inProgressJobs)
+                .completedJobs(completedJobs)
+                .disputedJobs(disputedJobs)
+                .cancelledJobs(cancelledJobs)
+                .totalApplications(totalApplications)
                 .build();
 
-        return ApiResponse.success("Lấy thống kê nạp số dư thành công", statistics);
+        return ApiResponse.success("Thành công", statistics);
     }
 
     private JsonNode callZaloPayCreateOrder(String appTransId, String appUser, long appTime,

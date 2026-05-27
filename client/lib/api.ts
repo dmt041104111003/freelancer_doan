@@ -1,6 +1,6 @@
 import { User, FreelancerListItem } from "@/types/user";
 import { Job, Page, CreateJobRequest, UpdateJobRequest, JobStatus, JobHistory } from "@/types/job";
-import { BalanceDeposit, DepositStatus, BalanceStatistics, WalletHistoryItem } from "@/types/balance";
+import { BalanceDeposit, DepositStatus, BalanceStatistics, WalletHistoryItem, WalletTransactionType } from "@/types/balance";
 import { clearAuthData, getUser } from "@/constant/auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -291,6 +291,14 @@ export const api = {
     if (params?.page !== undefined) query.append("page", params.page.toString());
     if (params?.size !== undefined) query.append("size", params.size.toString());
     return request<Page<BalanceDeposit>>(`/api/admin/balance${query.toString() ? `?${query}` : ""}`);
+  },
+
+  adminGetAllTransactions: (params?: { type?: WalletTransactionType; page?: number; size?: number }) => {
+    const query = new URLSearchParams();
+    if (params?.type) query.append("type", params.type);
+    if (params?.page !== undefined) query.append("page", params.page.toString());
+    if (params?.size !== undefined) query.append("size", params.size.toString());
+    return request<Page<WalletHistoryItem>>(`/api/admin/balance/transactions${query.toString() ? `?${query}` : ""}`);
   },
 
   adminGetPendingJobs: (params?: { page?: number; size?: number }) => {
