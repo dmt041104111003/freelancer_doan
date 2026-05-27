@@ -285,6 +285,18 @@ public class DisputeService {
             throw new IllegalStateException("Khiếu nại đã được giải quyết");
         }
 
+        // Chỉ cho phép quyết định khi:
+        // 1. Status = PENDING_ADMIN_DECISION (freelancer đã phản hồi hoặc hết hạn)
+        // 2. Hoặc Status = PENDING_FREELANCER_RESPONSE và deadline đã qua
+        if (dispute.isPendingFreelancerResponse()) {
+            if (dispute.getFreelancerDeadline() == null) {
+                throw new IllegalStateException("Chưa gửi yêu cầu phản hồi cho freelancer");
+            }
+            if (dispute.getFreelancerDeadline().isAfter(LocalDateTime.now())) {
+                throw new IllegalStateException("Chưa hết thời hạn phản hồi của freelancer");
+            }
+        }
+
         Job job = dispute.getJob();
         User employer = dispute.getEmployer();
         User freelancer = dispute.getFreelancer();
