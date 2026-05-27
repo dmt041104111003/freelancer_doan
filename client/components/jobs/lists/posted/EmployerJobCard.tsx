@@ -128,15 +128,6 @@ export default function EmployerJobCard({
                 <p className="text-sm text-gray-600 whitespace-pre-wrap break-words">{job.workSubmissionNote}</p>
               )}
               <div className="flex flex-wrap gap-2">
-                <a
-                  href={job.workSubmissionUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-3 py-1.5 text-sm border border-gray-300 rounded-md bg-white hover:bg-gray-100"
-                >
-                  <Icon name="open_in_new" size={16} />
-                  Xem file
-                </a>
                 <button
                   type="button"
                   onClick={() => downloadFileFromUrl(job.workSubmissionUrl!, "san-pham-hoan-thanh.pdf")}

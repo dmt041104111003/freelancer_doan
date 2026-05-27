@@ -109,16 +109,6 @@ export default function FreelancerJobCard({ job, onSubmitWork, onViewDispute }: 
 
           {job.workSubmissionUrl && (
             <div className="flex items-center gap-2 flex-wrap mb-2">
-              <a
-                href={job.workSubmissionUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md bg-[#04A0EF]/5 hover:bg-[#04A0EF]/10 transition-colors"
-              >
-                <Icon name="picture_as_pdf" size={20} className="text-red-500 shrink-0" />
-                <span className="text-sm text-gray-700">Xem file</span>
-                <Icon name="open_in_new" size={18} className="text-gray-500 shrink-0" />
-              </a>
               <button
                 type="button"
                 onClick={() => downloadFileFromUrl(job.workSubmissionUrl!, "san-pham-da-nop.pdf")}
