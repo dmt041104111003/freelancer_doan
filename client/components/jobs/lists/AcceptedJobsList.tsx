@@ -53,6 +53,20 @@ export default function AcceptedJobsList() {
     searchKeyword.trim() === "" || job.jobTitle.toLowerCase().includes(searchKeyword.toLowerCase())
   );
 
+  const fetchSavedJobs = useCallback(async () => {
+    setSavedJobsLoading(true);
+    try {
+      const res = await api.getSavedJobs({ size: 100 });
+      if (res.status === "SUCCESS" && res.data) {
+        setSavedJobs(res.data.content);
+      }
+    } catch (err) {
+      console.error("Error fetching saved jobs:", err);
+    } finally {
+      setSavedJobsLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (isHydrated && !isAuthenticated) {
       router.push("/login");
@@ -79,20 +93,6 @@ export default function AcceptedJobsList() {
   }, [isHydrated, isAuthenticated, hasAccess, filter, fetchJobs, fetchStats, isSavedTab, fetchSavedJobs]);
 
   const displayJobs = filterAcceptedJobs(jobs, filter);
-
-  const fetchSavedJobs = useCallback(async () => {
-    setSavedJobsLoading(true);
-    try {
-      const res = await api.getSavedJobs({ size: 100 });
-      if (res.status === "SUCCESS" && res.data) {
-        setSavedJobs(res.data.content);
-      }
-    } catch (err) {
-      console.error("Error fetching saved jobs:", err);
-    } finally {
-      setSavedJobsLoading(false);
-    }
-  }, []);
 
   const handleUnsaveJob = async (jobId: number) => {
     try {
