@@ -31,12 +31,9 @@ import {
   type PostedJobsFilter,
 } from "@/lib/jobFilters";
 
-const FILTER_TABS: { key: JobStatus | "all" | "history" | "review"; label: string }[] = [
+const FILTER_TABS: { key: PostedJobsFilter; label: string }[] = [
   { key: "all", label: "Tất cả" },
-  { key: "DRAFT", label: "Bản nháp" },
-  { key: "OPEN", label: "Đang tuyển" },
   { key: "IN_PROGRESS", label: "Đang thực hiện" },
-  { key: "review", label: "Chờ nghiệm thu" },
   { key: "DISPUTED", label: "Tranh chấp" },
   { key: "COMPLETED", label: "Hoàn thành" },
   { key: "history", label: "Lịch sử" },
@@ -48,7 +45,6 @@ export default function PostedJobsList() {
   const { jobs, page, isLoading, error, fetchJobs } = usePostedJobs();
   const [filter, setFilter] = useState<PostedJobsFilter>("all");
   const isHistoryTab = filter === "history";
-  const isReviewTab = filter === "review";
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [jobToDelete, setJobToDelete] = useState<Job | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -262,14 +258,7 @@ export default function PostedJobsList() {
         /* Normal Job List */
         <div className="space-y-3">
           {displayJobs.length === 0 ? (
-            <JobsEmptyState
-              message={
-                isReviewTab
-                  ? "Không có sản phẩm nào chờ nghiệm thu"
-                  : "Không có công việc nào"
-              }
-              icon={isReviewTab ? "rate_review" : undefined}
-            />
+            <JobsEmptyState message="Không có công việc nào" />
           ) : (
             displayJobs.map((job) => (
               <EmployerJobCard

@@ -1,6 +1,6 @@
 import { Job } from "@/types/job";
 
-export type PostedJobsFilter = Job["status"] | "all" | "history" | "review";
+export type PostedJobsFilter = Job["status"] | "all" | "history";
 export type AcceptedJobsFilter =
   | Job["status"]
   | "all"
@@ -8,10 +8,6 @@ export type AcceptedJobsFilter =
   | "submitted"
   | "applied"
   | "saved";
-
-export function isAwaitingEmployerReview(job: Job): boolean {
-  return job.status === "IN_PROGRESS" && Boolean(job.workReviewDeadline);
-}
 
 export function isActiveInProgress(job: Job): boolean {
   return job.status === "IN_PROGRESS" && !job.workReviewDeadline;
@@ -31,8 +27,6 @@ export function filterPostedJobs(jobs: Job[], filter: PostedJobsFilter): Job[] {
       return jobs;
     case "IN_PROGRESS":
       return jobs.filter(isActiveInProgress);
-    case "review":
-      return jobs.filter(isAwaitingEmployerReview);
     case "history":
       return jobs.filter((j) => j.status === "IN_PROGRESS" || j.status === "COMPLETED");
     default:
@@ -61,7 +55,7 @@ export function postedJobsFetchParams(
   if (filter === "all" || filter === "history") {
     return { size: 100 };
   }
-  if (filter === "review" || filter === "IN_PROGRESS") {
+  if (filter === "IN_PROGRESS") {
     return { status: "IN_PROGRESS", size: 100 };
   }
   return { status: filter, size: 100 };
