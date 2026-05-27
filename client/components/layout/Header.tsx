@@ -61,11 +61,11 @@ export default function Header() {
   const isFreelancer = user?.roles?.includes("ROLE_FREELANCER");
   const isEmployer = user?.roles?.includes("ROLE_EMPLOYER");
 
-  const userTabClass = (active: boolean) =>
-    `shrink-0 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
-      active
-        ? "border-[#04A0EF] text-[#04A0EF]"
-        : "border-transparent text-gray-600 hover:text-[#04A0EF]"
+  const navLinkClass = (active: boolean, compact = false) =>
+    `shrink-0 whitespace-nowrap font-medium transition-colors ${
+      compact ? "px-2.5 xl:px-3 py-2 text-xs xl:text-sm" : "px-2 xl:px-4 py-2 text-xs xl:text-sm tracking-wide"
+    } ${
+      active ? "text-[#04A0EF]" : "text-gray-700 hover:text-[#04A0EF]"
     }`;
 
   const handleBecomeEmployer = async () => {
@@ -79,55 +79,77 @@ export default function Header() {
     }
   };
 
+  const showUserNav = isHydrated && isAuthenticated && user;
+
   return (
     <header className="w-full md:sticky md:top-0 z-40">
-      <div className="bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between h-16 md:h-20">
-            
+      <div className="bg-white border-b border-gray-200 shadow-sm overflow-hidden">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4">
+          <div className="flex items-center gap-2 sm:gap-3 min-h-16 md:min-h-[72px] py-2">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 shrink-0">
-              <div className="flex items-center gap-2">
-                <Image
-                  src="/logo.svg"
-                  alt="Freelancer"
-                  width={50}
-                  height={50}
-                  className="h-10 md:h-12 w-auto object-contain"
-                />
-                <div className="hidden sm:block">
-                  <p className="text-[#04A0EF] font-bold text-lg md:text-xl">Freelancer</p>
-                  <p className="text-gray-500 text-xs">Nền tảng việc làm tự do #1 Việt Nam</p>
-                </div>
+            <Link href="/" className="flex items-center gap-2 shrink-0 min-w-0">
+              <Image
+                src="/logo.svg"
+                alt="Freelancer"
+                width={44}
+                height={44}
+                className="h-9 md:h-11 w-auto object-contain shrink-0"
+              />
+              <div className="hidden md:block min-w-0">
+                <p className="text-[#04A0EF] font-bold text-base lg:text-lg leading-tight truncate">
+                  Freelancer
+                </p>
+                <p className="text-gray-500 text-[10px] lg:text-xs leading-tight truncate hidden lg:block">
+                  Nền tảng việc làm tự do
+                </p>
               </div>
             </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-1">
+            {/* Desktop Navigation (main + user tabs) */}
+            <nav className="hidden lg:flex flex-1 min-w-0 items-center justify-center gap-0 overflow-x-auto mx-1">
               {mainNavItems.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`px-4 xl:px-6 py-2 text-sm font-medium tracking-wide transition-colors ${
-                    isActive(item.href) || isActivePrefix(item.href)
-                      ? "text-[#04A0EF]"
-                      : "text-gray-700 hover:text-[#04A0EF]"
-                  }`}
+                  className={navLinkClass(isActive(item.href) || isActivePrefix(item.href))}
                 >
                   {item.label}
                 </Link>
               ))}
+              {showUserNav && (
+                <>
+                  <span className="mx-1 h-4 w-px bg-gray-200 shrink-0" aria-hidden />
+                  {isFreelancer && (
+                    <Link
+                      href="/my-accepted-jobs"
+                      className={navLinkClass(isActivePrefix("/my-accepted-jobs"), true)}
+                    >
+                      Việc đã nhận
+                    </Link>
+                  )}
+                  {isEmployer ? (
+                    <Link
+                      href="/my-posted-jobs"
+                      className={navLinkClass(isActivePrefix("/my-posted-jobs"), true)}
+                    >
+                      Việc đã đăng
+                    </Link>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleBecomeEmployer}
+                      disabled={isBecomingEmployer}
+                      className={`${navLinkClass(false, true)} disabled:opacity-50`}
+                    >
+                      {isBecomingEmployer ? "Đang xử lý..." : "Đăng ký bên thuê"}
+                    </button>
+                  )}
+                </>
+              )}
             </nav>
 
             {/* Right Side - Icons & Auth */}
-            <div className="flex items-center gap-2 md:gap-4">
-              {/* Search Icon */}
-              <div className="hidden md:flex items-center gap-2">
-                <button className="p-2 text-gray-600 hover:text-[#04A0EF] transition-colors">
-                  <Icon name="search" size={22} />
-                </button>
-              </div>
-
+            <div className="flex items-center gap-0.5 sm:gap-1 shrink-0 ml-auto">
               {/* Auth Section */}
               {!isHydrated ? (
                 <div className="w-8 h-8 md:w-[100px] bg-gray-200 rounded animate-pulse" />
@@ -176,10 +198,10 @@ export default function Header() {
                             {user.fullName?.charAt(0)?.toUpperCase() || "U"}
                           </AvatarFallback>
                         </Avatar>
-                        <span className="hidden md:block text-sm font-medium text-gray-700 max-w-[100px] truncate">
+                        <span className="hidden xl:block text-sm font-medium text-gray-700 max-w-[88px] truncate">
                           {user.fullName}
                         </span>
-                        <Icon name="expand_more" size={16} className="text-gray-400 hidden md:block" />
+                        <Icon name="expand_more" size={16} className="text-gray-400 hidden xl:block shrink-0" />
                       </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -236,41 +258,6 @@ export default function Header() {
           </div>
         </div>
       </div>
-
-      {/* User tabs — việc đã nhận / đăng / đăng ký bên thuê */}
-      {isHydrated && isAuthenticated && user && (
-        <div className="border-t border-gray-100 bg-gray-50/90">
-          <div className="max-w-7xl mx-auto px-4">
-            <nav className="flex items-center gap-1 overflow-x-auto">
-              {isFreelancer && (
-                <Link
-                  href="/my-accepted-jobs"
-                  className={userTabClass(isActivePrefix("/my-accepted-jobs"))}
-                >
-                  Việc đã nhận
-                </Link>
-              )}
-              {isEmployer ? (
-                <Link
-                  href="/my-posted-jobs"
-                  className={userTabClass(isActivePrefix("/my-posted-jobs"))}
-                >
-                  Việc đã đăng
-                </Link>
-              ) : (
-                <button
-                  type="button"
-                  onClick={handleBecomeEmployer}
-                  disabled={isBecomingEmployer}
-                  className={`${userTabClass(false)} disabled:opacity-50`}
-                >
-                  {isBecomingEmployer ? "Đang xử lý..." : "Đăng ký bên thuê"}
-                </button>
-              )}
-            </nav>
-          </div>
-        </div>
-      )}
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
