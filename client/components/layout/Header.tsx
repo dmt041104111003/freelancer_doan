@@ -58,6 +58,16 @@ export default function Header() {
   const isActive = (path: string) => pathname === path;
   const isActivePrefix = (prefix: string) => pathname?.startsWith(prefix);
 
+  const isFreelancer = user?.roles?.includes("ROLE_FREELANCER");
+  const isEmployer = user?.roles?.includes("ROLE_EMPLOYER");
+
+  const userTabClass = (active: boolean) =>
+    `shrink-0 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
+      active
+        ? "border-[#04A0EF] text-[#04A0EF]"
+        : "border-transparent text-gray-600 hover:text-[#04A0EF]"
+    }`;
+
   const handleBecomeEmployer = async () => {
     setIsBecomingEmployer(true);
     const success = await becomeEmployer();
@@ -189,27 +199,6 @@ export default function Header() {
                           Ví của tôi
                         </Link>
                       </DropdownMenuItem>
-                      {user.roles?.includes("ROLE_FREELANCER") && (
-                        <DropdownMenuItem asChild>
-                          <Link href="/my-accepted-jobs">
-                            <Icon name="work" size={20} />
-                            Việc đã nhận
-                          </Link>
-                        </DropdownMenuItem>
-                      )}
-                      {user.roles?.includes("ROLE_EMPLOYER") ? (
-                        <DropdownMenuItem asChild>
-                          <Link href="/my-posted-jobs">
-                            <Icon name="post_add" size={20} />
-                            Việc đã đăng
-                          </Link>
-                        </DropdownMenuItem>
-                      ) : (
-                        <DropdownMenuItem onClick={handleBecomeEmployer} disabled={isBecomingEmployer}>
-                          <Icon name="add_business" size={20} />
-                          {isBecomingEmployer ? "Đang xử lý..." : "Đăng ký bên thuê"}
-                        </DropdownMenuItem>
-                      )}
                       <DropdownMenuSeparator />
                       <DropdownMenuItem variant="destructive" onClick={logout}>
                         <Icon name="logout" size={20} />
@@ -247,6 +236,41 @@ export default function Header() {
           </div>
         </div>
       </div>
+
+      {/* User tabs — việc đã nhận / đăng / đăng ký bên thuê */}
+      {isHydrated && isAuthenticated && user && (
+        <div className="border-t border-gray-100 bg-gray-50/90">
+          <div className="max-w-7xl mx-auto px-4">
+            <nav className="flex items-center gap-1 overflow-x-auto">
+              {isFreelancer && (
+                <Link
+                  href="/my-accepted-jobs"
+                  className={userTabClass(isActivePrefix("/my-accepted-jobs"))}
+                >
+                  Việc đã nhận
+                </Link>
+              )}
+              {isEmployer ? (
+                <Link
+                  href="/my-posted-jobs"
+                  className={userTabClass(isActivePrefix("/my-posted-jobs"))}
+                >
+                  Việc đã đăng
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleBecomeEmployer}
+                  disabled={isBecomingEmployer}
+                  className={`${userTabClass(false)} disabled:opacity-50`}
+                >
+                  {isBecomingEmployer ? "Đang xử lý..." : "Đăng ký bên thuê"}
+                </button>
+              )}
+            </nav>
+          </div>
+        </div>
+      )}
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
@@ -300,6 +324,47 @@ export default function Header() {
               ))}
             </nav>
 
+            {/* User tabs (mobile) */}
+            {isAuthenticated && user && (
+              <div className="py-2 border-b border-gray-200 bg-gray-50">
+                <p className="px-6 py-1 text-xs text-gray-400 uppercase tracking-wider">Quản lý việc</p>
+                {isFreelancer && (
+                  <Link
+                    href="/my-accepted-jobs"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`block px-6 py-3 text-base font-medium ${
+                      isActivePrefix("/my-accepted-jobs") ? "text-[#04A0EF] bg-blue-50" : "text-gray-700"
+                    }`}
+                  >
+                    Việc đã nhận
+                  </Link>
+                )}
+                {isEmployer ? (
+                  <Link
+                    href="/my-posted-jobs"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`block px-6 py-3 text-base font-medium ${
+                      isActivePrefix("/my-posted-jobs") ? "text-[#04A0EF] bg-blue-50" : "text-gray-700"
+                    }`}
+                  >
+                    Việc đã đăng
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleBecomeEmployer();
+                      setMobileMenuOpen(false);
+                    }}
+                    disabled={isBecomingEmployer}
+                    className="block w-full text-left px-6 py-3 text-base font-medium text-gray-700 disabled:opacity-50"
+                  >
+                    {isBecomingEmployer ? "Đang xử lý..." : "Đăng ký bên thuê"}
+                  </button>
+                )}
+              </div>
+            )}
+
             {/* User Actions */}
             {isAuthenticated && user ? (
               <div className="px-6 py-4 border-t border-gray-200">
@@ -321,15 +386,17 @@ export default function Header() {
                   <Icon name="account_balance_wallet" size={20} className="text-gray-500" />
                   Ví của tôi
                 </Link>
-                <Link href="/my-accepted-jobs" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 py-3 text-gray-700">
-                  <Icon name="work" size={20} className="text-gray-500" />
-                  Việc đã nhận
-                </Link>
-                <Link href="/my-posted-jobs" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 py-3 text-gray-700">
-                  <Icon name="post_add" size={20} className="text-gray-500" />
-                  Việc đã đăng
-                </Link>
-       
+                <button
+                  type="button"
+                  onClick={() => {
+                    logout();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="flex items-center gap-3 py-3 text-red-600 w-full"
+                >
+                  <Icon name="logout" size={20} />
+                  Đăng xuất
+                </button>
               </div>
             ) : (
               <div className="p-6 border-t border-gray-200">
