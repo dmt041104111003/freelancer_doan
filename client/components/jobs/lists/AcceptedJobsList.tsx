@@ -433,7 +433,7 @@ export default function AcceptedJobsList() {
               {displayJobs.length === 0 ? (
                 <JobsEmptyState
                   message={
-                    isSubmittedTab ? "Chưa có sản phẩm nào được nộp" : "Không có công việc nào"
+                    "Không có công việc nào"
                   }
                 />
               ) : (
