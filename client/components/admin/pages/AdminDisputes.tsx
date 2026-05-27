@@ -39,6 +39,21 @@ export default function AdminDisputes() {
   const [employerWins, setEmployerWins] = useState<boolean | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // Helper: check if freelancer deadline has passed
+  const isDeadlinePassed = (deadline: string | null | undefined): boolean => {
+    if (!deadline) return false;
+    return new Date(deadline) < new Date();
+  };
+
+  // Helper: can admin make decision?
+  const canMakeDecision = (dispute: Dispute): boolean => {
+    // Already in admin decision phase
+    if (dispute.status === "PENDING_ADMIN_DECISION") return true;
+    // Waiting for freelancer but deadline has passed
+    if (dispute.status === "PENDING_FREELANCER_RESPONSE" && isDeadlinePassed(dispute.freelancerDeadline)) return true;
+    return false;
+  };
+
   const fetchDisputes = async (pageNum: number) => {
     setIsLoading(true);
     try {
@@ -203,8 +218,7 @@ export default function AdminDisputes() {
                       Yêu cầu phản hồi
                     </button>
                   )}
-                  {(dispute.status === "PENDING_ADMIN_DECISION" || 
-                    (dispute.status === "PENDING_FREELANCER_RESPONSE" && dispute.freelancerDeadline)) && (
+                  {canMakeDecision(dispute) && (
                     <button
                       onClick={() => openResolveDialog(dispute)}
                       className="text-[#04A0EF] hover:underline text-sm"
@@ -272,8 +286,7 @@ export default function AdminDisputes() {
                               Yêu cầu
                             </button>
                           )}
-                          {(dispute.status === "PENDING_ADMIN_DECISION" || 
-                            (dispute.status === "PENDING_FREELANCER_RESPONSE" && dispute.freelancerDeadline)) && (
+                          {canMakeDecision(dispute) && (
                             <button
                               onClick={() => openResolveDialog(dispute)}
                               className="text-[#04A0EF] hover:underline"
