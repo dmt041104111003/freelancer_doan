@@ -14,6 +14,7 @@ import JobsPageHeader from "../shared/JobsPageHeader";
 import JobHistoryTimeline from "../shared/JobHistoryTimeline";
 import { CreateDisputeDialog, ViewDisputeDialog } from "../dispute/DisputeDialog";
 import { WorkReviewDialog } from "../work/WorkDialogs";
+import WithdrawalDialog from "../withdrawal/WithdrawalDialog";
 import Icon from "@/components/ui/Icon";
 import { Button } from "@/components/ui/button";
 import {
@@ -63,6 +64,10 @@ export default function PostedJobsList() {
   // Work review states
   const [workReviewDialogOpen, setWorkReviewDialogOpen] = useState(false);
   const [selectedJobForReview, setSelectedJobForReview] = useState<Job | null>(null);
+
+  // Withdrawal states
+  const [withdrawalDialogOpen, setWithdrawalDialogOpen] = useState(false);
+  const [withdrawalJob, setWithdrawalJob] = useState<Job | null>(null);
 
   const hasAccess = user?.roles?.includes("ROLE_EMPLOYER");
 
@@ -147,6 +152,11 @@ export default function PostedJobsList() {
   const handleReviewWork = (job: Job) => {
     setSelectedJobForReview(job);
     setWorkReviewDialogOpen(true);
+  };
+
+  const handleCancelJob = (job: Job) => {
+    setWithdrawalJob(job);
+    setWithdrawalDialogOpen(true);
   };
 
   const handleDeleteConfirm = async () => {
@@ -292,6 +302,7 @@ export default function PostedJobsList() {
                   onCreateDispute={handleCreateDispute}
                   onViewDispute={handleViewDispute}
                   onViewHistory={handleHistoryClick}
+                  onCancelJob={handleCancelJob}
                   showHistoryButton={
                     ["IN_PROGRESS", "COMPLETED", "DISPUTED"].includes(job.status)
                   }
@@ -406,6 +417,22 @@ export default function PostedJobsList() {
           onSuccess={() => {
             // Refresh jobs after review
             fetchJobs(postedJobsFetchParams(filter));
+          }}
+        />
+      )}
+
+      {/* Withdrawal Dialog */}
+      {withdrawalJob && (
+        <WithdrawalDialog
+          open={withdrawalDialogOpen}
+          onOpenChange={setWithdrawalDialogOpen}
+          jobId={withdrawalJob.id}
+          jobTitle={withdrawalJob.title}
+          escrowAmount={withdrawalJob.escrowAmount}
+          role="EMPLOYER"
+          onSuccess={() => {
+            fetchJobs(postedJobsFetchParams(filter));
+            setWithdrawalJob(null);
           }}
         />
       )}

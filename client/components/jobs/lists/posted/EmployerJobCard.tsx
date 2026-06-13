@@ -15,6 +15,7 @@ interface EmployerJobCardProps {
   onCreateDispute: (job: Job) => void;
   onViewDispute: (jobId: number) => void;
   onViewHistory: (jobId: number) => void;
+  onCancelJob: (job: Job) => void;
   showHistoryButton: boolean;
 }
 
@@ -27,6 +28,7 @@ export default function EmployerJobCard({
   onCreateDispute,
   onViewDispute,
   onViewHistory,
+  onCancelJob,
   showHistoryButton,
 }: EmployerJobCardProps) {
   const budgetLabel = formatBudget(job);
@@ -159,24 +161,37 @@ export default function EmployerJobCard({
               <span className="sm:hidden lg:inline ml-1">Lịch sử</span>
             </Button>
           )}
-          {job.status === "IN_PROGRESS" && hasReviewDeadline && (
+          {job.status === "IN_PROGRESS" && (
             <>
-              <Button
-                size="sm"
-                className="flex-1 sm:flex-none bg-[#04A0EF] hover:bg-[#0380BF]"
-                onClick={() => onReviewWork(job)}
-              >
-                <Icon name="rate_review" size={16} />
-                <span className="sm:hidden lg:inline ml-1">Duyệt sản phẩm</span>
-              </Button>
+              {hasReviewDeadline && (
+                <>
+                  <Button
+                    size="sm"
+                    className="flex-1 sm:flex-none bg-[#04A0EF] hover:bg-[#0380BF]"
+                    onClick={() => onReviewWork(job)}
+                  >
+                    <Icon name="rate_review" size={16} />
+                    <span className="sm:hidden lg:inline ml-1">Duyệt sản phẩm</span>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex-1 sm:flex-none text-gray-600 border-gray-200 hover:bg-gray-50"
+                    onClick={() => onCreateDispute(job)}
+                  >
+                    <Icon name="report_problem" size={16} />
+                    <span className="sm:hidden lg:inline ml-1">Khiếu nại</span>
+                  </Button>
+                </>
+              )}
               <Button
                 variant="outline"
                 size="sm"
-                className="flex-1 sm:flex-none text-gray-600 border-gray-200 hover:bg-gray-50"
-                onClick={() => onCreateDispute(job)}
+                className="flex-1 sm:flex-none text-red-600 border-red-200 hover:bg-red-50"
+                onClick={() => onCancelJob(job)}
               >
-                <Icon name="report_problem" size={16} />
-                <span className="sm:hidden lg:inline ml-1">Khiếu nại</span>
+                <Icon name="cancel" size={16} />
+                <span className="sm:hidden lg:inline ml-1">Hủy</span>
               </Button>
             </>
           )}

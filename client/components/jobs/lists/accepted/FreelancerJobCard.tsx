@@ -19,9 +19,10 @@ interface FreelancerJobCardProps {
   job: Job;
   onSubmitWork: (job: { id: number; title: string }) => void;
   onViewDispute: (jobId: number) => void;
+  onWithdrawJob: (job: { id: number; title: string; escrowAmount?: number }) => void;
 }
 
-export default function FreelancerJobCard({ job, onSubmitWork, onViewDispute }: FreelancerJobCardProps) {
+export default function FreelancerJobCard({ job, onSubmitWork, onViewDispute, onWithdrawJob }: FreelancerJobCardProps) {
   const hasSubmittedWork = job.workStatus === "SUBMITTED" || Boolean(job.workSubmissionUrl);
   const isApprovedWork = job.workStatus === "APPROVED";
   const effectiveWorkStatus = job.workStatus || (hasSubmittedWork ? "SUBMITTED" : undefined);
@@ -151,6 +152,17 @@ export default function FreelancerJobCard({ job, onSubmitWork, onViewDispute }: 
                 </span>
               </Button>
             )
+          )}
+          {job.status === "IN_PROGRESS" && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-red-600 border-red-200 hover:bg-red-50"
+              onClick={() => onWithdrawJob({ id: job.id, title: job.title, escrowAmount: job.escrowAmount })}
+            >
+              <Icon name="exit_to_app" size={16} />
+              <span className="sm:hidden lg:inline ml-1">Rút</span>
+            </Button>
           )}
           {job.status === "DISPUTED" && (
             <Button

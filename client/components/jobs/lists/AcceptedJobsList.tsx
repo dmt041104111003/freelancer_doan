@@ -12,6 +12,7 @@ import JobsEmptyState from "../shared/JobsEmptyState";
 import JobsSearchBar from "../shared/JobsSearchBar";
 import JobsPageHeader from "../shared/JobsPageHeader";
 import JobHistoryTimeline from "../shared/JobHistoryTimeline";
+import WithdrawalDialog from "../withdrawal/WithdrawalDialog";
 import { DisputeResponseDialog } from "../dispute/DisputeDialog";
 import { WorkSubmitDialog } from "../work/WorkDialogs";
 import FreelancerJobCard from "./accepted/FreelancerJobCard";
@@ -47,6 +48,10 @@ export default function AcceptedJobsList() {
   // Work submission states
   const [workSubmitDialogOpen, setWorkSubmitDialogOpen] = useState(false);
   const [selectedJobForWork, setSelectedJobForWork] = useState<{ id: number; title: string } | null>(null);
+
+  // Withdrawal states
+  const [withdrawalDialogOpen, setWithdrawalDialogOpen] = useState(false);
+  const [withdrawalJob, setWithdrawalJob] = useState<{ id: number; title: string; escrowAmount?: number } | null>(null);
 
   const hasAccess = user?.roles?.includes("ROLE_FREELANCER");
   const isSavedTab = filter === "saved";
@@ -150,6 +155,11 @@ export default function AcceptedJobsList() {
   const handleSubmitWork = (job: { id: number; title: string }) => {
     setSelectedJobForWork(job);
     setWorkSubmitDialogOpen(true);
+  };
+
+  const handleWithdrawJob = (job: { id: number; title: string; escrowAmount?: number }) => {
+    setWithdrawalJob(job);
+    setWithdrawalDialogOpen(true);
   };
 
   if (!isHydrated) {
@@ -465,6 +475,7 @@ export default function AcceptedJobsList() {
                       job={job}
                       onSubmitWork={handleSubmitWork}
                       onViewDispute={handleViewDispute}
+                      onWithdrawJob={handleWithdrawJob}
                     />
                   </div>
                 ))
@@ -498,6 +509,23 @@ export default function AcceptedJobsList() {
             fetchJobs("IN_PROGRESS");
             fetchStats();
             setSelectedJobForWork(null);
+          }}
+        />
+      )}
+
+      {/* Withdrawal Dialog */}
+      {withdrawalJob && (
+        <WithdrawalDialog
+          open={withdrawalDialogOpen}
+          onOpenChange={setWithdrawalDialogOpen}
+          jobId={withdrawalJob.id}
+          jobTitle={withdrawalJob.title}
+          escrowAmount={withdrawalJob.escrowAmount}
+          role="FREELANCER"
+          onSuccess={() => {
+            fetchJobs(acceptedJobsFetchStatus(filter));
+            fetchStats();
+            setWithdrawalJob(null);
           }}
         />
       )}

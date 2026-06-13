@@ -374,11 +374,33 @@ public class NotificationService {
      */
     @Transactional
     public void notifyFreelancerCleared(User employer, Job job, User freelancer) {
+        notifyFreelancerClearedWithReason(employer, job, freelancer,
+                "Freelancer " + freelancer.getFullName() + " đã không nộp sản phẩm đúng hạn cho công việc \"" + job.getTitle() + "\". Công việc đã được mở lại để tuyển freelancer mới.");
+    }
+
+    @Transactional
+    public void notifyFreelancerClearedWithReason(User employer, Job job, User freelancer, String message) {
         Notification notification = Notification.builder()
                 .user(employer)
                 .type(ENotificationType.JOB_REOPENED)
                 .title("Công việc được mở lại")
-                .message("Freelancer " + freelancer.getFullName() + " đã không nộp sản phẩm đúng hạn cho công việc \"" + job.getTitle() + "\". Công việc đã được mở lại để tuyển freelancer mới.")
+                .message(message)
+                .referenceId(job.getId())
+                .referenceType("JOB")
+                .build();
+        notificationRepository.save(notification);
+    }
+
+    /**
+     * Thông báo cho freelancer khi bị +1 untrust do rút khỏi job
+     */
+    @Transactional
+    public void notifyFreelancerWithdrawalPenalty(User freelancer, Job job) {
+        Notification notification = Notification.builder()
+                .user(freelancer)
+                .type(ENotificationType.WORK_SUBMISSION_TIMEOUT)
+                .title("Rút khỏi công việc")
+                .message("Bạn đã rút khỏi công việc \"" + job.getTitle() + "\". Nhân phẩm tệ của bạn đã tăng +1.")
                 .referenceId(job.getId())
                 .referenceType("JOB")
                 .build();
