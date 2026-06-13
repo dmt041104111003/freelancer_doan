@@ -206,15 +206,23 @@ public class NotificationService {
     }
 
     /**
-     * Thông báo cho người tạo yêu cầu khi bị từ chối
+     * Thông báo cho người tạo yêu cầu khi bị từ chối (kèm số tiền hoàn phạt)
      */
     @Transactional
     public void notifyWithdrawalRejected(User requester, Job job, User responder) {
+        notifyWithdrawalRejectedWithAmount(requester, job, responder, null);
+    }
+
+    @Transactional
+    public void notifyWithdrawalRejectedWithAmount(User requester, Job job, User responder, String amount) {
+        String message = amount != null
+                ? responder.getFullName() + " đã từ chối yêu cầu của bạn cho công việc \"" + job.getTitle() + "\". Số tiền phạt " + amount + " VND đã được hoàn lại vào số dư của bạn."
+                : responder.getFullName() + " đã từ chối yêu cầu của bạn cho công việc \"" + job.getTitle() + "\". Tiền phạt đã được hoàn lại.";
         Notification notification = Notification.builder()
                 .user(requester)
                 .type(ENotificationType.WITHDRAWAL_REJECTED)
                 .title("Yêu cầu bị từ chối")
-                .message(responder.getFullName() + " đã từ chối yêu cầu của bạn cho công việc \"" + job.getTitle() + "\". Tiền phạt đã được hoàn lại.")
+                .message(message)
                 .referenceId(job.getId())
                 .referenceType("JOB")
                 .build();
@@ -242,11 +250,19 @@ public class NotificationService {
      */
     @Transactional
     public void notifyJobCancelled(User employer, Job job) {
+        notifyJobCancelledWithAmount(employer, job, null);
+    }
+
+    @Transactional
+    public void notifyJobCancelledWithAmount(User employer, Job job, String amount) {
+        String message = amount != null
+                ? "Công việc \"" + job.getTitle() + "\" đã bị hủy. Số tiền " + amount + " VND đã được hoàn lại vào số dư của bạn."
+                : "Công việc \"" + job.getTitle() + "\" đã bị hủy. Tiền escrow đã được hoàn lại vào số dư của bạn.";
         Notification notification = Notification.builder()
                 .user(employer)
                 .type(ENotificationType.JOB_CANCELLED)
                 .title("Công việc đã bị hủy")
-                .message("Công việc \"" + job.getTitle() + "\" đã bị hủy. Tiền escrow đã được hoàn lại vào số dư của bạn.")
+                .message(message)
                 .referenceId(job.getId())
                 .referenceType("JOB")
                 .build();

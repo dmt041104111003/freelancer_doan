@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { api } from "@/lib/api";
 import { formatCurrency, formatDateTime } from "@/lib/format";
-import { Job, JobStatus, JOB_STATUS_CONFIG, Page } from "@/types/job";
+import { Job, JobStatus, JOB_STATUS_CONFIG, Page, JOB_COMPLEXITY_CONFIG, JOB_DURATION_CONFIG, WORK_TYPE_CONFIG } from "@/types/job";
 import { Pagination } from "@/components/ui/pagination";
 import AdminLoading from "../shared/AdminLoading";
 import AdminPageHeader from "../shared/AdminPageHeader";
@@ -41,6 +41,8 @@ export default function AdminJobs() {
   const [processingJobId, setProcessingJobId] = useState<number | null>(null);
   const [historyDialogOpen, setHistoryDialogOpen] = useState(false);
   const [historyJobId, setHistoryJobId] = useState<number | null>(null);
+  const [detailDialogOpen, setDetailDialogOpen] = useState(false);
+  const [detailJob, setDetailJob] = useState<Job | null>(null);
 
   const fetchJobs = async (pageNum: number, status: JobStatus | "history") => {
     setIsLoading(true);
@@ -131,6 +133,11 @@ export default function AdminJobs() {
     setHistoryDialogOpen(true);
   };
 
+  const handleDetailClick = (job: Job) => {
+    setDetailJob(job);
+    setDetailDialogOpen(true);
+  };
+
   const showHistoryButton = statusFilter === "IN_PROGRESS" || statusFilter === "COMPLETED";
 
   if (isLoading && jobs.length === 0) {
@@ -215,7 +222,12 @@ export default function AdminJobs() {
               <div key={job.id} className="bg-white rounded-lg shadow p-4 space-y-3">
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900 line-clamp-2">{job.title}</p>
+                    <button
+                      onClick={() => handleDetailClick(job)}
+                      className="font-medium text-gray-900 line-clamp-2 hover:text-blue-600 text-left"
+                    >
+                      {job.title}
+                    </button>
                     <p className="text-xs text-gray-500 mt-1 truncate">#{job.id} • {job.employer?.fullName || "Không có"}</p>
                   </div>
                   <span className={`text-xs px-2 py-1 rounded-full whitespace-nowrap ${JOB_STATUS_CONFIG[job.status]?.color || ""}`}>
@@ -333,9 +345,9 @@ export default function AdminJobs() {
                 <tbody className="divide-y divide-gray-200">
                   {jobs.map((job) => (
                     <>
-                      <tr key={job.id} className="hover:bg-gray-50">
+                      <tr key={job.id} className="hover:bg-gray-50 cursor-pointer" onClick={() => handleDetailClick(job)}>
                         <td className="px-3 py-2">
-                          <p className="font-medium text-gray-900 truncate max-w-[200px]">{job.title}</p>
+                          <p className="font-medium text-gray-900 truncate max-w-[200px] hover:text-blue-600">{job.title}</p>
                           <p className="text-xs text-gray-500">#{job.id}</p>
                         </td>
                         <td className="px-3 py-2">
@@ -439,6 +451,147 @@ export default function AdminJobs() {
           </div>
         </>
       )}
+
+      {/* Detail Dialog */}
+      <Dialog open={detailDialogOpen} onOpenChange={setDetailDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto rounded-lg">
+          <DialogHeader>
+            <DialogTitle className="text-xl">Chi tiết công việc</DialogTitle>
+            <DialogDescription>
+              Thông tin chi tiết về công việc
+            </DialogDescription>
+          </DialogHeader>
+          {detailJob && (
+            <div className="space-y-4">
+              {/* Title & Status */}
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-lg font-semibold text-gray-900">{detailJob.title}</h3>
+                  <p className="text-sm text-gray-500 mt-1">#{detailJob.id}</p>
+                </div>
+                <span className={`text-xs px-2 py-1 rounded-full whitespace-nowrap ${JOB_STATUS_CONFIG[detailJob.status]?.color || ""}`}>
+                  {JOB_STATUS_CONFIG[detailJob.status]?.label || detailJob.status}
+                </span>
+              </div>
+
+              {/* Employer Info */}
+              <div className="bg-gray-50 rounded-lg p-3">
+                <p className="text-xs text-gray-500 mb-1">Người đăng</p>
+                <p className="font-medium text-gray-900">{detailJob.employer?.fullName || "Không có"}</p>
+                {detailJob.employer?.company && (
+                  <p className="text-sm text-gray-500">{detailJob.employer.company}</p>
+                )}
+              </div>
+
+              {/* Budget & Escrow */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-gray-50 rounded-lg p-3">
+                  <p className="text-xs text-gray-500 mb-1">Ngân sách</p>
+                  <p className="font-semibold text-gray-900">{formatCurrency(detailJob.budget)}</p>
+                </div>
+                <div className="bg-gray-50 rounded-lg p-3">
+                  <p className="text-xs text-gray-500 mb-1">Tiền tạm giữ (Escrow)</p>
+                  <p className="font-semibold text-blue-600">{formatCurrency(detailJob.escrowAmount)}</p>
+                </div>
+              </div>
+
+              {/* Job Config */}
+              <div className="grid grid-cols-3 gap-3">
+                <div className="bg-gray-50 rounded-lg p-3">
+                  <p className="text-xs text-gray-500 mb-1">Độ phức tạp</p>
+                  <p className="font-medium text-gray-900 text-sm">{JOB_COMPLEXITY_CONFIG[detailJob.complexity]?.label || detailJob.complexity}</p>
+                </div>
+                <div className="bg-gray-50 rounded-lg p-3">
+                  <p className="text-xs text-gray-500 mb-1">Thời gian</p>
+                  <p className="font-medium text-gray-900 text-sm">{JOB_DURATION_CONFIG[detailJob.duration]?.label || detailJob.duration}</p>
+                </div>
+                <div className="bg-gray-50 rounded-lg p-3">
+                  <p className="text-xs text-gray-500 mb-1">Loại hình</p>
+                  <p className="font-medium text-gray-900 text-sm">{WORK_TYPE_CONFIG[detailJob.workType]?.label || detailJob.workType}</p>
+                </div>
+              </div>
+
+              {/* Description */}
+              <div>
+                <p className="text-sm font-medium text-gray-700 mb-1">Mô tả</p>
+                <p className="text-sm text-gray-600 whitespace-pre-wrap line-clamp-6">{detailJob.description}</p>
+              </div>
+
+              {/* Requirements */}
+              {detailJob.requirements && (
+                <div>
+                  <p className="text-sm font-medium text-gray-700 mb-1">Yêu cầu</p>
+                  <p className="text-sm text-gray-600 whitespace-pre-wrap line-clamp-4">{detailJob.requirements}</p>
+                </div>
+              )}
+
+              {/* Skills */}
+              {detailJob.skills && detailJob.skills.length > 0 && (
+                <div>
+                  <p className="text-sm font-medium text-gray-700 mb-2">Kỹ năng yêu cầu</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {detailJob.skills.map((skill, idx) => (
+                      <span key={idx} className="px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs font-medium">
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Rejection Reason */}
+              {detailJob.rejectionReason && (
+                <div className="bg-red-50 rounded-lg p-3">
+                  <p className="text-sm font-medium text-red-700 mb-1">Lý do từ chối</p>
+                  <p className="text-sm text-red-600">{detailJob.rejectionReason}</p>
+                </div>
+              )}
+
+              {/* Dates */}
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div>
+                  <p className="text-gray-500">Ngày tạo</p>
+                  <p className="font-medium text-gray-900">{formatDateTime(detailJob.createdAt)}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500">Cập nhật</p>
+                  <p className="font-medium text-gray-900">{formatDateTime(detailJob.updatedAt)}</p>
+                </div>
+              </div>
+
+              {/* Work deadlines */}
+              {(detailJob.workSubmissionDeadline || detailJob.workReviewDeadline) && (
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                  {detailJob.workSubmissionDeadline && (
+                    <div>
+                      <p className="text-gray-500">Hạn nộp bài</p>
+                      <p className="font-medium text-gray-900">{formatDateTime(detailJob.workSubmissionDeadline)}</p>
+                    </div>
+                  )}
+                  {detailJob.workReviewDeadline && (
+                    <div>
+                      <p className="text-gray-500">Hạn review</p>
+                      <p className="font-medium text-gray-900">{formatDateTime(detailJob.workReviewDeadline)}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Stats */}
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div>
+                  <p className="text-gray-500">Lượt xem</p>
+                  <p className="font-medium text-gray-900">{detailJob.viewCount}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500">Ứng viên</p>
+                  <p className="font-medium text-gray-900">{detailJob.applicationCount}</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* History Dialog */}
       <Dialog open={historyDialogOpen} onOpenChange={setHistoryDialogOpen}>

@@ -28,6 +28,7 @@ public class WithdrawalRequestService {
     private final UserService userService;
     private final NotificationService notificationService;
     private final JobHistoryService jobHistoryService;
+    private final WalletTransactionService walletTransactionService;
 
     private static final int FREELANCER_PENALTY_PERCENT = 12;
     private static final int EMPLOYER_PENALTY_PERCENT = 40;
@@ -193,6 +194,14 @@ public class WithdrawalRequestService {
         if (escrowAmount != null && escrowAmount.compareTo(BigDecimal.ZERO) > 0) {
             employer.addBalance(escrowAmount);
             userService.save(employer);
+            walletTransactionService.logBalance(
+                    employer,
+                    EWalletTransactionType.ESCROW_REFUND,
+                    escrowAmount,
+                    "Hoàn tiền escrow (chấp nhận yêu cầu hủy): " + job.getTitle(),
+                    job.getId(),
+                    "JOB"
+            );
         }
 
         // Ghi lịch sử
@@ -206,7 +215,11 @@ public class WithdrawalRequestService {
         notificationService.notifyWithdrawalApproved(request.getRequester(), job, user);
         
         // Thông báo cho employer về việc job bị hủy và hoàn tiền escrow
-        notificationService.notifyJobCancelled(employer, job);
+        if (escrowAmount != null && escrowAmount.compareTo(BigDecimal.ZERO) > 0) {
+            notificationService.notifyJobCancelledWithAmount(employer, job, escrowAmount.toPlainString());
+        } else {
+            notificationService.notifyJobCancelled(employer, job);
+        }
 
         return ApiResponse.success("Đã chấp nhận yêu cầu. Công việc đã được hủy.",
                 WithdrawalRequestResponse.fromEntity(request));
@@ -244,8 +257,19 @@ public class WithdrawalRequestService {
 
         // Hoàn tiền phạt cho người tạo yêu cầu
         User requester = request.getRequester();
-        requester.addBalance(request.getPenaltyFee());
+        BigDecimal penaltyFee = request.getPenaltyFee();
+        requester.addBalance(penaltyFee);
         userService.save(requester);
+
+        // Ghi lịch sử giao dịch
+        walletTransactionService.logBalance(
+                requester,
+                EWalletTransactionType.PENALTY_REFUND,
+                penaltyFee,
+                "Hoàn phí phạt (từ chối yêu cầu hủy): " + job.getTitle(),
+                request.getId(),
+                "WITHDRAWAL_REQUEST"
+        );
 
         // Ghi lịch sử
         String description = request.isFreelancerRequest()
@@ -253,8 +277,8 @@ public class WithdrawalRequestService {
                 : "Đã từ chối yêu cầu hủy của " + requester.getFullName();
         jobHistoryService.logHistory(job, user, EJobHistoryAction.WITHDRAWAL_REJECTED, description);
 
-        // Thông báo cho người tạo yêu cầu
-        notificationService.notifyWithdrawalRejected(requester, job, user);
+        // Thông báo cho người tạo yêu cầu (kèm số tiền hoàn phạt)
+        notificationService.notifyWithdrawalRejectedWithAmount(requester, job, user, penaltyFee.toPlainString());
 
         return ApiResponse.success("Đã từ chối yêu cầu. Tiền phạt đã được hoàn lại cho người yêu cầu.",
                 WithdrawalRequestResponse.fromEntity(request));
