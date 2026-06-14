@@ -616,6 +616,7 @@ export type NotificationType =
   | "WITHDRAWAL_REQUESTED"
   | "WITHDRAWAL_APPROVED"
   | "WITHDRAWAL_REJECTED"
+  | "WITHDRAWAL_CANCELLED"
   | "JOB_CANCELLED"
   | "WORK_SUBMITTED"
   | "WORK_APPROVED"
@@ -662,6 +663,7 @@ export const NOTIFICATION_TYPE_CONFIG: Record<NotificationType, { icon: string; 
   WITHDRAWAL_REQUESTED: { icon: "exit_to_app", color: "text-orange-600" },
   WITHDRAWAL_APPROVED: { icon: "check_circle", color: "text-green-600" },
   WITHDRAWAL_REJECTED: { icon: "cancel", color: "text-red-600" },
+  WITHDRAWAL_CANCELLED: { icon: "cancel", color: "text-gray-600" },
   JOB_CANCELLED: { icon: "cancel", color: "text-red-600" },
   WORK_SUBMITTED: { icon: "upload_file", color: "text-purple-600" },
   WORK_APPROVED: { icon: "task_alt", color: "text-green-600" },

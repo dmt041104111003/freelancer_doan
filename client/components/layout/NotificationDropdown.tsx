@@ -14,7 +14,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function NotificationDropdown() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -110,20 +110,27 @@ export default function NotificationDropdown() {
       case "WORK_REVIEW_TIMEOUT":
         return `/my-posted-jobs?highlight=${refId}`;
 
-      // Job cancelled/reopened -> job detail
+      // Job cancelled/reopened -> employer's posted jobs with highlight
       case "JOB_CANCELLED":
       case "JOB_REOPENED":
-        return `/jobs/${refId}`;
+        return `/my-posted-jobs?highlight=${refId}`;
 
-      // Job completed -> based on referenceType or job detail
+      // Job completed -> my job list with highlight
       case "JOB_COMPLETED":
-        return `/jobs/${refId}`;
+        if (user?.roles?.includes("ROLE_EMPLOYER")) {
+          return `/my-posted-jobs?highlight=${refId}`;
+        }
+        return `/my-accepted-jobs?highlight=${refId}`;
 
-      // Withdrawal notifications -> my jobs
+      // Withdrawal notifications -> my job list with highlight
       case "WITHDRAWAL_REQUESTED":
       case "WITHDRAWAL_APPROVED":
       case "WITHDRAWAL_REJECTED":
-        return `/jobs/${refId}`;
+      case "WITHDRAWAL_CANCELLED":
+        if (user?.roles?.includes("ROLE_EMPLOYER")) {
+          return `/my-posted-jobs?highlight=${refId}`;
+        }
+        return `/my-accepted-jobs?highlight=${refId}`;
 
       // Dispute notifications -> job detail with dispute param
       case "DISPUTE_CREATED":

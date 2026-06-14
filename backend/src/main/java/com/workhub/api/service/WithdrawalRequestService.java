@@ -299,6 +299,13 @@ public class WithdrawalRequestService {
                 : "Đã hủy yêu cầu hủy công việc";
         jobHistoryService.logHistory(job, user, EJobHistoryAction.WITHDRAWAL_CANCELLED, description);
 
+        User otherParty = request.isFreelancerRequest()
+                ? job.getEmployer()
+                : getAcceptedFreelancer(job.getId());
+        if (otherParty != null) {
+            notificationService.notifyWithdrawalCancelled(otherParty, job, user);
+        }
+
         return ApiResponse.success("Đã hủy yêu cầu.", null);
     }
 

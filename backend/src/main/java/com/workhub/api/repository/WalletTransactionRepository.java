@@ -12,6 +12,8 @@ public interface WalletTransactionRepository extends JpaRepository<WalletTransac
 
     boolean existsByReferenceTypeAndReferenceId(String referenceType, Long referenceId);
 
+    boolean existsByTypeAndReferenceTypeAndReferenceId(EWalletTransactionType type, String referenceType, Long referenceId);
+
     Page<WalletTransaction> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
     Page<WalletTransaction> findByTypeOrderByCreatedAtDesc(EWalletTransactionType type, Pageable pageable);

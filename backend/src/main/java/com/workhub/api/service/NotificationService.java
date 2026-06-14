@@ -591,6 +591,20 @@ public class NotificationService {
      * Thông báo khi bị chặn
      */
     @Transactional
+    public void notifyWithdrawalCancelled(User recipient, Job job, User canceller) {
+        String typeLabel = canceller.getFullName() + " đã hủy yêu cầu của họ cho công việc \"" + job.getTitle() + "\"";
+        Notification notification = Notification.builder()
+                .user(recipient)
+                .type(ENotificationType.WITHDRAWAL_CANCELLED)
+                .title("Yêu cầu đã được hủy")
+                .message(typeLabel)
+                .referenceId(job.getId())
+                .referenceType("JOB")
+                .build();
+        notificationRepository.save(notification);
+    }
+
+    @Transactional
     public void notifyChatBlocked(User blockedUser, User blocker) {
         Notification notification = Notification.builder()
                 .user(blockedUser)

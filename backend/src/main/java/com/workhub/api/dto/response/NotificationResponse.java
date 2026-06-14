@@ -44,6 +44,7 @@ public class NotificationResponse {
             case WITHDRAWAL_REQUESTED -> "Có yêu cầu rút/hủy";
             case WITHDRAWAL_APPROVED -> "Yêu cầu được chấp nhận";
             case WITHDRAWAL_REJECTED -> "Yêu cầu bị từ chối";
+            case WITHDRAWAL_CANCELLED -> "Yêu cầu đã được hủy";
             case JOB_CANCELLED -> "Công việc đã bị hủy";
             case WORK_SUBMITTED -> "Có sản phẩm mới nộp";
             case WORK_APPROVED -> "Sản phẩm được duyệt";

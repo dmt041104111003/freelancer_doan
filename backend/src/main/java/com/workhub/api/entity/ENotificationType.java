@@ -14,6 +14,7 @@ public enum ENotificationType {
     WITHDRAWAL_REQUESTED,      // Có yêu cầu rút/hủy mới
     WITHDRAWAL_APPROVED,       // Yêu cầu rút/hủy được chấp nhận
     WITHDRAWAL_REJECTED,       // Yêu cầu rút/hủy bị từ chối
+    WITHDRAWAL_CANCELLED,      // Người yêu cầu đã hủy yêu cầu
     JOB_CANCELLED,            // Công việc đã bị hủy
     
     // Work submission notifications

@@ -31,7 +31,7 @@ public class WalletTransactionService {
     public void logBalance(User user, EWalletTransactionType type, BigDecimal amount,
                            String description, Long referenceId, String referenceType) {
         if (referenceId != null && referenceType != null
-                && walletTransactionRepository.existsByReferenceTypeAndReferenceId(referenceType, referenceId)) {
+                && walletTransactionRepository.existsByTypeAndReferenceTypeAndReferenceId(type, referenceType, referenceId)) {
             return;
         }
         walletTransactionRepository.save(WalletTransaction.builder()
@@ -48,7 +48,7 @@ public class WalletTransactionService {
     public void logCredits(User user, EWalletTransactionType type, int credits,
                            String description, Long referenceId, String referenceType) {
         if (referenceId != null && referenceType != null
-                && walletTransactionRepository.existsByReferenceTypeAndReferenceId(referenceType, referenceId)) {
+                && walletTransactionRepository.existsByTypeAndReferenceTypeAndReferenceId(type, referenceType, referenceId)) {
             return;
         }
         walletTransactionRepository.save(WalletTransaction.builder()
