@@ -85,7 +85,7 @@ export default function NotificationDropdown() {
     // No reference ID -> fallback
     if (!refId) return "#";
 
-    const isEmployer = user?.roles?.includes("ROLE_EMPLOYER");
+    const isJobOwner = user?.id != null && notification.jobEmployerId === user.id;
 
     switch (type) {
       // Employer: new application on their job
@@ -96,7 +96,7 @@ export default function NotificationDropdown() {
       case "APPLICATION_REJECTED":
         return `/jobs/${refId}`;
 
-      // Job-related notifications -> route to the appropriate job list based on role
+      // Job-related notifications -> route to the appropriate job list
       case "APPLICATION_ACCEPTED":
       case "WORK_REVISION_REQUESTED":
       case "WORK_APPROVED":
@@ -113,7 +113,7 @@ export default function NotificationDropdown() {
       case "WITHDRAWAL_APPROVED":
       case "WITHDRAWAL_REJECTED":
       case "WITHDRAWAL_CANCELLED":
-        if (isEmployer) {
+        if (isJobOwner) {
           return `/my-posted-jobs?highlight=${refId}`;
         }
         return `/my-accepted-jobs?highlight=${refId}`;

@@ -17,6 +17,7 @@ public class NotificationResponse {
     private String message;
     private Long referenceId;
     private String referenceType;
+    private Long jobEmployerId;
     private Boolean isRead;
     private LocalDateTime createdAt;
 

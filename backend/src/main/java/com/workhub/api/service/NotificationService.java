@@ -4,6 +4,7 @@ import com.workhub.api.dto.response.ApiResponse;
 import com.workhub.api.dto.response.NotificationResponse;
 import com.workhub.api.entity.*;
 import com.workhub.api.repository.NotificationRepository;
+import com.workhub.api.repository.JobRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,12 +21,14 @@ import java.util.stream.Collectors;
 public class NotificationService {
     
     private final NotificationRepository notificationRepository;
+    private final JobRepository jobRepository;
 
     public ApiResponse<List<NotificationResponse>> getRecentNotifications(Long userId) {
         List<Notification> notifications = notificationRepository.findTop20ByUserIdOrderByCreatedAtDesc(userId);
         List<NotificationResponse> responses = notifications.stream()
                 .map(NotificationResponse::fromEntity)
                 .collect(Collectors.toList());
+        enrichWithJobEmployerId(responses);
         return ApiResponse.success("Thành công", responses);
     }
 
@@ -31,7 +36,26 @@ public class NotificationService {
         Page<Notification> notifications = notificationRepository.findByUserIdOrderByCreatedAtDesc(
                 userId, PageRequest.of(page, size));
         Page<NotificationResponse> responses = notifications.map(NotificationResponse::fromEntity);
+        enrichWithJobEmployerId(responses.getContent());
         return ApiResponse.success("Thành công", responses);
+    }
+
+    private void enrichWithJobEmployerId(List<NotificationResponse> responses) {
+        Set<Long> jobIds = responses.stream()
+                .filter(r -> "JOB".equals(r.getReferenceType()) && r.getReferenceId() != null)
+                .map(NotificationResponse::getReferenceId)
+                .collect(Collectors.toSet());
+        if (jobIds.isEmpty()) return;
+        Map<Long, Long> employerMap = jobRepository.findAllById(jobIds).stream()
+                .collect(Collectors.toMap(
+                        Job::getId,
+                        job -> job.getEmployer().getId()
+                ));
+        for (NotificationResponse r : responses) {
+            if ("JOB".equals(r.getReferenceType()) && r.getReferenceId() != null) {
+                r.setJobEmployerId(employerMap.get(r.getReferenceId()));
+            }
+        }
     }
 
     public ApiResponse<Long> getUnreadCount(Long userId) {

@@ -650,6 +650,7 @@ export interface Notification {
   message?: string;
   referenceId?: number;
   referenceType?: string;
+  jobEmployerId?: number;
   isRead: boolean;
   createdAt: string;
 }
