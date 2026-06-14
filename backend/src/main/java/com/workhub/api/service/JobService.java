@@ -9,6 +9,7 @@ import com.workhub.api.exception.JobNotFoundException;
 import com.workhub.api.exception.UnauthorizedAccessException;
 import com.workhub.api.repository.DisputeRepository;
 import com.workhub.api.repository.JobApplicationRepository;
+import com.workhub.api.repository.JobHistoryRepository;
 import com.workhub.api.repository.JobRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,6 +33,7 @@ public class JobService {
 
     private final JobRepository jobRepository;
     private final JobApplicationRepository jobApplicationRepository;
+    private final JobHistoryRepository jobHistoryRepository;
     private final DisputeRepository disputeRepository;
     private final UserService userService;
     private final WalletTransactionService walletTransactionService;
