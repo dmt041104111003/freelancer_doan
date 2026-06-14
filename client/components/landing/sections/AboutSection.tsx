@@ -90,7 +90,7 @@ export default function AboutSection() {
                   href={`/jobs/${job.id}`}
                   className="text-[#04A0EF] font-semibold text-base md:text-lg hover:underline"
                 >
-                  {job.title}
+                  {job.title} #{job.id}
                 </Link>
               </div>
 

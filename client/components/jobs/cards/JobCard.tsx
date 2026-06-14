@@ -56,10 +56,11 @@ export default function JobCard({ job, onFavorite, isFavorite = false }: JobCard
           )}
 
           {/* Job Title */}
-          <Link href={`/jobs/${job.id}`}>
+          <Link href={`/jobs/${job.id}`} className="flex items-center gap-1.5">
             <h3 className="font-semibold text-gray-900 group-hover:text-[#04A0EF] transition-colors line-clamp-2 mb-1 text-[15px] leading-snug">
               {job.title}
             </h3>
+            <span className="text-xs text-gray-400 shrink-0">#{job.id}</span>
           </Link>
 
           {/* Company Name */}

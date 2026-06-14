@@ -194,7 +194,7 @@ export default function AdminDisputes() {
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-gray-900 line-clamp-2">{dispute.jobTitle}</p>
-                    <p className="text-xs text-gray-500 mt-1">#{dispute.id} - Job #{dispute.jobId}</p>
+                    <p className="text-xs text-gray-500 mt-1">#{dispute.jobId}</p>
                   </div>
                   <span className="text-xs px-2 py-1 rounded-full whitespace-nowrap bg-gray-100 text-gray-700">
                     {dispute.statusLabel}
@@ -268,7 +268,7 @@ export default function AdminDisputes() {
                     <tr key={dispute.id} className="hover:bg-gray-50">
                       <td className="px-3 py-2">
                         <p className="font-medium text-gray-900 truncate max-w-[200px]">{dispute.jobTitle}</p>
-                        <p className="text-xs text-gray-500">#{dispute.id}</p>
+                        <p className="text-xs text-gray-500">#{dispute.jobId}</p>
                       </td>
                       <td className="px-3 py-2">
                         <p className="font-medium text-gray-900">{dispute.employer.fullName}</p>
@@ -344,7 +344,7 @@ export default function AdminDisputes() {
                 <div className="flex items-start justify-between">
                   <div>
                     <DialogTitle className="text-lg">Tranh chấp #{detailData.id}</DialogTitle>
-                    <p className="text-sm text-gray-500 mt-0.5">Công việc: {detailData.job.title}</p>
+                    <p className="text-sm text-gray-500 mt-0.5">Công việc: {detailData.job.title} #{detailData.job.id}</p>
                   </div>
                   <span className={`text-xs px-3 py-1 rounded-full whitespace-nowrap ${
                     detailData.status === "PENDING_ADMIN_DECISION"
@@ -476,7 +476,7 @@ export default function AdminDisputes() {
                 {detailTab === "job" && (
                   <div className="space-y-4">
                     <div className="bg-gray-50 rounded-lg p-4 border">
-                      <h3 className="font-semibold text-gray-800 mb-3">{detailData.job.title}</h3>
+                      <h3 className="font-semibold text-gray-800 mb-3">{detailData.job.title} #{detailData.job.id}</h3>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
                         <div>
                           <p className="text-gray-500 text-xs">Ngân sách</p>

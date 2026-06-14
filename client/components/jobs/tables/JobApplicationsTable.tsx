@@ -170,7 +170,7 @@ export default function JobApplicationsTable() {
           Quay lại chi tiết
         </Link>
         <h1 className="text-2xl font-bold text-gray-900">Danh sách ứng viên</h1>
-        <p className="text-gray-500 mt-1">Công việc: {job?.title}</p>
+        <p className="text-gray-500 mt-1">Công việc: {job?.title} #{job?.id}</p>
       </div>
 
       {/* Filter */}

@@ -45,10 +45,11 @@ export default function FreelancerJobCard({ job, onSubmitWork, onViewDispute, on
         )}
 
         <div className="flex-1 min-w-0">
-          <div className="flex flex-wrap items-center gap-2 mb-2">
-            <h3 className="text-lg font-semibold text-gray-900 hover:text-[#04A0EF] cursor-pointer truncate">
-              {job.title}
-            </h3>
+            <div className="flex flex-wrap items-center gap-2 mb-2">
+              <h3 className="text-lg font-semibold text-gray-900 hover:text-[#04A0EF] cursor-pointer truncate">
+                {job.title}
+              </h3>
+              <span className="text-xs text-gray-400 shrink-0">#{job.id}</span>
             <span
               className={`px-2 py-0.5 rounded-full text-xs font-medium shrink-0 ${
                 JOB_STATUS_CONFIG[job.status]?.color || "bg-gray-100 text-gray-700"

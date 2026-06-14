@@ -102,12 +102,13 @@ export default function JobCardWithPreview({ job, onFavorite, isFavorite = false
             )}
 
             {/* Job Title */}
-            <Link href={`/jobs/${job.id}`}>
+            <Link href={`/jobs/${job.id}`} className="flex items-center gap-1.5">
               <h3 className={`font-semibold transition-colors line-clamp-2 mb-1 text-[15px] leading-snug ${
                 showPreview ? "text-[#04A0EF]" : "text-gray-900 hover:text-[#04A0EF]"
               }`}>
                 {job.title}
               </h3>
+              <span className="text-xs text-gray-400 shrink-0">#{job.id}</span>
             </Link>
 
             {/* Company Name */}
@@ -177,9 +178,12 @@ export default function JobCardWithPreview({ job, onFavorite, isFavorite = false
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1 min-w-0">
-                <h4 className="font-semibold text-gray-900 line-clamp-2 text-[15px] leading-snug">
-                  {job.title}
-                </h4>
+                <div className="flex items-center gap-1.5">
+                  <h4 className="font-semibold text-gray-900 line-clamp-2 text-[15px] leading-snug">
+                    {job.title}
+                  </h4>
+                  <span className="text-xs text-gray-400 shrink-0">#{job.id}</span>
+                </div>
                 <p className="text-sm text-gray-500 truncate">{job.employer.company || job.employer.fullName}</p>
                 <p className="text-[#04A0EF] font-semibold text-sm mt-1">{formatBudget(job.budget)}</p>
               </div>
