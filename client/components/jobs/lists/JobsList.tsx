@@ -34,7 +34,11 @@ export default function JobsList() {
   const [skillKeyword, setSkillKeyword] = useState("");
   const [minBudget, setMinBudget] = useState<number>(0);
   const [maxBudget, setMaxBudget] = useState<number>(0);
+  const [debouncedMinBudget, setDebouncedMinBudget] = useState(0);
+  const [debouncedMaxBudget, setDebouncedMaxBudget] = useState(0);
+  const [debouncedSkillKeyword, setDebouncedSkillKeyword] = useState("");
   const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const filterDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const currentPage = parseInt(searchParams.get("page") || "0", 10);
 
@@ -100,6 +104,18 @@ export default function JobsList() {
     [debouncedKeyword]
   );
 
+  useEffect(() => {
+    if (filterDebounceRef.current) clearTimeout(filterDebounceRef.current);
+    filterDebounceRef.current = setTimeout(() => {
+      setDebouncedSkillKeyword(skillKeyword);
+      setDebouncedMinBudget(minBudget);
+      setDebouncedMaxBudget(maxBudget);
+    }, 150);
+    return () => {
+      if (filterDebounceRef.current) clearTimeout(filterDebounceRef.current);
+    };
+  }, [skillKeyword, minBudget, maxBudget]);
+
   const maxAvailableBudget = useMemo(() => {
     const budgets = jobs.map(j => j.budget).filter((b): b is number => b != null);
     return budgets.length > 0 ? Math.max(...budgets) : 0;
@@ -113,18 +129,18 @@ export default function JobsList() {
 
   const filteredJobs = useMemo(() => {
     return jobs.filter(job => {
-      if (skillKeyword.trim()) {
-        const kw = skillKeyword.trim().toLowerCase();
+      if (debouncedSkillKeyword.trim()) {
+        const kw = debouncedSkillKeyword.trim().toLowerCase();
         const match = job.skills?.some(s => s.toLowerCase().includes(kw));
         if (!match) return false;
       }
       if (job.budget != null) {
-        if (job.budget < minBudget) return false;
-        if (maxBudget > 0 && job.budget > maxBudget) return false;
+        if (job.budget < debouncedMinBudget) return false;
+        if (debouncedMaxBudget > 0 && job.budget > debouncedMaxBudget) return false;
       }
       return true;
     });
-  }, [jobs, skillKeyword, minBudget, maxBudget]);
+  }, [jobs, debouncedSkillKeyword, debouncedMinBudget, debouncedMaxBudget]);
 
   useEffect(() => {
     if (debouncedKeyword && currentPage !== 0) {
@@ -244,26 +260,26 @@ export default function JobsList() {
                 type="range"
                 min={0}
                 max={maxAvailableBudget || 50000000}
-                step={1000000}
+                step={500000}
                 value={minBudget}
                 onChange={(e) => {
                   const val = Number(e.target.value);
                   setMinBudget(Math.min(val, maxBudget));
                 }}
-                className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#04A0EF]"
+                className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#04A0EF] range-thumb"
               />
               <span className="text-xs text-gray-400 shrink-0">-</span>
               <input
                 type="range"
                 min={0}
                 max={maxAvailableBudget || 50000000}
-                step={1000000}
+                step={500000}
                 value={maxBudget}
                 onChange={(e) => {
                   const val = Number(e.target.value);
                   setMaxBudget(Math.max(val, minBudget));
                 }}
-                className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#04A0EF]"
+                className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#04A0EF] range-thumb"
               />
             </div>
           </div>
