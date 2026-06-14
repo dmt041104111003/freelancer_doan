@@ -34,10 +34,15 @@ public class JobApplicationResponse {
     public static class FreelancerResponse {
         private Long id;
         private String fullName;
+        private String email;
         private String avatarUrl;
         private String phoneNumber;
+        private String title;
+        private String location;
+        private String company;
         private String bio;
         private Set<String> skills;
+        private Boolean isVerified;
         private Integer trustScore;      // Điểm uy tín (UT)
         private Integer untrustScore;    // Điểm không uy tín (KUT)
     }

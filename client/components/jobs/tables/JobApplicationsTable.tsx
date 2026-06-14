@@ -53,6 +53,7 @@ export default function JobApplicationsTable() {
   // View dialogs
   const [showSkillsDialog, setShowSkillsDialog] = useState(false);
   const [showCoverLetterDialog, setShowCoverLetterDialog] = useState(false);
+  const [showProfileDialog, setShowProfileDialog] = useState(false);
   const [viewingApp, setViewingApp] = useState<JobApplication | null>(null);
 
   useEffect(() => {
@@ -264,26 +265,32 @@ export default function JobApplicationsTable() {
                       {formatDate(app.createdAt)}
                     </td>
                     <td className="px-4 py-3">
-                      {app.status === "PENDING" ? (
-                        <div className="flex items-center justify-center gap-3">
-                          <button
-                            onClick={() => handleAction(app, "accept")}
-                            disabled={processingId === app.id}
-                            className="text-[#04A0EF] hover:underline text-sm disabled:opacity-50"
-                          >
-                            Duyệt
-                          </button>
-                          <button
-                            onClick={() => handleAction(app, "reject")}
-                            disabled={processingId === app.id}
-                            className="text-red-600 hover:underline text-sm disabled:opacity-50"
-                          >
-                            Từ chối
-                          </button>
-                        </div>
-                      ) : (
-                        <span className="text-gray-400 text-center block">-</span>
-                      )}
+                      <div className="flex items-center justify-center gap-3">
+                        <button
+                          onClick={() => { setViewingApp(app); setShowProfileDialog(true); }}
+                          className="text-gray-600 hover:underline text-sm"
+                        >
+                          Xem profile
+                        </button>
+                        {app.status === "PENDING" && (
+                          <>
+                            <button
+                              onClick={() => handleAction(app, "accept")}
+                              disabled={processingId === app.id}
+                              className="text-[#04A0EF] hover:underline text-sm disabled:opacity-50"
+                            >
+                              Duyệt
+                            </button>
+                            <button
+                              onClick={() => handleAction(app, "reject")}
+                              disabled={processingId === app.id}
+                              className="text-red-600 hover:underline text-sm disabled:opacity-50"
+                            >
+                              Từ chối
+                            </button>
+                          </>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -379,6 +386,116 @@ export default function JobApplicationsTable() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowCoverLetterDialog(false)}>
+              Đóng
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Profile Dialog */}
+      <Dialog open={showProfileDialog} onOpenChange={setShowProfileDialog}>
+        <DialogContent className="max-w-lg max-h-[90vh] flex flex-col overflow-hidden">
+          <DialogHeader className="shrink-0">
+            <DialogTitle>Hồ sơ ứng viên</DialogTitle>
+            <DialogDescription>
+              Chi tiết thông tin của {viewingApp?.freelancer.fullName}
+            </DialogDescription>
+          </DialogHeader>
+          {viewingApp && (
+            <div className="flex-1 overflow-y-auto space-y-4 py-2">
+              {/* Avatar + Name */}
+              <div className="flex items-center gap-4">
+                <Avatar className="w-16 h-16">
+                  <AvatarImage src={viewingApp.freelancer.avatarUrl} alt={viewingApp.freelancer.fullName} />
+                  <AvatarFallback className="bg-[#04A0EF] text-white text-lg">
+                    {viewingApp.freelancer.fullName?.charAt(0)?.toUpperCase() || "U"}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">{viewingApp.freelancer.fullName}</h3>
+                  {viewingApp.freelancer.title && (
+                    <p className="text-sm text-gray-500">{viewingApp.freelancer.title}</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Info Grid */}
+              <div className="grid grid-cols-2 gap-3 text-sm bg-gray-50 rounded-lg p-4">
+                {viewingApp.freelancer.email && (
+                  <div>
+                    <p className="text-gray-500 text-xs">Email</p>
+                    <p className="font-medium text-gray-800 truncate">{viewingApp.freelancer.email}</p>
+                  </div>
+                )}
+                {viewingApp.freelancer.phoneNumber && (
+                  <div>
+                    <p className="text-gray-500 text-xs">Số điện thoại</p>
+                    <p className="font-medium text-gray-800">{viewingApp.freelancer.phoneNumber}</p>
+                  </div>
+                )}
+                {viewingApp.freelancer.location && (
+                  <div>
+                    <p className="text-gray-500 text-xs">Địa điểm</p>
+                    <p className="font-medium text-gray-800">{viewingApp.freelancer.location}</p>
+                  </div>
+                )}
+                {viewingApp.freelancer.company && (
+                  <div>
+                    <p className="text-gray-500 text-xs">Công ty</p>
+                    <p className="font-medium text-gray-800">{viewingApp.freelancer.company}</p>
+                  </div>
+                )}
+                <div>
+                  <p className="text-gray-500 text-xs">Nhân phẩm tốt</p>
+                  <p className="font-medium text-green-600">{viewingApp.freelancer.trustScore ?? 0}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 text-xs">Nhân phẩm tệ</p>
+                  <p className="font-medium text-red-600">{viewingApp.freelancer.untrustScore ?? 0}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 text-xs">Đã xác thực</p>
+                  <p className="font-medium">{viewingApp.freelancer.isVerified ? "Có" : "Không"}</p>
+                </div>
+              </div>
+
+              {/* Bio */}
+              {viewingApp.freelancer.bio && (
+                <div>
+                  <h4 className="text-sm font-medium text-gray-700 mb-1">Giới thiệu</h4>
+                  <p className="text-sm text-gray-600 whitespace-pre-wrap bg-gray-50 rounded-lg p-3 border">
+                    {viewingApp.freelancer.bio}
+                  </p>
+                </div>
+              )}
+
+              {/* Skills */}
+              {viewingApp.freelancer.skills && viewingApp.freelancer.skills.length > 0 && (
+                <div>
+                  <h4 className="text-sm font-medium text-gray-700 mb-1">Kỹ năng</h4>
+                  <div className="flex flex-wrap gap-1.5">
+                    {viewingApp.freelancer.skills.map((skill) => (
+                      <span key={skill} className="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-full text-xs">
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Cover Letter */}
+              {viewingApp.coverLetter && (
+                <div>
+                  <h4 className="text-sm font-medium text-gray-700 mb-1">Thư giới thiệu</h4>
+                  <p className="text-sm text-gray-600 whitespace-pre-wrap bg-gray-50 rounded-lg p-3 border">
+                    {viewingApp.coverLetter}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+          <DialogFooter className="shrink-0">
+            <Button variant="outline" onClick={() => setShowProfileDialog(false)}>
               Đóng
             </Button>
           </DialogFooter>

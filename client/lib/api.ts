@@ -721,10 +721,15 @@ export interface JobApplication {
   freelancer: {
     id: number;
     fullName: string;
+    email?: string;
     avatarUrl?: string;
     phoneNumber?: string;
+    title?: string;
+    location?: string;
+    company?: string;
     bio?: string;
     skills?: string[];
+    isVerified?: boolean;
     trustScore?: number;
     untrustScore?: number;
   };
