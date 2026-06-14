@@ -72,7 +72,6 @@ public class JobService {
                 .skills(req.getSkills() != null ? req.getSkills() : new HashSet<>())
                 .complexity(req.getComplexity() != null ? req.getComplexity() : EJobComplexity.INTERMEDIATE)
                 .duration(req.getDuration() != null ? req.getDuration() : EJobDuration.SHORT_TERM)
-                .workType(req.getWorkType() != null ? req.getWorkType() : EWorkType.PART_TIME)
                 .budget(req.getBudget())
                 .escrowAmount(total)  // Lưu số tiền đã giữ (budget + fee)
                 .currency(req.getCurrency() != null ? req.getCurrency() : "VND")
@@ -228,7 +227,6 @@ public class JobService {
                 req.getSkills(),
                 req.getComplexity(),
                 req.getDuration(),
-                req.getWorkType(),
                 req.getBudget(),
                 req.getCurrency(),
                 req.getApplicationDeadline(),
@@ -380,7 +378,6 @@ public class JobService {
                 .avatarUrl(employer.getAvatarUrl())
                 .title(employer.getTitle())
                 .company(employer.getCompany())
-                .location(employer.getLocation())
                 .isVerified(employer.getIsVerified())
                 .trustScore(employer.getTrustScore())
                 .untrustScore(employer.getUntrustScore())
@@ -403,7 +400,6 @@ public class JobService {
                 .skills(job.getSkills())
                 .complexity(job.getComplexity())
                 .duration(job.getDuration())
-                .workType(job.getWorkType())
                 .budget(job.getBudget())
                 .escrowAmount(job.getEscrowAmount())
                 .currency(job.getCurrency())

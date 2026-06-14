@@ -10,10 +10,8 @@ import {
   Job,
   JobComplexity,
   JobDuration,
-  WorkType,
   JOB_COMPLEXITY_CONFIG,
   JOB_DURATION_CONFIG,
-  WORK_TYPE_CONFIG,
   JOB_STATUS_CONFIG,
 } from "@/types/job";
 import Icon from "@/components/ui/Icon";
@@ -41,7 +39,6 @@ export default function EditJobForm() {
     skills: [],
     complexity: "INTERMEDIATE",
     duration: "SHORT_TERM",
-    workType: "PART_TIME",
     budget: undefined,
     currency: "VND",
     applicationDeadline: "",
@@ -78,7 +75,6 @@ export default function EditJobForm() {
             skills: jobData.skills || [],
             complexity: jobData.complexity,
             duration: jobData.duration,
-            workType: jobData.workType,
             budget: jobData.budget,
             currency: jobData.currency,
             applicationDeadline: jobData.applicationDeadline 
@@ -352,22 +348,6 @@ export default function EditJobForm() {
                   {(Object.keys(JOB_DURATION_CONFIG) as JobDuration[]).map((key) => (
                     <option key={key} value={key}>
                       {JOB_DURATION_CONFIG[key].label} - {JOB_DURATION_CONFIG[key].description}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Loại công việc</label>
-                <select
-                  name="workType"
-                  value={formData.workType}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#04A0EF] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
-                >
-                  {(Object.keys(WORK_TYPE_CONFIG) as WorkType[]).map((key) => (
-                    <option key={key} value={key}>
-                      {WORK_TYPE_CONFIG[key].label} - {WORK_TYPE_CONFIG[key].description}
                     </option>
                   ))}
                 </select>

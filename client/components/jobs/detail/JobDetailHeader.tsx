@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import Link from "next/link";
-import { Job, JOB_STATUS_CONFIG, JOB_COMPLEXITY_CONFIG, JOB_DURATION_CONFIG, WORK_TYPE_CONFIG } from "@/types/job";
+import { Job, JOB_STATUS_CONFIG, JOB_COMPLEXITY_CONFIG, JOB_DURATION_CONFIG } from "@/types/job";
 import Icon from "@/components/ui/Icon";
 import { Button } from "@/components/ui/button";
 
@@ -64,9 +64,6 @@ export default function JobDetailHeader({ job, isOwner, formatCurrency, formatRe
         </span>
         <span className="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">
           {JOB_DURATION_CONFIG[job.duration]?.label}
-        </span>
-        <span className="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">
-          {WORK_TYPE_CONFIG[job.workType]?.label}
         </span>
       </div>
     </div>

@@ -433,12 +433,6 @@ export default function JobApplicationsTable() {
                     <p className="font-medium text-gray-800">{viewingApp.freelancer.phoneNumber}</p>
                   </div>
                 )}
-                {viewingApp.freelancer.location && (
-                  <div>
-                    <p className="text-gray-500 text-xs">Địa điểm</p>
-                    <p className="font-medium text-gray-800">{viewingApp.freelancer.location}</p>
-                  </div>
-                )}
                 {viewingApp.freelancer.company && (
                   <div>
                     <p className="text-gray-500 text-xs">Công ty</p>

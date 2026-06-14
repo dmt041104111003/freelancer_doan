@@ -92,16 +92,18 @@ export default function PostedJobsList() {
   // Handle highlight from notification
   useEffect(() => {
     const highlight = searchParams.get("highlight");
-    if (highlight && !isLoading) {
+    if (highlight && !isLoading && jobs.length > 0) {
       const jobId = parseInt(highlight, 10);
-      setHighlightedJobId(jobId);
-      setTimeout(() => {
-        highlightRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-      }, 100);
-      const timer = setTimeout(() => setHighlightedJobId(null), 6000);
-      return () => clearTimeout(timer);
+      if (jobs.some(job => job.id === jobId)) {
+        setHighlightedJobId(jobId);
+        setTimeout(() => {
+          highlightRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 100);
+        const timer = setTimeout(() => setHighlightedJobId(null), 6000);
+        return () => clearTimeout(timer);
+      }
     }
-  }, [searchParams, isLoading]);
+  }, [searchParams, isLoading, jobs]);
 
   const displayJobs = filterPostedJobs(jobs, filter);
 

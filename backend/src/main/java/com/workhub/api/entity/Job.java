@@ -57,11 +57,6 @@ public class Job {
     @Builder.Default
     private EJobDuration duration = EJobDuration.SHORT_TERM;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "work_type", nullable = false, length = 20)
-    @Builder.Default
-    private EWorkType workType = EWorkType.PART_TIME;
-
     
     @Column(precision = 15, scale = 2)
     private BigDecimal budget;
@@ -127,7 +122,7 @@ public class Job {
 
     public void update(String title, String description, String context,
                        String requirements, String deliverables, Set<String> skills,
-                       EJobComplexity complexity, EJobDuration duration, EWorkType workType,
+                       EJobComplexity complexity, EJobDuration duration,
                        BigDecimal budget, String currency,
                        LocalDateTime applicationDeadline,
                        Integer submissionDays, Integer reviewDays) {
@@ -148,9 +143,6 @@ public class Job {
         }
         if (duration != null) {
             this.duration = duration;
-        }
-        if (workType != null) {
-            this.workType = workType;
         }
         if (budget != null) {
             this.budget = budget;

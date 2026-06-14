@@ -455,7 +455,6 @@ public class DisputeService {
                 .skills(job.getSkills())
                 .complexity(job.getComplexity() != null ? job.getComplexity().name() : null)
                 .duration(job.getDuration() != null ? job.getDuration().name() : null)
-                .workType(job.getWorkType() != null ? job.getWorkType().name() : null)
                 .budget(job.getBudget())
                 .escrowAmount(job.getEscrowAmount())
                 .currency(job.getCurrency())

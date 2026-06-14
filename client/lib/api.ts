@@ -736,7 +736,6 @@ export interface JobApplication {
     avatarUrl?: string;
     phoneNumber?: string;
     title?: string;
-    location?: string;
     company?: string;
     bio?: string;
     skills?: string[];
@@ -768,7 +767,6 @@ export interface SavedJob {
     id: number;
     fullName: string;
     company?: string;
-    location?: string;
     avatarUrl?: string;
   };
   savedAt: string;
@@ -840,7 +838,6 @@ export interface AdminDisputeDetailResponse {
     skills: string[];
     complexity?: string;
     duration?: string;
-    workType?: string;
     budget?: number;
     escrowAmount?: number;
     currency: string;

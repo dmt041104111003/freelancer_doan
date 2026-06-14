@@ -4,7 +4,6 @@ import com.workhub.api.entity.EJobComplexity;
 import com.workhub.api.entity.EJobDuration;
 import com.workhub.api.entity.EJobStatus;
 import com.workhub.api.entity.EWorkStatus;
-import com.workhub.api.entity.EWorkType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,7 +28,6 @@ public class JobResponse {
     private Set<String> skills;
     private EJobComplexity complexity;
     private EJobDuration duration;
-    private EWorkType workType;
     private BigDecimal budget;
     private BigDecimal escrowAmount;  // Số tiền đã giữ (budget + fee)
     private String currency;
@@ -69,7 +67,6 @@ public class JobResponse {
         private String avatarUrl;
         private String title;
         private String company;
-        private String location;
         private Boolean isVerified;
         private Integer trustScore;      // Điểm uy tín (UT)
         private Integer untrustScore;    // Điểm không uy tín (KUT)

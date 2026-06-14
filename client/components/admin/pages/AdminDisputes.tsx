@@ -499,10 +499,6 @@ export default function AdminDisputes() {
                           <p className="font-medium">{detailData.job.duration || "-"}</p>
                         </div>
                         <div>
-                          <p className="text-gray-500 text-xs">Hình thức</p>
-                          <p className="font-medium">{detailData.job.workType || "-"}</p>
-                        </div>
-                        <div>
                           <p className="text-gray-500 text-xs">Trạng thái</p>
                           <p className="font-medium">{detailData.job.status || "-"}</p>
                         </div>

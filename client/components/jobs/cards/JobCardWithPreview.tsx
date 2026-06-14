@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useMemo } from "react";
 import Link from "next/link";
-import { Job, JOB_COMPLEXITY_CONFIG, WORK_TYPE_CONFIG, JOB_DURATION_CONFIG } from "@/types/job";
+import { Job, JOB_COMPLEXITY_CONFIG, JOB_DURATION_CONFIG } from "@/types/job";
 import Icon from "@/components/ui/Icon";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -39,7 +39,6 @@ export default function JobCardWithPreview({ job, onFavorite, isFavorite = false
     return `Còn ${diffDays} ngày`;
   };
 
-  const workTypeConfig = WORK_TYPE_CONFIG[job.workType];
   const durationConfig = JOB_DURATION_CONFIG[job.duration];
   const complexityConfig = JOB_COMPLEXITY_CONFIG[job.complexity];
 
@@ -121,10 +120,27 @@ export default function JobCardWithPreview({ job, onFavorite, isFavorite = false
               <span className="inline-flex items-center px-2.5 py-1 bg-[#e8f5e9] text-[#00875a] text-xs font-medium rounded-md">
                 {formatBudget(job.budget)}
               </span>
-              <span className="inline-flex items-center px-2.5 py-1 bg-gray-100 text-gray-600 text-xs rounded-md">
-                {job.employer.location || "Remote"}
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-gray-100 text-gray-600 text-xs rounded-md">
+                <Icon name="language" size={14} />
+                Remote
               </span>
             </div>
+
+            {/* Skills */}
+            {job.skills && job.skills.length > 0 && (
+              <div className="flex items-center flex-wrap gap-1.5 mt-2">
+                {job.skills.slice(0, 4).map((skill, idx) => (
+                  <span key={idx} className="px-2 py-0.5 bg-[#eef2ff] text-[#4f46e5] text-[11px] font-medium rounded">
+                    {skill}
+                  </span>
+                ))}
+                {job.skills.length > 4 && (
+                  <span className="text-[11px] text-gray-400 font-medium">
+                    +{job.skills.length - 4}
+                  </span>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Favorite Button */}
@@ -173,8 +189,8 @@ export default function JobCardWithPreview({ job, onFavorite, isFavorite = false
             {/* Tags */}
             <div className="flex flex-wrap gap-2 mt-3">
               <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
-                <Icon name="location_on" size={14} />
-                {job.employer.location || "Remote"}
+                <Icon name="language" size={14} />
+                Remote
               </span>
               <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
                 <Icon name="work" size={14} />
@@ -187,6 +203,22 @@ export default function JobCardWithPreview({ job, onFavorite, isFavorite = false
                 </span>
               )}
             </div>
+
+            {/* Skills */}
+            {job.skills && job.skills.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mt-3">
+                {job.skills.slice(0, 8).map((skill, idx) => (
+                  <span key={idx} className="px-2 py-0.5 bg-[#eef2ff] text-[#4f46e5] text-xs font-medium rounded">
+                    {skill}
+                  </span>
+                ))}
+                {job.skills.length > 8 && (
+                  <span className="text-xs text-gray-400 font-medium">
+                    +{job.skills.length - 8}
+                  </span>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Description */}

@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import Link from "next/link";
-import { Job, JOB_COMPLEXITY_CONFIG, WORK_TYPE_CONFIG } from "@/types/job";
+import { Job, JOB_COMPLEXITY_CONFIG } from "@/types/job";
 import Icon from "@/components/ui/Icon";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useMemo } from "react";
@@ -25,7 +25,6 @@ export default function JobCard({ job, onFavorite, isFavorite = false }: JobCard
   };
 
   const complexityConfig = JOB_COMPLEXITY_CONFIG[job.complexity];
-  const workTypeConfig = WORK_TYPE_CONFIG[job.workType];
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-lg hover:border-[#04A0EF]/30 transition-all duration-200 group">
@@ -70,21 +69,30 @@ export default function JobCard({ job, onFavorite, isFavorite = false }: JobCard
 
           {/* Tags */}
           <div className="flex items-center flex-wrap gap-2">
-            {/* Budget/Salary */}
             <span className="inline-flex items-center px-2.5 py-1 bg-[#e8f5e9] text-[#00875a] text-xs font-medium rounded-md">
               {formatBudget(job.budget)}
             </span>
-
-            {/* Location */}
-            <span className="inline-flex items-center px-2.5 py-1 bg-gray-100 text-gray-600 text-xs rounded-md">
-              {job.employer.location || "Remote"}
-            </span>
-
-            {/* Work Type - show only on larger screens */}
-            <span className="hidden sm:inline-flex items-center px-2.5 py-1 bg-gray-100 text-gray-600 text-xs rounded-md">
-              {workTypeConfig.label}
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-gray-100 text-gray-600 text-xs rounded-md">
+              <Icon name="language" size={14} />
+              Remote
             </span>
           </div>
+
+          {/* Skills */}
+          {job.skills && job.skills.length > 0 && (
+            <div className="flex items-center flex-wrap gap-1.5 mt-2">
+              {job.skills.slice(0, 4).map((skill, idx) => (
+                <span key={idx} className="px-2 py-0.5 bg-[#eef2ff] text-[#4f46e5] text-[11px] font-medium rounded">
+                  {skill}
+                </span>
+              ))}
+              {job.skills.length > 4 && (
+                <span className="text-[11px] text-gray-400 font-medium">
+                  +{job.skills.length - 4}
+                </span>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Favorite Button */}

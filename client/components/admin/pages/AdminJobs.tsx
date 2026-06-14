@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { api } from "@/lib/api";
 import { formatCurrency, formatDateTime } from "@/lib/format";
-import { Job, JobStatus, JOB_STATUS_CONFIG, Page, JOB_COMPLEXITY_CONFIG, JOB_DURATION_CONFIG, WORK_TYPE_CONFIG } from "@/types/job";
+import { Job, JobStatus, JOB_STATUS_CONFIG, Page, JOB_COMPLEXITY_CONFIG, JOB_DURATION_CONFIG } from "@/types/job";
 import { Pagination } from "@/components/ui/pagination";
 import AdminLoading from "../shared/AdminLoading";
 import AdminPageHeader from "../shared/AdminPageHeader";
@@ -504,10 +504,6 @@ export default function AdminJobs() {
                 <div className="bg-gray-50 rounded-lg p-3">
                   <p className="text-xs text-gray-500 mb-1">Thời gian</p>
                   <p className="font-medium text-gray-900 text-sm">{JOB_DURATION_CONFIG[detailJob.duration]?.label || detailJob.duration}</p>
-                </div>
-                <div className="bg-gray-50 rounded-lg p-3">
-                  <p className="text-xs text-gray-500 mb-1">Loại hình</p>
-                  <p className="font-medium text-gray-900 text-sm">{WORK_TYPE_CONFIG[detailJob.workType]?.label || detailJob.workType}</p>
                 </div>
               </div>
 

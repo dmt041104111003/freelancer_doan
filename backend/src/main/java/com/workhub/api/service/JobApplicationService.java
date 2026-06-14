@@ -291,7 +291,6 @@ public class JobApplicationService {
                 .avatarUrl(freelancer.getAvatarUrl())
                 .phoneNumber(freelancer.getPhoneNumber())
                 .title(freelancer.getTitle())
-                .location(freelancer.getLocation())
                 .company(freelancer.getCompany())
                 .bio(freelancer.getBio())
                 .skills(freelancer.getSkills())

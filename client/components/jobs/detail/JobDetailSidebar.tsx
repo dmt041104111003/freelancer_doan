@@ -74,12 +74,6 @@ export default function JobDetailSidebar({
             {job.employer.company}
           </div>
         )}
-        {job.employer.location && (
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <Icon name="location_on" size={16} className="text-gray-400" />
-            {job.employer.location}
-          </div>
-        )}
       </div>
 
       {/* Timeline Card */}

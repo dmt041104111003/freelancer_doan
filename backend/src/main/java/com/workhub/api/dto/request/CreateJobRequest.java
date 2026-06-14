@@ -2,7 +2,6 @@ package com.workhub.api.dto.request;
 
 import com.workhub.api.entity.EJobComplexity;
 import com.workhub.api.entity.EJobDuration;
-import com.workhub.api.entity.EWorkType;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,8 +35,6 @@ public class CreateJobRequest {
     private EJobComplexity complexity;
 
     private EJobDuration duration;
-
-    private EWorkType workType;
 
     @DecimalMin(value = "0", message = "Ngân sách phải >= 0")
     private BigDecimal budget;

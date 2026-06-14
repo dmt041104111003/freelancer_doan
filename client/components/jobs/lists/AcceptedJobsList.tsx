@@ -105,17 +105,18 @@ export default function AcceptedJobsList() {
   // Handle highlight from notification
   useEffect(() => {
     const highlight = searchParams.get("highlight");
-    if (highlight && !isLoading) {
+    if (highlight && !isLoading && jobs.length > 0) {
       const jobId = parseInt(highlight, 10);
-      setHighlightedJobId(jobId);
-      setTimeout(() => {
-        highlightRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-      }, 100);
-      // Clear highlight after 3 seconds
-      const timer = setTimeout(() => setHighlightedJobId(null), 6000);
-      return () => clearTimeout(timer);
+      if (jobs.some(job => job.id === jobId)) {
+        setHighlightedJobId(jobId);
+        setTimeout(() => {
+          highlightRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 100);
+        const timer = setTimeout(() => setHighlightedJobId(null), 6000);
+        return () => clearTimeout(timer);
+      }
     }
-  }, [searchParams, isLoading]);
+  }, [searchParams, isLoading, jobs]);
 
   const displayJobs = filterAcceptedJobs(jobs, filter);
 
@@ -305,12 +306,10 @@ export default function AcceptedJobsList() {
                             <Icon name="payments" size={16} />
                             {savedJob.jobBudget ? `${savedJob.jobBudget.toLocaleString("vi-VN")} VND` : "Thương lượng"}
                           </span>
-                          {savedJob.employer.location && (
-                            <span className="flex items-center gap-1">
-                              <Icon name="location_on" size={16} />
-                              {savedJob.employer.location}
-                            </span>
-                          )}
+                          <span className="flex items-center gap-1">
+                            <Icon name="language" size={16} />
+                            Remote
+                          </span>
                           <span className="flex items-center gap-1">
                             <Icon name="schedule" size={16} />
                             Lưu: {new Date(savedJob.savedAt).toLocaleDateString("vi-VN")}

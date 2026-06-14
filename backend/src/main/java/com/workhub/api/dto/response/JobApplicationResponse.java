@@ -38,7 +38,6 @@ public class JobApplicationResponse {
         private String avatarUrl;
         private String phoneNumber;
         private String title;
-        private String location;
         private String company;
         private String bio;
         private Set<String> skills;

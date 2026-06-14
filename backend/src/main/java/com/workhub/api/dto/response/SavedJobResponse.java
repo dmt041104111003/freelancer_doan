@@ -32,7 +32,6 @@ public class SavedJobResponse {
         private Long id;
         private String fullName;
         private String company;
-        private String location;
         private String avatarUrl;
     }
 }

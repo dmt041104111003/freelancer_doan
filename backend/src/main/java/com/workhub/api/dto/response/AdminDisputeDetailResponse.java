@@ -42,7 +42,6 @@ public class AdminDisputeDetailResponse {
         private Set<String> skills;
         private String complexity;
         private String duration;
-        private String workType;
         private BigDecimal budget;
         private BigDecimal escrowAmount;
         private String currency;

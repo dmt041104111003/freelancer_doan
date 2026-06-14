@@ -103,7 +103,6 @@ public class SavedJobService {
                         .id(employer.getId())
                         .fullName(employer.getFullName())
                         .company(employer.getCompany())
-                        .location(employer.getLocation())
                         .avatarUrl(employer.getAvatarUrl())
                         .build())
                 .savedAt(savedJob.getCreatedAt())

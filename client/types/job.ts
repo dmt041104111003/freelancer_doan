@@ -1,7 +1,6 @@
 export type JobStatus = "DRAFT" | "PENDING_APPROVAL" | "OPEN" | "REJECTED" | "IN_PROGRESS" | "DISPUTED" | "COMPLETED" | "CLOSED" | "CANCELLED";
 export type JobComplexity = "ENTRY" | "INTERMEDIATE" | "EXPERT";
 export type JobDuration = "SHORT_TERM" | "MEDIUM_TERM" | "LONG_TERM";
-export type WorkType = "PART_TIME" | "FULL_TIME";
 export type WorkStatus = "NOT_STARTED" | "IN_PROGRESS" | "SUBMITTED" | "REVISION_REQUESTED" | "APPROVED";
 
 export interface JobEmployer {
@@ -10,7 +9,6 @@ export interface JobEmployer {
   avatarUrl?: string;
   title?: string;
   company?: string;
-  location?: string;
   isVerified?: boolean;
   trustScore?: number;
   untrustScore?: number;
@@ -26,7 +24,6 @@ export interface Job {
   skills: string[];
   complexity: JobComplexity;
   duration: JobDuration;
-  workType: WorkType;
   budget?: number;
   escrowAmount?: number;
   currency: string;
@@ -60,7 +57,6 @@ export interface CreateJobRequest {
   skills?: string[];
   complexity?: JobComplexity;
   duration?: JobDuration;
-  workType?: WorkType;
   budget?: number;
   currency?: string;
   applicationDeadline?: string;
@@ -77,7 +73,6 @@ export interface UpdateJobRequest {
   skills?: string[];
   complexity?: JobComplexity;
   duration?: JobDuration;
-  workType?: WorkType;
   budget?: number;
   currency?: string;
   applicationDeadline?: string;
@@ -118,11 +113,6 @@ export const JOB_DURATION_CONFIG = {
   SHORT_TERM: { label: "Ngắn hạn", description: "Dưới 1 tháng" },
   MEDIUM_TERM: { label: "Trung hạn", description: "1-6 tháng" },
   LONG_TERM: { label: "Dài hạn", description: "Trên 6 tháng" },
-} as const;
-
-export const WORK_TYPE_CONFIG = {
-  PART_TIME: { label: "Bán thời gian", description: "Dưới 30 giờ/tuần" },
-  FULL_TIME: { label: "Toàn thời gian", description: "Trên 30 giờ/tuần" },
 } as const;
 
 export type JobHistoryAction =
