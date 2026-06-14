@@ -85,49 +85,35 @@ export default function NotificationDropdown() {
     // No reference ID -> fallback
     if (!refId) return "#";
 
+    const isEmployer = user?.roles?.includes("ROLE_EMPLOYER");
+
     switch (type) {
       // Employer: new application on their job
       case "NEW_APPLICATION":
         return `/jobs/${refId}/applications`;
 
-      // Freelancer: their application was accepted/rejected
-      case "APPLICATION_ACCEPTED":
-        return `/my-accepted-jobs?highlight=${refId}`;
-      case "WORK_REVISION_REQUESTED":
-      case "WORK_APPROVED":
-      case "PAYMENT_RELEASED":
-        return `/my-accepted-jobs?highlight=${refId}`;
-
+      // Freelancer: view job detail when rejected
       case "APPLICATION_REJECTED":
         return `/jobs/${refId}`;
 
-      // Employer: job status changes
-      case "JOB_APPROVED":
-      case "JOB_REJECTED":
-        return `/my-posted-jobs?highlight=${refId}`;
+      // Job-related notifications -> route to the appropriate job list based on role
+      case "APPLICATION_ACCEPTED":
+      case "WORK_REVISION_REQUESTED":
+      case "WORK_APPROVED":
+      case "PAYMENT_RELEASED":
       case "WORK_SUBMITTED":
       case "WORK_SUBMISSION_TIMEOUT":
       case "WORK_REVIEW_TIMEOUT":
-        return `/my-posted-jobs?highlight=${refId}`;
-
-      // Job cancelled/reopened -> employer's posted jobs with highlight
+      case "JOB_APPROVED":
+      case "JOB_REJECTED":
       case "JOB_CANCELLED":
       case "JOB_REOPENED":
-        return `/my-posted-jobs?highlight=${refId}`;
-
-      // Job completed -> my job list with highlight
       case "JOB_COMPLETED":
-        if (user?.roles?.includes("ROLE_EMPLOYER")) {
-          return `/my-posted-jobs?highlight=${refId}`;
-        }
-        return `/my-accepted-jobs?highlight=${refId}`;
-
-      // Withdrawal notifications -> my job list with highlight
       case "WITHDRAWAL_REQUESTED":
       case "WITHDRAWAL_APPROVED":
       case "WITHDRAWAL_REJECTED":
       case "WITHDRAWAL_CANCELLED":
-        if (user?.roles?.includes("ROLE_EMPLOYER")) {
+        if (isEmployer) {
           return `/my-posted-jobs?highlight=${refId}`;
         }
         return `/my-accepted-jobs?highlight=${refId}`;

@@ -209,7 +209,7 @@ public class WithdrawalRequestService {
                 walletTransactionService.logBalance(
                         employer,
                         EWalletTransactionType.PENALTY_FEE,
-                        penaltyAmount,
+                        penaltyAmount.negate(),
                         "Phí hủy job " + EMPLOYER_PENALTY_PERCENT + "%: " + job.getTitle(),
                         job.getId(),
                         "JOB"
