@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { api, Dispute, DISPUTE_STATUS_CONFIG } from "@/lib/api";
+import { api, Dispute, DISPUTE_STATUS_CONFIG, AdminDisputeDetailResponse, PartyDetail, JobHistoryInfo, FileUploadInfo } from "@/lib/api";
 import { Page } from "@/types/job";
 import { formatDateTime, formatCurrency } from "@/lib/format";
 import { Pagination } from "@/components/ui/pagination";
@@ -21,6 +21,8 @@ import {
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/Icon";
 
+type TabType = "detail" | "employer" | "freelancer" | "job" | "files";
+
 export default function AdminDisputes() {
   const handleDownloadEvidence = (url: string, filename: string) => {
     downloadFileFromUrl(url, filename || "evidence.pdf");
@@ -35,6 +37,9 @@ export default function AdminDisputes() {
   // Dialog states
   const [selectedDispute, setSelectedDispute] = useState<Dispute | null>(null);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
+  const [detailData, setDetailData] = useState<AdminDisputeDetailResponse | null>(null);
+  const [detailTab, setDetailTab] = useState<TabType>("detail");
+  const [isDetailLoading, setIsDetailLoading] = useState(false);
   const [requestResponseDialogOpen, setRequestResponseDialogOpen] = useState(false);
   const [resolveDialogOpen, setResolveDialogOpen] = useState(false);
   const [daysToRespond, setDaysToRespond] = useState(3);
@@ -50,9 +55,7 @@ export default function AdminDisputes() {
 
   // Helper: can admin make decision?
   const canMakeDecision = (dispute: Dispute): boolean => {
-    // Already in admin decision phase
     if (dispute.status === "PENDING_ADMIN_DECISION") return true;
-    // Waiting for freelancer but deadline has passed
     if (dispute.status === "PENDING_FREELANCER_RESPONSE" && isDeadlinePassed(dispute.freelancerDeadline)) return true;
     return false;
   };
@@ -90,9 +93,24 @@ export default function AdminDisputes() {
     fetchPendingCount();
   }, [page]);
 
-  const handleViewDetail = (dispute: Dispute) => {
+  const handleViewDetail = async (dispute: Dispute) => {
     setSelectedDispute(dispute);
     setDetailDialogOpen(true);
+    setDetailTab("detail");
+    setIsDetailLoading(true);
+    setDetailData(null);
+    try {
+      const response = await api.adminGetDisputeDetail(dispute.id);
+      if (response.status === "SUCCESS") {
+        setDetailData(response.data);
+      } else {
+        toast.error(response.message || "Không thể tải chi tiết tranh chấp");
+      }
+    } catch (error) {
+      toast.error("Có lỗi khi tải chi tiết tranh chấp");
+    } finally {
+      setIsDetailLoading(false);
+    }
   };
 
   const handleRequestResponse = async () => {
@@ -176,7 +194,7 @@ export default function AdminDisputes() {
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-gray-900 line-clamp-2">{dispute.jobTitle}</p>
-                    <p className="text-xs text-gray-500 mt-1">#{dispute.id} • Job #{dispute.jobId}</p>
+                    <p className="text-xs text-gray-500 mt-1">#{dispute.id} - Job #{dispute.jobId}</p>
                   </div>
                   <span className="text-xs px-2 py-1 rounded-full whitespace-nowrap bg-gray-100 text-gray-700">
                     {dispute.statusLabel}
@@ -259,9 +277,7 @@ export default function AdminDisputes() {
                         <p className="font-medium text-gray-900">{dispute.freelancer.fullName}</p>
                       </td>
                       <td className="px-3 py-2 text-center">
-                        <span className={`text-xs px-2 py-1 rounded-full ${
-                          "bg-gray-100 text-gray-700"
-                        }`}>
+                        <span className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-700">
                           {dispute.statusLabel}
                         </span>
                       </td>
@@ -302,7 +318,6 @@ export default function AdminDisputes() {
             </div>
           </div>
 
-          {/* Pagination */}
           {totalPages > 1 && (
             <Pagination
               currentPage={page}
@@ -314,97 +329,249 @@ export default function AdminDisputes() {
         </>
       )}
 
-      {/* Detail Dialog */}
+      {/* ===== DETAIL DIALOG ===== */}
       <Dialog open={detailDialogOpen} onOpenChange={setDetailDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
-          <DialogHeader className="shrink-0">
-            <DialogTitle>Chi tiết khiếu nại #{selectedDispute?.id}</DialogTitle>
-            <DialogDescription className="min-w-0">
-              <span className="block truncate">Công việc: {selectedDispute?.jobTitle}</span>
-            </DialogDescription>
-          </DialogHeader>
+        <DialogContent className="max-w-5xl max-h-[95vh] flex flex-col overflow-hidden p-0">
+          {isDetailLoading ? (
+            <div className="flex items-center justify-center p-12">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#04A0EF]" />
+              <span className="ml-3 text-gray-500">Đang tải chi tiết...</span>
+            </div>
+          ) : detailData ? (
+            <>
+              {/* Header */}
+              <div className="shrink-0 p-6 pb-3 border-b">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <DialogTitle className="text-lg">Tranh chấp #{detailData.id}</DialogTitle>
+                    <p className="text-sm text-gray-500 mt-0.5">Công việc: {detailData.job.title}</p>
+                  </div>
+                  <span className={`text-xs px-3 py-1 rounded-full whitespace-nowrap ${
+                    detailData.status === "PENDING_ADMIN_DECISION"
+                      ? "bg-blue-100 text-blue-700"
+                      : detailData.status === "PENDING_FREELANCER_RESPONSE"
+                        ? "bg-orange-100 text-orange-700"
+                        : detailData.status === "EMPLOYER_WON" || detailData.status === "FREELANCER_WON"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-gray-100 text-gray-700"
+                  }`}>
+                    {detailData.statusLabel}
+                  </span>
+                </div>
 
-          {selectedDispute && (
-            <div className="space-y-4 min-h-0 flex-1 overflow-y-auto">
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-500">Trạng thái:</span>
-                <span className={`px-2 py-1 rounded-full text-xs ${
-                  DISPUTE_STATUS_CONFIG[selectedDispute.status]?.color || "text-gray-600"
-                }`}>
-                  {selectedDispute.statusLabel}
-                </span>
+                {/* Tabs */}
+                <div className="flex gap-1 mt-4 border-b">
+                  {[
+                    { key: "detail" as TabType, label: "Chi tiết khiếu nại" },
+                    { key: "employer" as TabType, label: "Bên thuê" },
+                    { key: "freelancer" as TabType, label: "Người làm" },
+                    { key: "job" as TabType, label: "Công việc" },
+                    { key: "files" as TabType, label: "Tài liệu" },
+                  ].map((tab) => (
+                    <button
+                      key={tab.key}
+                      onClick={() => setDetailTab(tab.key)}
+                      className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors -mb-[1px] ${
+                        detailTab === tab.key
+                          ? "border-[#04A0EF] text-[#04A0EF]"
+                          : "border-transparent text-gray-500 hover:text-gray-700"
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
               </div>
 
-              <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 min-w-0">
-                <h4 className="font-medium text-gray-800 mb-2">
-                  Khiếu nại từ bên thuê: {selectedDispute.employer.fullName}
-                </h4>
-                <div className="max-h-[40vh] overflow-y-auto rounded border border-gray-100 bg-white p-3">
-                  <p className="text-sm text-gray-600 whitespace-pre-wrap break-words">{selectedDispute.employerDescription}</p>
-                </div>
-                {selectedDispute.employerEvidenceUrl && (
-                  <button
-                    onClick={() => handleDownloadEvidence(selectedDispute.employerEvidenceUrl!, "employer-evidence.pdf")}
-                    className="flex items-center gap-2 mt-3 px-3 py-2 border border-gray-300 rounded-md bg-[#04A0EF]/5 hover:bg-[#04A0EF]/10 transition-colors"
-                  >
-                    <Icon name="picture_as_pdf" size={20} className="text-red-500 shrink-0" />
-                    <span className="flex-1 text-sm text-gray-700">Bằng chứng đính kèm</span>
-                    <Icon name="download" size={18} className="text-gray-500 shrink-0" />
-                  </button>
+              {/* Content */}
+              <div className="flex-1 overflow-y-auto p-6">
+                {/* Tab: Detail */}
+                {detailTab === "detail" && (
+                  <div className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                        <h4 className="font-semibold text-red-800 mb-2 flex items-center gap-1">
+                          <Icon name="warning" size={18} /> Khiếu nại từ: {detailData.employer.fullName}
+                        </h4>
+                        <p className="text-sm text-red-700 whitespace-pre-wrap break-words">
+                          {detailData.employerDescription}
+                        </p>
+                        {detailData.employerEvidenceFile && (
+                          <button
+                            onClick={() => handleDownloadEvidence(detailData.employerEvidenceFile!.secureUrl, "employer-evidence")}
+                            className="flex items-center gap-2 mt-3 px-3 py-2 border border-red-300 rounded-md bg-white hover:bg-red-50 transition-colors w-full"
+                          >
+                            <Icon name="picture_as_pdf" size={20} className="text-red-500 shrink-0" />
+                            <span className="flex-1 text-sm text-gray-700 text-left truncate">
+                              {detailData.employerEvidenceFile.originalFilename || "Bằng chứng đính kèm"}
+                            </span>
+                            <Icon name="download" size={18} className="text-gray-500 shrink-0" />
+                          </button>
+                        )}
+                      </div>
+
+                      {detailData.freelancerDescription ? (
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                          <h4 className="font-semibold text-blue-800 mb-2 flex items-center gap-1">
+                            <Icon name="reply" size={18} /> Phản hồi từ: {detailData.freelancer.fullName}
+                          </h4>
+                          <p className="text-sm text-blue-700 whitespace-pre-wrap break-words">
+                            {detailData.freelancerDescription}
+                          </p>
+                          {detailData.freelancerEvidenceFile && (
+                            <button
+                              onClick={() => handleDownloadEvidence(detailData.freelancerEvidenceFile!.secureUrl, "freelancer-evidence")}
+                              className="flex items-center gap-2 mt-3 px-3 py-2 border border-blue-300 rounded-md bg-white hover:bg-blue-50 transition-colors w-full"
+                            >
+                              <Icon name="picture_as_pdf" size={20} className="text-red-500 shrink-0" />
+                              <span className="flex-1 text-sm text-gray-700 text-left truncate">
+                                {detailData.freelancerEvidenceFile.originalFilename || "Bằng chứng đính kèm"}
+                              </span>
+                              <Icon name="download" size={18} className="text-gray-500 shrink-0" />
+                            </button>
+                          )}
+                        </div>
+                      ) : detailData.freelancerDeadline ? (
+                        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                          <h4 className="font-medium text-gray-700">Chờ người làm phản hồi</h4>
+                          <p className="text-sm text-gray-500 mt-1">Hạn: {formatDateTime(detailData.freelancerDeadline)}</p>
+                        </div>
+                      ) : (
+                        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                          <p className="text-sm text-gray-500">Chưa yêu cầu người làm phản hồi</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {detailData.adminNote && (
+                      <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                        <h4 className="font-medium text-purple-800 mb-1">Quyết định</h4>
+                        <p className="text-sm text-purple-700">{detailData.adminNote}</p>
+                        {detailData.resolvedBy && (
+                          <p className="text-xs text-gray-500 mt-2">
+                            Người xử lý: {detailData.resolvedBy.fullName} - {formatDateTime(detailData.resolvedAt!)}
+                          </p>
+                        )}
+                      </div>
+                    )}
+
+                    <div className="text-xs text-gray-400 flex gap-4">
+                      <span>Tạo: {formatDateTime(detailData.createdAt)}</span>
+                      <span>Cập nhật: {formatDateTime(detailData.updatedAt)}</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Tab: Employer */}
+                {detailTab === "employer" && (
+                  <PartyTab party={detailData.employer} label="Bên thuê" />
+                )}
+
+                {/* Tab: Freelancer */}
+                {detailTab === "freelancer" && (
+                  <PartyTab party={detailData.freelancer} label="Người làm" showApplication />
+                )}
+
+                {/* Tab: Job */}
+                {detailTab === "job" && (
+                  <div className="space-y-4">
+                    <div className="bg-gray-50 rounded-lg p-4 border">
+                      <h3 className="font-semibold text-gray-800 mb-3">{detailData.job.title}</h3>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                        <div>
+                          <p className="text-gray-500 text-xs">Ngân sách</p>
+                          <p className="font-medium">{formatCurrency(detailData.job.budget)}</p>
+                        </div>
+                        <div>
+                          <p className="text-gray-500 text-xs">Ký quỹ</p>
+                          <p className="font-medium">{formatCurrency(detailData.job.escrowAmount)}</p>
+                        </div>
+                        <div>
+                          <p className="text-gray-500 text-xs">Loại tiền</p>
+                          <p className="font-medium">{detailData.job.currency}</p>
+                        </div>
+                        <div>
+                          <p className="text-gray-500 text-xs">Độ phức tạp</p>
+                          <p className="font-medium">{detailData.job.complexity || "-"}</p>
+                        </div>
+                        <div>
+                          <p className="text-gray-500 text-xs">Thời lượng</p>
+                          <p className="font-medium">{detailData.job.duration || "-"}</p>
+                        </div>
+                        <div>
+                          <p className="text-gray-500 text-xs">Hình thức</p>
+                          <p className="font-medium">{detailData.job.workType || "-"}</p>
+                        </div>
+                        <div>
+                          <p className="text-gray-500 text-xs">Trạng thái</p>
+                          <p className="font-medium">{detailData.job.status || "-"}</p>
+                        </div>
+                        <div>
+                          <p className="text-gray-500 text-xs">Ngày tạo</p>
+                          <p className="font-medium">{formatDateTime(detailData.job.createdAt)}</p>
+                        </div>
+                      </div>
+                      {detailData.job.skills?.length > 0 && (
+                        <div className="mt-3">
+                          <p className="text-gray-500 text-xs mb-1">Kỹ năng</p>
+                          <div className="flex flex-wrap gap-1">
+                            {detailData.job.skills.map((s, i) => (
+                              <span key={i} className="text-xs px-2 py-0.5 bg-gray-200 rounded-full">{s}</span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    {(detailData.job.description || detailData.job.context || detailData.job.requirements || detailData.job.deliverables) && (
+                      <div className="space-y-3">
+                        {detailData.job.description && (
+                          <div>
+                            <h4 className="text-sm font-medium text-gray-700 mb-1">Mô tả</h4>
+                            <p className="text-sm text-gray-600 whitespace-pre-wrap bg-gray-50 rounded p-3 border">{detailData.job.description}</p>
+                          </div>
+                        )}
+                        {detailData.job.context && (
+                          <div>
+                            <h4 className="text-sm font-medium text-gray-700 mb-1">Bối cảnh</h4>
+                            <p className="text-sm text-gray-600 whitespace-pre-wrap bg-gray-50 rounded p-3 border">{detailData.job.context}</p>
+                          </div>
+                        )}
+                        {detailData.job.requirements && (
+                          <div>
+                            <h4 className="text-sm font-medium text-gray-700 mb-1">Yêu cầu</h4>
+                            <p className="text-sm text-gray-600 whitespace-pre-wrap bg-gray-50 rounded p-3 border">{detailData.job.requirements}</p>
+                          </div>
+                        )}
+                        {detailData.job.deliverables && (
+                          <div>
+                            <h4 className="text-sm font-medium text-gray-700 mb-1">Sản phẩm bàn giao</h4>
+                            <p className="text-sm text-gray-600 whitespace-pre-wrap bg-gray-50 rounded p-3 border">{detailData.job.deliverables}</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Tab: Files */}
+                {detailTab === "files" && (
+                  <div className="space-y-6">
+                    <PartyFilesSection
+                      party={detailData.employer}
+                      label={detailData.employer.fullName}
+                      roleLabel="Bên thuê"
+                    />
+                    <PartyFilesSection
+                      party={detailData.freelancer}
+                      label={detailData.freelancer.fullName}
+                      roleLabel="Người làm"
+                    />
+                  </div>
                 )}
               </div>
-
-              {selectedDispute.freelancerDescription ? (
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 min-w-0">
-                  <h4 className="font-medium text-gray-800 mb-2">
-                    Phản hồi từ người làm: {selectedDispute.freelancer.fullName}
-                  </h4>
-                  <div className="max-h-[40vh] overflow-y-auto rounded border border-gray-100 bg-white p-3">
-                    <p className="text-sm text-gray-600 whitespace-pre-wrap break-words">{selectedDispute.freelancerDescription}</p>
-                  </div>
-                  {selectedDispute.freelancerEvidenceUrl && (
-                    <button
-                      onClick={() => handleDownloadEvidence(selectedDispute.freelancerEvidenceUrl!, "freelancer-evidence.pdf")}
-                      className="flex items-center gap-2 mt-3 px-3 py-2 border border-gray-300 rounded-md bg-[#04A0EF]/5 hover:bg-[#04A0EF]/10 transition-colors"
-                    >
-                      <Icon name="picture_as_pdf" size={20} className="text-red-500 shrink-0" />
-                      <span className="flex-1 text-sm text-gray-700">Bằng chứng đính kèm</span>
-                      <Icon name="download" size={18} className="text-gray-500 shrink-0" />
-                    </button>
-                  )}
-                </div>
-              ) : selectedDispute.freelancerDeadline ? (
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                  <h4 className="font-medium text-gray-800 mb-1">
-                    Chờ người làm phản hồi
-                  </h4>
-                  <p className="text-sm text-gray-600">
-                    Hạn: {formatDateTime(selectedDispute.freelancerDeadline)}
-                  </p>
-                </div>
-              ) : (
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                  <p className="text-sm text-gray-600">
-                    Chưa yêu cầu người làm phản hồi
-                  </p>
-                </div>
-              )}
-
-              {/* Admin decision */}
-              {selectedDispute.adminNote && (
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                  <h4 className="font-medium text-gray-800 mb-2">
-                    Quyết định của quản trị viên
-                  </h4>
-                  <p className="text-sm text-gray-600">{selectedDispute.adminNote}</p>
-                  {selectedDispute.resolvedBy && (
-                    <p className="text-xs text-gray-500 mt-2">
-                      Người xử lý: {selectedDispute.resolvedBy.fullName} - {formatDateTime(selectedDispute.resolvedAt!)}
-                    </p>
-                  )}
-                </div>
-              )}
-            </div>
+            </>
+          ) : (
+            <div className="p-12 text-center text-gray-500">Không có dữ liệu</div>
           )}
         </DialogContent>
       </Dialog>
@@ -468,8 +635,8 @@ export default function AdminDisputes() {
                 <button
                   onClick={() => setEmployerWins(true)}
                   className={`p-3 border-2 rounded-lg text-center transition-colors ${
-                    employerWins === true 
-                      ? "border-green-500 bg-green-50 text-green-700" 
+                    employerWins === true
+                      ? "border-green-500 bg-green-50 text-green-700"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
                 >
@@ -479,8 +646,8 @@ export default function AdminDisputes() {
                 <button
                   onClick={() => setEmployerWins(false)}
                   className={`p-3 border-2 rounded-lg text-center transition-colors ${
-                    employerWins === false 
-                      ? "border-green-500 bg-green-50 text-green-700" 
+                    employerWins === false
+                      ? "border-green-500 bg-green-50 text-green-700"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
                 >
@@ -521,8 +688,8 @@ export default function AdminDisputes() {
             <Button variant="outline" onClick={() => setResolveDialogOpen(false)}>
               Hủy
             </Button>
-            <Button 
-              onClick={handleResolve} 
+            <Button
+              onClick={handleResolve}
               disabled={isProcessing || employerWins === null || !resolveNote.trim()}
             >
               {isProcessing ? "Đang xử lý..." : "Xác nhận quyết định"}
@@ -530,6 +697,183 @@ export default function AdminDisputes() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+    </div>
+  );
+}
+
+/* ===== Party Tab Component ===== */
+function PartyTab({ party, label, showApplication }: { party: PartyDetail; label: string; showApplication?: boolean }) {
+  return (
+    <div className="space-y-6">
+      {/* Profile */}
+      <div className="bg-gray-50 rounded-lg border p-4">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="w-12 h-12 rounded-full bg-gray-300 overflow-hidden shrink-0">
+            {party.avatarUrl ? (
+              <img src={party.avatarUrl} alt="" className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-gray-500">
+                <Icon name="person" size={24} />
+              </div>
+            )}
+          </div>
+          <div>
+            <h3 className="font-semibold text-gray-800">{party.fullName}</h3>
+            <p className="text-xs text-gray-500">{label}</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
+          <div><p className="text-gray-500 text-xs">Email</p><p className="font-medium truncate">{party.email}</p></div>
+          {party.phoneNumber && <div><p className="text-gray-500 text-xs">SĐT</p><p className="font-medium">{party.phoneNumber}</p></div>}
+          {party.title && <div><p className="text-gray-500 text-xs">Chức danh</p><p className="font-medium truncate">{party.title}</p></div>}
+          {party.location && <div><p className="text-gray-500 text-xs">Địa điểm</p><p className="font-medium truncate">{party.location}</p></div>}
+          {party.company && <div><p className="text-gray-500 text-xs">Công ty</p><p className="font-medium truncate">{party.company}</p></div>}
+          <div><p className="text-gray-500 text-xs">Đã xác thực</p><p className="font-medium">{party.isVerified ? "Có" : "Không"}</p></div>
+          <div><p className="text-gray-500 text-xs">Nhân phẩm tốt</p><p className="font-medium text-green-600">{party.trustScore}</p></div>
+          <div><p className="text-gray-500 text-xs">Nhân phẩm tệ</p><p className="font-medium text-red-600">{party.untrustScore}</p></div>
+          <div><p className="text-gray-500 text-xs">Ngày tham gia</p><p className="font-medium">{formatDateTime(party.createdAt)}</p></div>
+        </div>
+        {party.skills?.length > 0 && (
+          <div className="mt-3">
+            <p className="text-gray-500 text-xs mb-1">Kỹ năng</p>
+            <div className="flex flex-wrap gap-1">
+              {party.skills.map((s, i) => (
+                <span key={i} className="text-xs px-2 py-0.5 bg-gray-200 rounded-full">{s}</span>
+              ))}
+            </div>
+          </div>
+        )}
+        {party.bio && (
+          <div className="mt-3">
+            <p className="text-gray-500 text-xs mb-1">Giới thiệu</p>
+            <p className="text-sm text-gray-600 whitespace-pre-wrap bg-white rounded p-2 border">{party.bio}</p>
+          </div>
+        )}
+      </div>
+
+      {/* Job Application (freelancer only) */}
+      {showApplication && party.jobApplication && (
+        <div className="bg-white rounded-lg border p-4">
+          <h4 className="font-medium text-gray-800 mb-2 flex items-center gap-1">
+            <Icon name="assignment" size={16} /> Thông tin tham gia job
+          </h4>
+          <div className="grid grid-cols-2 gap-3 text-sm">
+            <div><p className="text-gray-500 text-xs">Trạng thái đơn</p><p className="font-medium">{party.jobApplication.status}</p></div>
+            <div><p className="text-gray-500 text-xs">Trạng thái work</p><p className="font-medium">{party.jobApplication.workStatus || "-"}</p></div>
+            <div><p className="text-gray-500 text-xs">Ngày nộp đơn</p><p className="font-medium">{formatDateTime(party.jobApplication.createdAt)}</p></div>
+            {party.jobApplication.workSubmittedAt && (
+              <div><p className="text-gray-500 text-xs">Ngày nộp sản phẩm</p><p className="font-medium">{formatDateTime(party.jobApplication.workSubmittedAt)}</p></div>
+            )}
+          </div>
+          {party.jobApplication.coverLetter && (
+            <div className="mt-2">
+              <p className="text-gray-500 text-xs mb-1">Thư xin việc</p>
+              <p className="text-sm text-gray-600 whitespace-pre-wrap bg-gray-50 rounded p-2 border">{party.jobApplication.coverLetter}</p>
+            </div>
+          )}
+          {party.jobApplication.workSubmissionNote && (
+            <div className="mt-2">
+              <p className="text-gray-500 text-xs mb-1">Ghi chú nộp sản phẩm</p>
+              <p className="text-sm text-gray-600 whitespace-pre-wrap bg-gray-50 rounded p-2 border">{party.jobApplication.workSubmissionNote}</p>
+            </div>
+          )}
+          {party.jobApplication.workRevisionNote && (
+            <div className="mt-2">
+              <p className="text-gray-500 text-xs mb-1">Yêu cầu chỉnh sửa</p>
+              <p className="text-sm text-gray-600 whitespace-pre-wrap bg-gray-50 rounded p-2 border">{party.jobApplication.workRevisionNote}</p>
+            </div>
+          )}
+          {party.jobApplication.workSubmissionUrl && (
+            <button
+              onClick={() => handleDownloadFile(party.jobApplication!.workSubmissionUrl!, "work-submission")}
+              className="flex items-center gap-2 mt-2 px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+            >
+              <Icon name="download" size={18} className="text-gray-500 shrink-0" />
+              <span className="text-sm text-gray-700">Tải sản phẩm đã nộp</span>
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* History */}
+      <div className="bg-white rounded-lg border p-4">
+        <h4 className="font-medium text-gray-800 mb-3 flex items-center gap-1">
+          <Icon name="history" size={16} /> Lịch sử hoạt động (job này)
+        </h4>
+        {party.history.length === 0 ? (
+          <p className="text-sm text-gray-400">Không có lịch sử</p>
+        ) : (
+          <div className="space-y-2 max-h-80 overflow-y-auto">
+            {party.history.map((h) => (
+              <div key={h.id} className="flex items-start gap-2 text-sm p-2 bg-gray-50 rounded">
+                <div className="w-1.5 h-1.5 rounded-full bg-gray-400 mt-1.5 shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-gray-800">{h.actionLabel}</p>
+                  {h.description && <p className="text-gray-500 text-xs whitespace-pre-wrap">{h.description}</p>}
+                  <p className="text-gray-400 text-xs mt-0.5">
+                    {h.user.fullName} - {formatDateTime(h.createdAt)}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  function handleDownloadFile(url: string, name: string) {
+    downloadFileFromUrl(url, name);
+  }
+}
+
+/* ===== Party Files Section ===== */
+function PartyFilesSection({ party, label, roleLabel }: { party: PartyDetail; label: string; roleLabel: string }) {
+  const [showAll, setShowAll] = useState(false);
+  const files = party.uploadedFiles || [];
+  const displayed = showAll ? files : files.slice(0, 10);
+
+  return (
+    <div className="bg-white rounded-lg border p-4">
+      <h4 className="font-medium text-gray-800 mb-2 flex items-center gap-1">
+        <Icon name="folder" size={16} /> Tài liệu của {roleLabel}: {label}
+        <span className="text-xs text-gray-400 font-normal">({files.length} tệp)</span>
+      </h4>
+      {files.length === 0 ? (
+        <p className="text-sm text-gray-400">Không có tài liệu</p>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {displayed.map((f) => (
+              <div key={f.id} className="flex items-center gap-2 p-2 border rounded-md hover:bg-gray-50 transition-colors">
+                <Icon name={f.mimeType?.startsWith("image/") ? "image" : "description"} size={20} className="text-gray-500 shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-gray-700 truncate">{f.originalFilename}</p>
+                  <div className="flex items-center gap-2 text-xs text-gray-400">
+                    {f.readableSize && <span>{f.readableSize}</span>}
+                    {f.usage && <span>({f.usage})</span>}
+                    <span>{formatDateTime(f.createdAt)}</span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => downloadFileFromUrl(f.secureUrl, f.originalFilename || "file")}
+                  className="text-gray-500 hover:text-gray-700 p-1 shrink-0"
+                >
+                  <Icon name="download" size={16} />
+                </button>
+              </div>
+            ))}
+          </div>
+          {files.length > 10 && (
+            <button
+              onClick={() => setShowAll(!showAll)}
+              className="text-sm text-[#04A0EF] hover:underline mt-2"
+            >
+              {showAll ? "Thu gọn" : `Xem tất cả (${files.length} tệp)`}
+            </button>
+          )}
+        </>
+      )}
     </div>
   );
 }

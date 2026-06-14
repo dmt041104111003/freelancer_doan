@@ -4,6 +4,7 @@ import com.workhub.api.dto.request.CreateDisputeRequest;
 import com.workhub.api.dto.request.DisputeResponseRequest;
 import com.workhub.api.dto.request.RequestDisputeResponseRequest;
 import com.workhub.api.dto.request.ResolveDisputeRequest;
+import com.workhub.api.dto.response.AdminDisputeDetailResponse;
 import com.workhub.api.dto.response.ApiResponse;
 import com.workhub.api.dto.response.DisputeResponse;
 import com.workhub.api.security.UserDetailsImpl;
@@ -101,6 +102,18 @@ public class DisputeController {
             @RequestParam(defaultValue = "10") int size) {
 
         return ResponseEntity.ok(disputeService.getPendingDisputes(page, size));
+    }
+
+    /**
+     * [ADMIN] Xem chi tiết tranh chấp đầy đủ (kèm lịch sử 2 bên, tài liệu, job application)
+     * GET /api/admin/disputes/{disputeId}/detail
+     */
+    @GetMapping("/admin/disputes/{disputeId}/detail")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<AdminDisputeDetailResponse>> getAdminDisputeDetail(
+            @PathVariable Long disputeId) {
+
+        return ResponseEntity.ok(disputeService.getAdminDisputeDetail(disputeId));
     }
 
     /**

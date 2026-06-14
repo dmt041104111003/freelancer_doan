@@ -3,6 +3,7 @@ package com.workhub.api.service;
 import com.workhub.api.dto.request.CreateDisputeRequest;
 import com.workhub.api.dto.request.DisputeResponseRequest;
 import com.workhub.api.dto.request.ResolveDisputeRequest;
+import com.workhub.api.dto.response.AdminDisputeDetailResponse;
 import com.workhub.api.dto.response.ApiResponse;
 import com.workhub.api.dto.response.DisputeResponse;
 import com.workhub.api.dto.response.FileUploadResponse;
@@ -23,7 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -425,6 +428,161 @@ public class DisputeService {
         if (!expiredDisputes.isEmpty()) {
             log.info("Processed {} expired freelancer response deadlines", expiredDisputes.size());
         }
+    }
+
+    /**
+     * [ADMIN] Xem chi tiết tranh chấp đầy đủ
+     */
+    @Transactional(readOnly = true)
+    public ApiResponse<AdminDisputeDetailResponse> getAdminDisputeDetail(Long disputeId) {
+        Dispute dispute = disputeRepository.findById(disputeId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy khiếu nại"));
+
+        Job job = dispute.getJob();
+        User employer = dispute.getEmployer();
+        User freelancer = dispute.getFreelancer();
+
+        // Job info
+        AdminDisputeDetailResponse.JobInfo jobInfo = AdminDisputeDetailResponse.JobInfo.builder()
+                .id(job.getId())
+                .title(job.getTitle())
+                .description(job.getDescription())
+                .context(job.getContext())
+                .requirements(job.getRequirements())
+                .deliverables(job.getDeliverables())
+                .skills(job.getSkills())
+                .complexity(job.getComplexity() != null ? job.getComplexity().name() : null)
+                .duration(job.getDuration() != null ? job.getDuration().name() : null)
+                .workType(job.getWorkType() != null ? job.getWorkType().name() : null)
+                .budget(job.getBudget())
+                .escrowAmount(job.getEscrowAmount())
+                .currency(job.getCurrency())
+                .status(job.getStatus() != null ? job.getStatus().name() : null)
+                .createdAt(job.getCreatedAt())
+                .build();
+
+        // Employer detail
+        AdminDisputeDetailResponse.PartyDetail employerDetail = AdminDisputeDetailResponse.PartyDetail.fromUser(employer);
+        employerDetail.setJobApplication(null); // employer không có job application
+        employerDetail.setHistory(getPartyHistory(job.getId(), employer.getId()));
+        employerDetail.setUploadedFiles(getPartyFiles(employer.getId()));
+
+        // Freelancer detail - tìm job application đúng tại thời điểm dispute
+        AdminDisputeDetailResponse.PartyDetail freelancerDetail = AdminDisputeDetailResponse.PartyDetail.fromUser(freelancer);
+
+        freelancerDetail.setJobApplication(null);
+        try {
+            JobApplication app = jobApplicationRepository
+                    .findByJobIdAndFreelancerId(job.getId(), freelancer.getId())
+                    .orElse(null);
+            if (app != null) {
+                AdminDisputeDetailResponse.FileAttachment workFile = null;
+                if (app.getWorkSubmissionUrl() != null) {
+                    workFile = AdminDisputeDetailResponse.FileAttachment.builder()
+                            .secureUrl(app.getWorkSubmissionUrl())
+                            .originalFilename("work-submission")
+                            .build();
+                }
+                freelancerDetail.setJobApplication(AdminDisputeDetailResponse.JobApplicationInfo.builder()
+                        .id(app.getId())
+                        .coverLetter(app.getCoverLetter())
+                        .status(app.getStatus().name())
+                        .workStatus(app.getWorkStatus() != null ? app.getWorkStatus().name() : null)
+                        .workSubmissionUrl(app.getWorkSubmissionUrl())
+                        .workSubmissionNote(app.getWorkSubmissionNote())
+                        .workSubmittedAt(app.getWorkSubmittedAt())
+                        .workRevisionNote(app.getWorkRevisionNote())
+                        .createdAt(app.getCreatedAt())
+                        .updatedAt(app.getUpdatedAt())
+                        .workSubmissionFile(workFile)
+                        .build());
+            }
+        } catch (Exception ignored) {}
+
+        freelancerDetail.setHistory(getPartyHistory(job.getId(), freelancer.getId()));
+        freelancerDetail.setUploadedFiles(getPartyFiles(freelancer.getId()));
+
+        // Evidence files
+        AdminDisputeDetailResponse.FileAttachment employerEvidence = null;
+        if (dispute.getEmployerEvidenceFileId() != null) {
+            try {
+                FileUploadResponse f = fileUploadService.getFileById(dispute.getEmployerEvidenceFileId());
+                employerEvidence = AdminDisputeDetailResponse.FileAttachment.builder()
+                        .id(f.getId()).secureUrl(f.getSecureUrl())
+                        .originalFilename(f.getOriginalFilename()).readableSize(f.getReadableSize())
+                        .build();
+            } catch (Exception ignored) {}
+        }
+
+        AdminDisputeDetailResponse.FileAttachment freelancerEvidence = null;
+        if (dispute.getFreelancerEvidenceFileId() != null) {
+            try {
+                FileUploadResponse f = fileUploadService.getFileById(dispute.getFreelancerEvidenceFileId());
+                freelancerEvidence = AdminDisputeDetailResponse.FileAttachment.builder()
+                        .id(f.getId()).secureUrl(f.getSecureUrl())
+                        .originalFilename(f.getOriginalFilename()).readableSize(f.getReadableSize())
+                        .build();
+            } catch (Exception ignored) {}
+        }
+
+        AdminDisputeDetailResponse response = AdminDisputeDetailResponse.builder()
+                .id(dispute.getId())
+                .status(dispute.getStatus())
+                .statusLabel(getStatusLabel(dispute.getStatus()))
+                .createdAt(dispute.getCreatedAt())
+                .updatedAt(dispute.getUpdatedAt())
+                .job(jobInfo)
+                .employer(employerDetail)
+                .freelancer(freelancerDetail)
+                .employerDescription(dispute.getEmployerDescription())
+                .employerEvidenceFile(employerEvidence)
+                .freelancerDescription(dispute.getFreelancerDescription())
+                .freelancerEvidenceFile(freelancerEvidence)
+                .freelancerDeadline(dispute.getFreelancerDeadline())
+                .adminNote(dispute.getAdminNote())
+                .resolvedBy(dispute.getResolvedBy() != null ? AdminDisputeDetailResponse.AdminInfo.builder()
+                        .id(dispute.getResolvedBy().getId())
+                        .fullName(dispute.getResolvedBy().getFullName())
+                        .avatarUrl(dispute.getResolvedBy().getAvatarUrl())
+                        .build() : null)
+                .resolvedAt(dispute.getResolvedAt())
+                .build();
+
+        return ApiResponse.success("Thành công", response);
+    }
+
+    private List<AdminDisputeDetailResponse.JobHistoryInfo> getPartyHistory(Long jobId, Long userId) {
+        List<JobHistory> history = jobHistoryRepository.findByJobIdAndUserId(jobId, userId);
+        return history.stream()
+                .map(AdminDisputeDetailResponse.JobHistoryInfo::fromEntity)
+                .toList();
+    }
+
+    private List<AdminDisputeDetailResponse.FileUploadInfo> getPartyFiles(Long userId) {
+        var files = fileUploadRepository
+                .findByUploaderIdAndIsDeletedFalseOrderByCreatedAtDesc(userId,
+                        org.springframework.data.domain.PageRequest.of(0, 200));
+        return files.stream()
+                .map(f -> AdminDisputeDetailResponse.FileUploadInfo.builder()
+                        .id(f.getId())
+                        .secureUrl(f.getSecureUrl())
+                        .originalFilename(f.getOriginalFilename())
+                        .readableSize(f.getReadableSize())
+                        .mimeType(f.getMimeType())
+                        .usage(f.getUsage() != null ? f.getUsage().name() : null)
+                        .createdAt(f.getCreatedAt())
+                        .build())
+                .toList();
+    }
+
+    private static String getStatusLabel(EDisputeStatus status) {
+        return switch (status) {
+            case PENDING_FREELANCER_RESPONSE -> "Chờ freelancer phản hồi";
+            case PENDING_ADMIN_DECISION -> "Chờ admin quyết định";
+            case EMPLOYER_WON -> "Employer thắng";
+            case FREELANCER_WON -> "Freelancer thắng";
+            case CANCELLED -> "Đã hủy";
+        };
     }
 
     private DisputeResponse buildResponse(Dispute dispute) {

@@ -324,6 +324,9 @@ export const api = {
   adminCountPendingJobs: () =>
     request<number>("/api/jobs/admin/count/pending"),
 
+  adminGetDisputeDetail: (disputeId: number) =>
+    request<AdminDisputeDetailResponse>(`/api/admin/disputes/${disputeId}/detail`),
+
   adminGetPendingDisputes: (params?: { page?: number; size?: number }) => {
     const query = new URLSearchParams();
     if (params?.page !== undefined) query.append("page", params.page.toString());
@@ -803,6 +806,107 @@ export interface Dispute {
   resolvedAt?: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface AdminDisputeDetailResponse {
+  id: number;
+  status: DisputeStatus;
+  statusLabel: string;
+  createdAt: string;
+  updatedAt: string;
+  job: {
+    id: number;
+    title: string;
+    description: string;
+    context?: string;
+    requirements?: string;
+    deliverables?: string;
+    skills: string[];
+    complexity?: string;
+    duration?: string;
+    workType?: string;
+    budget?: number;
+    escrowAmount?: number;
+    currency: string;
+    status?: string;
+    createdAt: string;
+  };
+  employer: PartyDetail;
+  freelancer: PartyDetail;
+  employerDescription: string;
+  employerEvidenceFile?: FileAttachment;
+  freelancerDescription?: string;
+  freelancerEvidenceFile?: FileAttachment;
+  freelancerDeadline?: string;
+  adminNote?: string;
+  resolvedBy?: AdminInfo;
+  resolvedAt?: string;
+}
+
+export interface PartyDetail {
+  id: number;
+  fullName: string;
+  email: string;
+  phoneNumber?: string;
+  avatarUrl?: string;
+  title?: string;
+  location?: string;
+  company?: string;
+  bio?: string;
+  isVerified: boolean;
+  trustScore: number;
+  untrustScore: number;
+  skills: string[];
+  createdAt: string;
+  jobApplication?: JobApplicationInfo;
+  history: JobHistoryInfo[];
+  uploadedFiles: FileUploadInfo[];
+}
+
+export interface JobApplicationInfo {
+  id: number;
+  coverLetter?: string;
+  status: string;
+  workStatus?: string;
+  workSubmissionUrl?: string;
+  workSubmissionNote?: string;
+  workSubmittedAt?: string;
+  workRevisionNote?: string;
+  createdAt: string;
+  updatedAt: string;
+  workSubmissionFile?: FileAttachment;
+}
+
+export interface JobHistoryInfo {
+  id: number;
+  action: string;
+  actionLabel: string;
+  description?: string;
+  createdAt: string;
+  user: { id: number; fullName: string; avatarUrl?: string };
+}
+
+export interface FileUploadInfo {
+  id: number;
+  secureUrl: string;
+  originalFilename: string;
+  readableSize?: string;
+  mimeType?: string;
+  usage?: string;
+  createdAt: string;
+}
+
+export interface FileAttachment {
+  id?: number;
+  secureUrl: string;
+  originalFilename?: string;
+  readableSize?: string;
+}
+
+export interface AdminInfo {
+  id: number;
+  fullName: string;
+  avatarUrl?: string;
 }
 
 export type ChatMessageType = "TEXT" | "IMAGE" | "FILE" | "LIKE";
