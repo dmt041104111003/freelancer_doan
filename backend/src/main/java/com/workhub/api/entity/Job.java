@@ -57,6 +57,10 @@ public class Job {
     @Builder.Default
     private EJobDuration duration = EJobDuration.SHORT_TERM;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "work_type")
+    private EWorkType workType;
+
     
     @Column(precision = 15, scale = 2)
     private BigDecimal budget;
