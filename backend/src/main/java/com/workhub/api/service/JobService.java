@@ -389,6 +389,10 @@ public class JobService {
         // Check if job has/had dispute
         boolean hadDispute = disputeRepository.existsByJobId(job.getId());
 
+        // Count revision requests for freelancer dispute eligibility
+        int revisionRequestCount = (int) jobHistoryRepository.countByJobIdAndAction(
+                job.getId(), EJobHistoryAction.WORK_REJECTED);
+
         return JobResponse.builder()
                 .id(job.getId())
                 .title(job.getTitle())
@@ -416,6 +420,7 @@ public class JobService {
                 .createdAt(job.getCreatedAt())
                 .updatedAt(job.getUpdatedAt())
                 .hadDispute(hadDispute)
+                .revisionRequestCount(revisionRequestCount)
                 .build();
     }
 

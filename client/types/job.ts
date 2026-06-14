@@ -48,6 +48,7 @@ export interface Job {
   workRevisionNote?: string;
   workSubmittedAt?: string;
   hadDispute?: boolean;
+  revisionRequestCount?: number;
 }
 
 export interface CreateJobRequest {

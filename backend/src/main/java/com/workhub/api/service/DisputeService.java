@@ -10,6 +10,7 @@ import com.workhub.api.dto.response.FileUploadResponse;
 import com.workhub.api.entity.*;
 import com.workhub.api.exception.UnauthorizedAccessException;
 import com.workhub.api.repository.DisputeRepository;
+import com.workhub.api.repository.FileUploadRepository;
 import com.workhub.api.repository.JobApplicationRepository;
 import com.workhub.api.repository.JobHistoryRepository;
 import com.workhub.api.repository.JobRepository;
@@ -34,6 +35,7 @@ import java.util.Set;
 public class DisputeService {
 
     private final DisputeRepository disputeRepository;
+    private final FileUploadRepository fileUploadRepository;
     private final JobRepository jobRepository;
     private final JobApplicationRepository jobApplicationRepository;
     private final JobHistoryRepository jobHistoryRepository;

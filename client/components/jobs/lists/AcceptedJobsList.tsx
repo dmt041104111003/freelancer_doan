@@ -13,7 +13,7 @@ import JobsSearchBar from "../shared/JobsSearchBar";
 import JobsPageHeader from "../shared/JobsPageHeader";
 import JobHistoryTimeline from "../shared/JobHistoryTimeline";
 import WithdrawalDialog from "../withdrawal/WithdrawalDialog";
-import { DisputeResponseDialog } from "../dispute/DisputeDialog";
+import { DisputeResponseDialog, CreateDisputeDialog } from "../dispute/DisputeDialog";
 import { WorkSubmitDialog } from "../work/WorkDialogs";
 import FreelancerJobCard from "./accepted/FreelancerJobCard";
 import Icon from "@/components/ui/Icon";
@@ -44,6 +44,8 @@ export default function AcceptedJobsList() {
   // Dispute states
   const [disputeDialogOpen, setDisputeDialogOpen] = useState(false);
   const [currentDispute, setCurrentDispute] = useState<Dispute | null>(null);
+  const [createDisputeDialogOpen, setCreateDisputeDialogOpen] = useState(false);
+  const [disputeJob, setDisputeJob] = useState<{ id: number; title: string } | null>(null);
 
   // Work submission states
   const [workSubmitDialogOpen, setWorkSubmitDialogOpen] = useState(false);
@@ -136,6 +138,11 @@ export default function AcceptedJobsList() {
       return `${(amount / 1000000).toFixed(1)}M`;
     }
     return amount.toLocaleString("vi-VN");
+  };
+
+  const handleCreateDispute = (job: { id: number; title: string }) => {
+    setDisputeJob(job);
+    setCreateDisputeDialogOpen(true);
   };
 
   const handleViewDispute = async (jobId: number) => {
@@ -476,6 +483,7 @@ export default function AcceptedJobsList() {
                       onSubmitWork={handleSubmitWork}
                       onViewDispute={handleViewDispute}
                       onWithdrawJob={handleWithdrawJob}
+                      onCreateDispute={handleCreateDispute}
                     />
                   </div>
                 ))
@@ -483,6 +491,22 @@ export default function AcceptedJobsList() {
             </div>
           )}
         </>
+      )}
+
+      {/* Create Dispute Dialog */}
+      {disputeJob && (
+        <CreateDisputeDialog
+          open={createDisputeDialogOpen}
+          onOpenChange={setCreateDisputeDialogOpen}
+          jobId={disputeJob.id}
+          jobTitle={disputeJob.title}
+          onSuccess={() => {
+            fetchJobs(acceptedJobsFetchStatus(filter));
+            fetchStats();
+            setDisputeJob(null);
+          }}
+          role="FREELANCER"
+        />
       )}
 
       {/* Dispute Response Dialog */}

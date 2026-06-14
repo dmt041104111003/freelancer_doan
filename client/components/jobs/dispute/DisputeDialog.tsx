@@ -91,6 +91,7 @@ interface CreateDisputeDialogProps {
   jobId: number;
   jobTitle: string;
   onSuccess?: () => void;
+  role?: "EMPLOYER" | "FREELANCER";
 }
 
 export function CreateDisputeDialog({
@@ -99,6 +100,7 @@ export function CreateDisputeDialog({
   jobId,
   jobTitle,
   onSuccess,
+  role = "EMPLOYER",
 }: CreateDisputeDialogProps) {
   const [description, setDescription] = useState("");
   const [selectedEvidence, setSelectedEvidence] = useState<EvidenceMeta | null>(null);
@@ -116,12 +118,10 @@ export function CreateDisputeDialog({
 
     setIsSubmitting(true);
     try {
-      const response = await api.createDispute(
-        jobId,
-        description,
-        selectedEvidence?.url ?? "",
-        selectedEvidence?.fileId
-      );
+      const apiCall = role === "FREELANCER"
+        ? api.createDisputeByFreelancer(jobId, description, selectedEvidence?.url ?? "", selectedEvidence?.fileId)
+        : api.createDispute(jobId, description, selectedEvidence?.url ?? "", selectedEvidence?.fileId);
+      const response = await apiCall;
       if (response.status === "SUCCESS") {
         toast.success("Đã tạo khiếu nại thành công. Chờ admin xử lý.");
         setDescription("");

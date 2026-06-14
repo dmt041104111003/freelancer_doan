@@ -20,9 +20,11 @@ interface FreelancerJobCardProps {
   onSubmitWork: (job: { id: number; title: string }) => void;
   onViewDispute: (jobId: number) => void;
   onWithdrawJob: (job: { id: number; title: string; escrowAmount?: number }) => void;
+  onCreateDispute?: (job: { id: number; title: string }) => void;
 }
 
-export default function FreelancerJobCard({ job, onSubmitWork, onViewDispute, onWithdrawJob }: FreelancerJobCardProps) {
+export default function FreelancerJobCard({ job, onSubmitWork, onViewDispute, onWithdrawJob, onCreateDispute }: FreelancerJobCardProps) {
+  const canDispute = job.workStatus === "REVISION_REQUESTED" && (job.revisionRequestCount ?? 0) >= 3;
   const hasSubmittedWork = job.workStatus === "SUBMITTED" || Boolean(job.workSubmissionUrl);
   const isApprovedWork = job.workStatus === "APPROVED";
   const effectiveWorkStatus = job.workStatus || (hasSubmittedWork ? "SUBMITTED" : undefined);
@@ -152,6 +154,17 @@ export default function FreelancerJobCard({ job, onSubmitWork, onViewDispute, on
                 </span>
               </Button>
             )
+          )}
+          {canDispute && onCreateDispute && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-red-600 border-red-200 hover:bg-red-50"
+              onClick={() => onCreateDispute({ id: job.id, title: job.title })}
+            >
+              <Icon name="report_problem" size={16} />
+              <span className="sm:hidden lg:inline ml-1">Khiếu nại</span>
+            </Button>
           )}
           {job.status === "IN_PROGRESS" && (
             <Button

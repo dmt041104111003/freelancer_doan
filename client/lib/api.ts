@@ -360,6 +360,17 @@ export const api = {
       body: JSON.stringify({ description, evidenceUrl, fileId }),
     }),
 
+  createDisputeByFreelancer: (
+    jobId: number,
+    description: string,
+    evidenceUrl: string,
+    fileId?: number
+  ) =>
+    request<Dispute>(`/api/jobs/${jobId}/disputes/freelancer`, {
+      method: "POST",
+      body: JSON.stringify({ description, evidenceUrl, fileId }),
+    }),
+
   getDispute: (jobId: number) =>
     request<Dispute | null>(`/api/jobs/${jobId}/disputes`),
 

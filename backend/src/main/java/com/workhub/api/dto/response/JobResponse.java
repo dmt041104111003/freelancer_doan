@@ -56,6 +56,9 @@ public class JobResponse {
     // Dispute info
     private Boolean hadDispute;  // Job từng có tranh chấp
 
+    // Freelancer dispute eligibility
+    private Integer revisionRequestCount;  // Số lần bị yêu cầu chỉnh sửa (>= 3 mới được tạo khiếu nại)
+
     @Data
     @Builder
     @NoArgsConstructor
